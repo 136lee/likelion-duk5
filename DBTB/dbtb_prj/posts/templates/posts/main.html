@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="{% url 'posts:category' 'secret' %}">비밀게시판</a>
+    <a href="{% url 'posts:category' 'freshman' %}">새내기게시판</a>
+    <a href="{% url 'posts:category' 'free' %}">자유게시판</a>
+    <br><br><br>
+    {% if request.user.is_authenticated %}
+    nickname : {{ request.user.nickname }} <br><br>
+    <a href="{% url 'accounts:logout' %}">로그아웃</a>
+    <a href="{% url 'accounts:mypage' %}">마이페이지</a>
+    <hr>
+    {% else %}
+    <a href="{% url 'accounts:login' %}">로그인</a>
+    <a href="{% url 'accounts:signup' %}">회원가입</a><hr>
+    {% endif %}
+    <br><br><br>
+    
+    {% for category, posts in category_posts.items %}
+    <h2><a href="{% url 'posts:category' category.slug %}">{{ category.name }}</a></h2>
+    
+    {% for post in posts %}
+    <p><a href="{% url 'posts:detail' post.id %}">{{ post.title }}</p>
+    {% empty %}
+    <p>작성된 글이 없습니다.</p>
+    {% endfor %}
+    {% endfor %}
+</body>
+</html>
