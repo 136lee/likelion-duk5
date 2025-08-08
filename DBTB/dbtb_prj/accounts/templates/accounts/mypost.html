@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    {% for post in posts %}
+    {% if post.author == user %}
+        <h2><a href="{% url 'posts:detail' post.id %}"> {{ post.title }} </a></h2>
+        <p>{{ post.content }}</p>
+        <p>{{ post.author }}</p>
+        <p>작성일 - {{ post.created_at }}</p>
+    {% endif %}
+    {% empty %}
+    <p>글이 없습니다.</p>
+    {% endfor %}
+
+</body>
+</html>

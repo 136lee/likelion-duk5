@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="{% static 'css/example.css' %}" rel="stylesheet"/>
+</head>
+<body>
+    <a href="{% url 'posts:main' %}">홈으로</a><br><br>
+
+    {% if request.user.profile_image %}
+    <img width="200px" src="{{request.user.profile_image.url}}" alt="Profil Image">
+    {%else%}
+    <img width="200px" src="{% static 'img/profile_image.jpg ' %}" alt="Default Profile">
+    {% endif %}
+
+    <form method="POST" action="{% url 'accounts:user-info'%}" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        이미지 변경 - <input type="file" name="profile_image"><br>
+        <button type="submit">프로필 이미지 변경하기</button>
+
+    </form>
+
+    <p>username : {{request.user.username}}</p>
+    <p>email : {{request.user.email}}</p>
+    <p>nickname : {{request.user.nickname}}</p>
+    <p>university : {{request.user.university}}</p>
+</body>
+</html>

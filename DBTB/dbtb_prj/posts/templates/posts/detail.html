@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="{% url 'posts:main' %}">메인 페이지로 돌아가기</a><br>
+
+    <p>nickname : {{ request.user.nickname }}</p>
+    <a href="{% url 'accounts:logout' %}">로그아웃</a><hr>
+
+    <h2>제목 - {{ post.title}} </h2>
+    <p>내용 - {{post.content}} </p>
+
+    
+    {% if post.image %}
+        <img width="320" height="240" src="{{post.image.url}}">
+    {%endif%}
+    {% if post.video %}
+        <video width="320" height="240" controls>
+            <source src="{{post.video.url}}" type="video/mp4">
+        </video>
+    {%endif%}
+
+    <p> 작성일 - {{post.created_at}} </p>
+    작성자:
+    {% if post.is_anonymous %}
+        익명
+    {% else %}
+        {{ post.author }}
+    {% endif %}
+    <hr><br>
+    {% if post.author == request.user %} 
+    <a href ="{% url 'posts:update' post.id %}">수정하기</a>
+    <a href ="{% url 'posts:delete' post.id %}">삭제하기</a>
+    {% endif %}
+    <br><br>
+
+    공감{{ post.like.count}}개 스크랩{{post.scrap.count}}개
+
+    <form method="POST" action="{% url 'posts:like' post.id %}">
+    {% csrf_token %}
+    <button type="submit">
+        {% if user in post.like.all %}
+        좋아요 취소
+        {% else %}
+        좋아요
+        {% endif %}
+    </button>
+    </form>
+    <form method="POST" action="{% url 'posts:scrap' post.id %}">
+    {% csrf_token %}
+    <button type="submit">
+        {% if user in post.scrap.all %}
+        스크랩 취소
+        {% else %}
+        스크랩
+        {% endif %}
+    </button>
+    </form>
+
+
+    <h3>댓글</h3>
+    {% for comment in post.comments.all %}
+    <p>{% if comment.is_anonymous %}
+        익명
+    {% else %}
+        {{ comment.author }}
+    {% endif %}
+    {{ comment.content }} {{comment.created_at}} 
+    {% if comment.author == request.user %} 
+    <a href="{% url 'posts:delete_comment' comment.id %}">삭제하기</a>
+    {% endif %}</p>
+    {% endfor %}
+
+    <form method="POST" action="{% url 'posts:create-comment' post.id %}">
+        {% csrf_token %}
+        <input type="text" name = 'content' >
+        <label><input type="checkbox" name="is_anonymous">익명</label>
+        <button type="submit">댓글 작성</button><br>
+    </form>
+</body>
+</html>

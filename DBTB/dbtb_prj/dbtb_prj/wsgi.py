@@ -1,5 +1,5 @@
 """
-WSGI config for DBTB project.
+WSGI config for everytime project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "DBTB.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dbtb_prj.settings")
 
 application = get_wsgi_application()
