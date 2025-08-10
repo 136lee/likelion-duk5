@@ -2,5 +2,5 @@ from django.shortcuts import render , redirect
 
 # Create your views here.
 
-def mymap(request):
-    return render (request , 'map/mymap.html')
+def map_view(request):
+    return render (request , 'map/index.html')
