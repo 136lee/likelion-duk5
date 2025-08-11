@@ -1,24 +1,34 @@
-import json
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt   # 처음엔 편하게, 나중에 제거
+from django.shortcuts import render
+from .models import *
+from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+# Create your views here.
 
-from .models import Post
-from map.models import Place
+@login_required
+def create(request):
+    categories = Category.objects.all()
 
-@require_POST
-@csrf_exempt
-def create_post(request):
-    data = json.loads(request.body or "{}")
-    place = Place.objects.get(id=data["place_id"])
-    post = Post.objects.create(
-        place=place,
-        rating=int(data.get("rating", 5)),
-        content=data.get("content",""),
-        # user=request.user if request.user.is_authenticated else None
-    )
-    return JsonResponse({"id": post.id}, status=201)
+    if request.method =="POST":
+        title = request.POST.get('title') 
+        content = request.POST.get('content')
+        image = request.FILES.get('image')
+        video = request.FILES.get('video')
 
-def list_by_place(request, place_id):
-    qs = Post.objects.filter(place_id=place_id).order_by("-id")
-    return JsonResponse([{"id":p.id,"rating":p.rating,"content":p.content} for p in qs], safe=False)
+        category_ids = request.POST.getlist('category')
+        category_list = [get_object_or_404(Category, id=category_id) for category_id in category_ids]
+
+
+        post = Post.objects.create(
+            title=title,
+            content= content,
+            author=request.user,
+            image = image,
+            video = video
+        )
+
+        for category in category_list:
+            post.category.add(category)
+
+        return redirect('map:index') #데이터 전송없이 url 이동만
+    return render(request, 'post/create.html', {'categories': categories}) 
