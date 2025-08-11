@@ -5,5 +5,5 @@ app_name ='map'
 
 urlpatterns = [
 
-    path('',map_view,name='home'),
+    path('',list,name='list'),
 ]

@@ -23,6 +23,8 @@ class Post(models.Model):
     category = models.ManyToManyField(to=Category, through="PostCategory", related_name="posts")
     image = models.ImageField(upload_to=upload_filepath, blank=True)
     video = models.FileField(upload_to=upload_filepath, blank=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
 
 
