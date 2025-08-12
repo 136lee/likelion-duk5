@@ -1,27 +1,28 @@
-{% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>카카오 지도에서 글 작성</title>
-  <link rel="stylesheet" href="{% static 'map/map.css' %}">
-  <!-- 카카오 지도 SDK (여기만 외부, appkey/도메인 등록 필수) -->
-  <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b76f141ae739da5b568454a96523a207"></script>
+  <meta charset="utf-8" />
+  <title>Kakao Map Test</title>
+
+  <!-- JS 키만 바꿔 넣기 -->
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b76f141ae739da5b568454a96523a207"></script>
+
+  <style>
+    html, body { height:100%; margin:0; }
+    /* 높이 없으면 안 보임! */
+    #map { width:100%; height:100vh; }
+  </style>
 </head>
 <body>
-  <h2>카카오 지도에서 위치 선택 → 글 작성</h2>
   <div id="map"></div>
-  <p>지도를 클릭하면 포스팅 폼이 열리고, 좌표가 자동 입력됩니다.</p>
 
-
-    <!-- 지도에서 채워질 좌표 -->
-    <input type="hidden" id="lat" name="latitude">
-    <input type="hidden" id="lng" name="longitude">
-
-    <div class="coords">선택 좌표: <span id="coord">-</span></div>
-    <button type="submit">등록</button>
-  </form>
-
-  <script src="{% static 'map/map.js' %}"></script>
+  <!-- SDK 다음에 실행되도록 아래에 두기 -->
+  <script>
+    console.log('kakao?', typeof kakao); // 'object'가 떠야 정상
+    const map = new kakao.maps.Map(
+      document.getElementById('map'),
+      { center: new kakao.maps.LatLng(37.5665, 126.9780), level: 3 }
+    );
+  </script>
 </body>
 </html>
