@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="{% url 'blog:list' %}">홈으로</a>
+
+    <h2>제목 - {{ post.title}} </h2>
+    <p>내용 - {{post.content}} </p>
+    <p> 작성일 - {{post.created_at}} </p>
+    <p>작성자 - {{post.author.nickname }}</p>
+
+    {% if post.image %}
+        <img width="320" height="240" src="{{post.image.url}}">
+    {%endif%}
+    {% if post.video %}
+        <video width="320" height="240" controls>
+            <source src="{{post.video.url}}" type="video/mp4">
+        </video>
+    {%endif%}
+    
+    <p> 카테고리 - 
+        {% for category in post.category.all %}
+        [{{ category.name }}]
+        {% empty %}
+        선택한 카테고리 없음
+        {% endfor %}
+
+    </p>
+    <hr><br>
+    {% if request.user == post.author %}
+    <a href ="{% url 'blog:update' post.id %}">수정하기</a>
+    <a href ="{% url 'blog:delete' post.id %}">삭제하기</a>
+    {%endif%}
+
+</body>
+</html>
