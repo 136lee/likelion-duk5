@@ -1,9 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/DBTB/static/css/account/signup.css" />
+    <link rel="stylesheet" href="{% static 'css/account/login.css' %}" />
     <title>signup</title>
   </head>
   <body>
@@ -24,7 +25,8 @@
           <p>회원가입</p>
         </div>
         <div id="formCon">
-          <form action="login.html" method="">
+          <form action="{% url 'account:signup' %}" method="POST">
+            {% csrf_token %}
             <div class="spForm">
               <p>이름</p>
               <input id="LId" type="text" />
@@ -85,7 +87,7 @@
         </div>
         <div id="AdCon">
           <p>이미 가입 하셨다면?</p>
-          <a href="login.html">로그인</a>
+          <a href="{% url 'account:login' %}">로그인</a>
         </div>
       </article>
     </section>
@@ -99,6 +101,6 @@
         <p id="FtAdC2">ⓒ 2025 AAA. All rights reserved.</p>
       </div>
     </footer>
-    <script src="/DBTB/static/js/account/signup.js"></script>
+    <script src="{% static 'js/account/signup.js' %}"></script>
   </body>
 </html>
