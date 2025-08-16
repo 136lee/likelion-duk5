@@ -1,0 +1,240 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* 헤더 */
+#HdStyle {
+  border-bottom: 1px solid #d8d8d8;
+  background: #fff;
+  padding: 8px 0;
+}
+
+#HdLayout {
+  display: flex;
+  /* width: 100%; */
+  height: 70%;
+  padding: 6px 5%;
+  justify-content: space-between;
+  align-items: center;
+}
+#HdLogo {
+  display: flex;
+  gap: 5px;
+}
+/* 로고 수정 */
+/* #Hdlogoimg {
+  width:;
+  height:;
+} */
+#HdText {
+  color: var(--CoolGray-60, #697077);
+  font-family: Roboto;
+  font-size: 180%;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 110%; /* 39.6px */
+}
+
+#HdAccountBt {
+  border-radius: 10px;
+  background: #0050a5;
+  border: none;
+  display: flex;
+  padding: 0.8%;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+#HdAccountBt p {
+  color: #fff;
+}
+
+/* 바디 */
+#AcSection {
+  padding-bottom: 60px;
+  /* border: 1px solid red; */
+}
+#artText {
+  margin-top: 50px;
+  color: #000;
+  font-family: Roboto;
+  font-size: 42px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 110%; /* 46.2px */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#LId,
+#LPw,
+#Lsb {
+  width: 400px;
+  height: 50px;
+  padding: 0 8px;
+  margin-top: 8px;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.spForm {
+  margin-top: 20px;
+}
+#conLpw {
+  display: flex;
+  justify-content: space-between;
+}
+#Lsb {
+  width: 420px;
+  background-color: #0050a5;
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%; /* 44.8px */
+  margin-top: 30px;
+}
+#formCon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#AdCon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#AdCon a,
+#AdCon p {
+  color: #9d9d9d;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  text-underline-position: from-font;
+}
+
+#AdCon {
+  font-size: 14px;
+  color: #666666;
+  font-family: Arial, sans-serif;
+  gap: 1%;
+  margin-top: 8px;
+}
+
+#AdCon > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#AdCon > div:last-child {
+  display: flex;
+  gap: 9px;
+}
+
+#AdCon > div:last-child p {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* 푸터 */
+#AcFooter {
+  display: flex;
+  padding: 38px 50px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
+  background-color: #f0f0f0;
+}
+#FtLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+#FtLogo p {
+  color: var(--CoolGray-60, #697077);
+  font-family: Roboto;
+  font-size: 23px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 110%; /* 39.6px */
+}
+#FtAd {
+  margin-top: 4%;
+}
+#FtAdC1 {
+  color: #000;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+#FtAdC2 {
+  color: #999;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 2px;
+}
+
+#spButtom {
+  margin-top: 40px;
+}
+
+.spForm p {
+  color: #595959;
+}
+#spButtomTop {
+  border-bottom: 1.8px solid #d8d8d8;
+  padding-bottom: 8px;
+}
+.spButtomTopAg p {
+  display: inline;
+}
+.spButtomTopAg {
+  margin-top: 6px;
+}
+#agtxt {
+  color: #000;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%; /* 33.6px */
+}
+.agtxtr {
+  color: #f00;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%;
+}
+
+#agtxtg {
+  color: #9d9d9d;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%;
+}
+.agtxtall {
+  color: #000;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%; /* 28px */
+}
+#spBtBt {
+  margin-left: 18px;
+}

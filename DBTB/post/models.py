@@ -1,5 +1,5 @@
 from django.db import models
-from user.models import User
+from users.models import User
 import os
 from uuid import uuid4
 from django.utils import timezone
