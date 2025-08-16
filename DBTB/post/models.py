@@ -26,8 +26,14 @@ class Post(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
 
+# class Post(models.Model):
+   # AI_matching=models.TextField()
+   # author=models.ForeignKey(User, on_delete=models.CASCADE, related_name="post_author")
+    #place=models.ForeignKey(Place, on_delete=models.CASCADE, related_name="post_place")
+   # scrab=models.ManyToManyField(User, related_name="post_scrab")
 
-
+  #  def __str__(self):
+    #    return f'[{self.author}]-{self.content[:15]}...'
     def __str__(self):
         return f'[{self.id}] {self.title}'
     
