@@ -26,6 +26,17 @@
 </head>
 <body>
   <header>지도 페이지</header>
+
+  {% if request.user.is_authenticated %}
+    {{request.user.username}}님 환영합니다. <br/>
+    <a href="{% url 'account:logout' %}">로그아웃</a>
+    <a href="{#}">마이페이지</a>
+    {% else %}
+    <a href="{% url 'account:login' %}">로그인</a>
+    <a href="{% url 'account:signup' %}">회원가입</a>
+    {% endif %} 
+    <br/>
+
   <div id="map"></div>
 
   <!-- ✅ 모달 폼: 전통 폼 제출 방식 (A안) -->
@@ -72,54 +83,74 @@
     </div>
   </div>
 
-  <script>
-    // 1) 지도 초기화 (원하면 도봉구 중심으로 바꿔도 됨)
-    const map = new kakao.maps.Map(document.getElementById('map'), {
-      center: new kakao.maps.LatLng(37.668, 127.047), // 도봉구 대략 중심
-      level: 6
-    });
 
-    // 모달 엘리먼트
-    const modal    = document.getElementById('postModal');
-    const closeBtn = document.getElementById('closeModalBtn');
-    const latInput = document.getElementById('form-lat');
-    const lngInput = document.getElementById('form-lng');
+  <!-- 서버에서 넘어온 포스트들 -->
+<script id="posts-data" type="application/json">{{ posts_json|default:"[]"|safe }}</script>
 
-    // 2) 지도 클릭 → 모달 열고 좌표 hidden input에 넣기
-    kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-      const ll = mouseEvent.latLng;
-      latInput.value = ll.getLat();
-      lngInput.value = ll.getLng();
-      openModal();
-    });
+<script>
+  // Kakao SDK 로드 확인 (가끔 로딩 이슈 방지)
+  if (!window.kakao || !kakao.maps) {
+    console.error('카카오 지도 스크립트가 로드되지 않았습니다.');
+  }
 
-    function openModal()  { modal.style.display = 'block'; modal.setAttribute('aria-hidden','false'); }
-    function closeModal() { modal.style.display = 'none';  modal.setAttribute('aria-hidden','true'); }
-    closeBtn.addEventListener('click', closeModal);
+  // 1) 지도 초기화 (한 번만!)
+  const map = new kakao.maps.Map(document.getElementById('map'), {
+    center: new kakao.maps.LatLng(37.668, 127.047),
+    level: 6
+  });
 
-    // 3) 저장 후 리다이렉트되어 돌아왔을 때 방금 저장한 포스트 강조
-    //    (뷰에서 ?lat=..&lng=..&id=.. 보내는 것 전제)
-    const params  = new URLSearchParams(location.search);
-    const sLat    = parseFloat(params.get('lat'));
-    const sLng    = parseFloat(params.get('lng'));
-    const savedId = params.get('id');
+  // 2) 모달 엘리먼트
+  const modal    = document.getElementById('postModal');
+  const closeBtn = document.getElementById('closeModalBtn');
+  const latInput = document.getElementById('form-lat');
+  const lngInput = document.getElementById('form-lng');
 
-    if (!isNaN(sLat) && !isNaN(sLng)) {
-      const pos = new kakao.maps.LatLng(sLat, sLng);
-      map.setCenter(pos);
+  function openModal()  { modal.style.display = 'block'; modal.setAttribute('aria-hidden','false'); }
+  function closeModal() { modal.style.display = 'none';  modal.setAttribute('aria-hidden','true'); }
+  closeBtn.addEventListener('click', closeModal);
 
-      const marker = new kakao.maps.Marker({ position: pos });
-      marker.setMap(map);
-
-      const iw = new kakao.maps.InfoWindow({
-        content: `<div style="padding:6px 10px; font-size:13px;">저장 완료!</div>`
-      });
-      iw.open(map, marker);
-
-      // 2.5초 후 안내만 닫기, 그리고 주소의 쿼리 정리(새로고침 시 중복 방지)
-      setTimeout(() => iw.close(), 2500);
-      history.replaceState(null, "", location.pathname);
+  // 로그인 여부에 따라 모달 오픈 제어(옵션)
+  const isAuth =  JSON.parse('{{ request.user.is_authenticated|yesno:"true,false"|lower }}');
+  kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+    if (!isAuth) {
+      // 비로그인 시 로그인 페이지로 유도하려면 주석 해제
+      location.href = "{% url 'account:login' %}?next={% url 'map:mine' %}";
+      return;
     }
-  </script>
+    const ll = mouseEvent.latLng;
+    latInput.value = ll.getLat();
+    lngInput.value = ll.getLng();
+    openModal();
+  });
+
+  // 3) 항상 DB의 포스트들 마커로 그리기
+  const POSTS = JSON.parse(document.getElementById('posts-data').textContent || "[]");
+  const markers = [];
+  POSTS.forEach(p => {
+    const pos = new kakao.maps.LatLng(p.lat, p.lng);
+    const m = new kakao.maps.Marker({ position: pos });
+    m.setMap(map);
+    const iw = new kakao.maps.InfoWindow({ content: `<div style="padding:6px 10px">${p.title}</div>` });
+    kakao.maps.event.addListener(m, 'click', () => iw.open(map, m));
+    markers.push(m);
+  });
+
+  // 4) 저장 직후 하이라이트(쿼리로 lat/lng 넘어온 경우)
+  const params  = new URLSearchParams(location.search);
+  const sLat    = parseFloat(params.get('lat'));
+  const sLng    = parseFloat(params.get('lng'));
+  if (!isNaN(sLat) && !isNaN(sLng)) {
+    const pos = new kakao.maps.LatLng(sLat, sLng);
+    map.setCenter(pos);
+    const m = new kakao.maps.Marker({ position: pos });
+    m.setMap(map);
+    const iw = new kakao.maps.InfoWindow({ content: `<div style="padding:6px 10px; font-size:13px;">저장 완료!</div>` });
+    iw.open(map, m);
+    setTimeout(() => iw.close(), 2000);
+    history.replaceState(null, "", location.pathname); // 새로고침 시 중복 방지
+  }
+</script>
+
+
 </body>
 </html>

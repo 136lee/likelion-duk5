@@ -42,7 +42,7 @@ def create(request):
         #   예) /map/list?lat=37.66&lng=127.04&id=123
         map_url = reverse('map:list')  # 너가 쓰는 메인 지도 URL 네임
         q = urlencode({"lat": post.latitude or "", "lng": post.longitude or "", "id": post.pk})
-        return redirect(f"{map_url}?{q}")
+        return redirect(f"{reverse('map:list')}?scope=mine")
 
 #자세히 (마이페이지, 지도?)
 def detail(request, id):

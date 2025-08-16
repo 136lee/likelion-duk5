@@ -21,10 +21,10 @@ def login(request):
     form=AuthenticationForm(request, request.POST)
     if form.is_valid():
         auth_login(request,  form.user_cache)
-        return redirect('map:home')
+        return redirect('map:list')
     return render(request, 'account/login.html', {'form':form})
 
 def logout(request):
     if request.user.is_authenticated:
         auth_logout(request)
-    return redirect('account:login')
+    return redirect('map:list')
