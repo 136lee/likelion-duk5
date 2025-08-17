@@ -117,7 +117,7 @@
 
 #postcont {
   display: flex;
-  margin: 30px 10% 0 10%;
+  margin: 30px 7% 0 7%;
 }
 #postcont img {
   height: 30px;
@@ -128,7 +128,7 @@
 }
 #postcontmi {
   display: flex;
-  margin: 10px 13% 0 13%;
+  margin: 27px 10% 0 10%;
 }
 #usid {
   font-size: 18px;
@@ -140,75 +140,50 @@
   color: #808080;
 }
 
-/* 여기 */
-
-.masonry img,
-.masonry .add-btn {
-  width: 100%;
-  display: block;
-  margin-bottom: 10px; /* 아래 간격 */
-  border-radius: 6px;
+#addPtCon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed #808080;
+  width: 70%;
+  height: 230px;
+  margin: 0 auto;
+  flex-direction: column;
+  border-radius: 10px;
+  margin-top: 50px;
 }
-.masonry ig {
-  width: 100%;
-  height: 100%;
-  max-width: 300px; /* 최대 크기 */
-  max-height: auto; /* 최대 크기 */
-  min-width: 300px; /* 최소 크기 */
-  min-height: fit-content; /* 최소 크기 */
-  object-fit: cover; /* 원본 비율 유지하면서 영역 꽉 채움 */
-  border-radius: 6px;
-}
-.masonry ig {
-  display: block;
-  width: 300px; /* 가로 크기 고정 */
-  height: auto; /* 세로는 원본 비율에 맞게 */
-  border-radius: 6px;
-  margin-bottom: 10px; /* 아래 간격 */
-}
-
-.masonry {
-  column-count: 2; /* 두 열 */
-  column-gap: 10px; /* 열 간격 */
-  margin: 30px 20% 40px 20%;
-}
-
-.masonry img {
-  display: block;
-  height: auto; /* 비율 유지 */
-  margin-bottom: 10px; /* 아래 간격 */
-  border-radius: 6px;
-}
-
 .add-btn {
-  background: #f0f2ed;
-  text-align: center;
-  font-size: 1.5rem;
-  line-height: 120%;
   cursor: pointer;
-  color: #697077;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+#addPtCon img {
+  width: 45px;
+}
+#addPtCon p {
+  color: #808080;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  margin-top: 8px;
 }
 
-#csubcon {
+#addPtBt {
   display: flex;
   justify-content: end;
-  margin: 10px 10% 0px 10%;
-  margin-bottom: 40px;
+  width: 85%;
+  margin-top: 60px;
 }
+#addPtBt input {
+  padding: 16px 20px;
+  border-radius: 10px;
+  background: #deede5;
+  border: none;
 
-#csubcona {
-  margin-right: 20px;
-  border-radius: 4px;
-  border: 2px solid #01a0ff;
-  padding: 10px 20px;
-  color: #01a0ff;
+  color: #509771;
+  font-size: 17px;
   font-weight: 500;
-}
-#csubconBt {
-  border-radius: 4px;
-  border: 2px solid #01a0ff;
-  background-color: #01a0ff;
-  padding: 10px 20px;
-  color: #ffffff;
-  font-weight: 500;
+  line-height: 110%;
 }

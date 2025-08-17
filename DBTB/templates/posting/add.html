@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/DBTB/static/css/account/add.css" />
+    <title>add</title>
+  </head>
+  <body>
+    <div id="postcont">
+      <img src="/DBTB/static/img/chevron-left.svg" />
+      <p>덕성여자대학교</p>
+    </div>
+    <div id="postcontmi">
+      <!-- 피드로 이동 -->
+      <a>
+        <img id="postpf" src="/DBTB/static/img/profile.svg" />
+      </a>
+      <div>
+        <p id="usid">봉봉봉</p>
+        <p id="usst">AI 작업 실행 중</p>
+      </div>
+    </div>
+    <div id="addPtCon">
+      <input type="file" id="fileUpload" accept="image/*" hidden />
+      <label for="fileUpload" class="add-btn">
+        <img src="/DBTB/static/img/circle-plus.svg" />
+        <p>사진 등록하기</p>
+      </label>
+    </div>
+    <div id="addPtBt">
+      <form action="/DBTB/templates/posting/posting.html">
+        <input type="button" value="다음 단계" />
+      </form>
+    </div>
+  </body>
+</html>

@@ -38,16 +38,18 @@
 
 #HdAccountBt {
   border-radius: 10px;
-  background: #0050a5;
+  background: #a9dfc099;
   border: none;
   display: flex;
-  padding: 0.8%;
+  padding: 1%;
   justify-content: center;
   align-items: center;
   gap: 10px;
+  font-weight: 600;
+  cursor: pointer;
 }
 #HdAccountBt p {
-  color: #fff;
+  color: #536a59;
 }
 
 /* 바디 */
@@ -81,16 +83,20 @@
   display: flex;
   justify-content: space-between;
 }
+input {
+  outline: none;
+}
 #Lsb {
   width: 420px;
-  background-color: #0050a5;
-  color: #fff;
+  background-color: #a9dfc099;
+  color: #536a59;
   font-family: Pretendard;
   font-size: 20px;
   font-style: normal;
   font-weight: 500;
   line-height: 140%; /* 44.8px */
   margin-top: 30px;
+  border: none;
 }
 #formCon {
   display: flex;
