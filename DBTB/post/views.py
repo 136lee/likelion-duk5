@@ -1,10 +1,8 @@
-from django.shortcuts import render
 from .models import *
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from urllib.parse import urlencode
 # Create your views here.
 
 @login_required
@@ -63,8 +61,8 @@ def update(request,id):
         return redirect ('post:detail', id)
     return render(request, 'post/update.html', {'post':post})
 
-#삭제 (마이페이지에서)
-# def delete(request, id):
-#    post = get_object_or_404(Post, id=id)
- #   post.delete()
-  #  return redirect ('post:list') 
+# 삭제 (마이페이지에서)
+def delete(request, id):
+    post = get_object_or_404(Post, id=id)
+    post.delete()
+    return redirect ('post:list') 

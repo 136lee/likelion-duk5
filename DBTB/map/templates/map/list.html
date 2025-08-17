@@ -62,11 +62,18 @@
     const bounds = new kakao.maps.LatLngBounds();
     let added = 0, skipped = 0;
 
+    const detailPattern = "{% url 'post:detail' 12345 %}";
+    const detailUrlFor = (id) => detailPattern.replace(/12345\/?$/, id + "/");
+
+
     posts.forEach(p=>{
       const pos = getPos(p);
       if (!pos){ skipped++; return; }
       const m = new kakao.maps.Marker({ position: pos });
       m.setMap(map);
+      kakao.maps.event.addListener(m, 'click', () => {
+      location.href = detailUrlFor(p.id);   // ✅ 마커 클릭 → 상세 페이지로 이동
+      });
       markers.push(m);
       bounds.extend(pos);
       added++;
