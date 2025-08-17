@@ -1,36 +1,34 @@
-import json
-from django.shortcuts import render , redirect
+# map/views.py
+from django.shortcuts import render
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from post.models import Post
-from post.models import Category  # 카테고리 사용
 
-def _posts_to_json(qs):
-    data = [
-        {"id": p.id, "title": p.title, "lat": p.latitude, "lng": p.longitude}
-        for p in qs
-        if p.latitude is not None and p.longitude is not None
-    ]
-    return json.dumps(data, ensure_ascii=False)
+DOBONG_CENTER = {"lat": 37.668, "lng": 127.047}
 
 def list(request):
-    categories = Category.objects.all()
-    qs = Post.objects.exclude(latitude__isnull=True).exclude(longitude__isnull=True)
-    return render(request, "map/list.html", {
-        "scope": "all",
-        "posts_json": _posts_to_json(qs),
-        "categories": categories, 
-    })
+    return render(request, "map/list.html", {"scope": "list", "center": DOBONG_CENTER})
 
 @login_required
 def mine(request):
-    if not request.user.is_authenticated:
-        return redirect("map:list")
-    
-    categories = Category.objects.all()
-    qs = Post.objects.filter(author=request.user)\
-            .exclude(latitude__isnull=True).exclude(longitude__isnull=True)
-    return render(request, "map/list.html", {
-        "scope": "mine",
-        "posts_json": _posts_to_json(qs),
-        "categories": categories, 
-    })
+    return render(request, "map/list.html", {"scope": "mine", "center": DOBONG_CENTER})
+
+def posts_api(request):
+    scope = request.GET.get("scope", "list")  # 'list' | 'mine'
+    qs = Post.objects.all()
+    if scope == "mine":
+        if not request.user.is_authenticated:
+            return JsonResponse({"detail": "auth required"}, status=401)
+        qs = qs.filter(author=request.user)
+
+    data = []
+    for p in qs:
+        lat = float(p.latitude) if p.latitude is not None else None
+        lng = float(p.longitude) if p.longitude is not None else None
+        data.append({
+            "id": p.id,
+            "title": p.title or "",
+            "lat": lat,   # ← 프론트가 기대하는 이름
+            "lng": lng,
+        })
+    return JsonResponse(data, safe=False)

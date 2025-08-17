@@ -2,153 +2,129 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <title>Kakao Map</title>
+  <title>지도 - {% if scope == 'mine' %}내 지도{% else %}전체 지도{% endif %}</title>
   <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b76f141ae739da5b568454a96523a207"></script>
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; }
-    header { padding: 1rem; background: #f0f0f0; text-align: center; font-size: 1.2rem; font-weight: bold; }
-    #map { width: 100%; height: 500px; border-top: 2px solid #ccc; }
-
-    /* 모달 */
-    .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index: 9999;}
-    .modal .body {
-      max-width: 480px; margin: 8vh auto; background:#fff; padding:16px; border-radius:12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.2);
-    }
-    .modal h3 { margin: 0 0 12px; }
-    .row { margin: 8px 0; }
-    .row input[type="text"], .row textarea { width:100%; padding:8px; box-sizing:border-box; }
-    .actions { display:flex; gap:8px; justify-content:flex-end; margin-top: 12px; }
-    button { cursor:pointer; padding:8px 12px; border-radius:8px; border:1px solid #ddd; background:#fafafa; }
-    button[type="submit"] { background:#222; color:#fff; border-color:#222; }
-    
+    body{margin:0;font-family:system-ui,Arial,sans-serif}
+    header{padding:12px;background:#f5f5f5;display:flex;gap:10px;align-items:center}
+    nav a{padding:6px 10px;border:1px solid #ddd;border-radius:8px;text-decoration:none;color:#333}
+    nav a.active{background:#222;color:#fff;border-color:#222}
+    #map{width:100%;height:70vh;border-top:1px solid #eee}
+    #count{padding:8px 12px;color:#666;font-size:14px}
   </style>
 </head>
 <body>
-  <header>지도 페이지</header>
-
-  {% if request.user.is_authenticated %}
-    {{request.user.username}}님 환영합니다. <br/>
-    <a href="{% url 'account:logout' %}">로그아웃</a>
-    <a href="{#}">마이페이지</a>
-    {% else %}
-    <a href="{% url 'account:login' %}">로그인</a>
-    <a href="{% url 'account:signup' %}">회원가입</a>
-    {% endif %} 
-    <br/>
+  <header>
+    <strong>{% if scope == 'mine' %}내 지도{% else %}전체 지도{% endif %}</strong>
+    <nav>
+      <a href="{% url 'map:list' %}" class="{% if scope == 'list' %}active{% endif %}">전체지도</a>
+      <a href="{% url 'map:mine' %}" class="{% if scope == 'mine' %}active{% endif %}">내지도</a>
+    </nav>
+    <div style="margin-left:auto;">
+      {% if request.user.is_authenticated %}
+        {{ request.user.username }}님 | <a href="{% url 'account:logout' %}">로그아웃</a>
+      {% else %}
+        <a href="{% url 'account:login' %}?next={{ request.path|urlencode }}">로그인</a>
+      {% endif %}
+    </div>
+  </header>
 
   <div id="map"></div>
+  <div id="count">표시된 포스트: 0개</div>
 
-  <!-- ✅ 모달 폼: 전통 폼 제출 방식 (A안) -->
-  <div id="postModal" class="modal" aria-hidden="true">
-    <div class="body">
-      <h3>새 포스트</h3>
-      <form method="POST" action="{% url 'post:create' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="row">
-          <input type="text" name="title" placeholder="제목" required />
-        </div>
-        <div class="row">
-          <textarea name="content" placeholder="내용" rows="4"></textarea>
-        </div>
-        <div class="row">
-          <label>이미지: <input type="file" name="image" accept="image/*" /></label>
-        </div>
-        <div class="row">
-          <label>영상: <input type="file" name="video" accept="video/*" /></label>
-        </div>
+  <script>
+  // 스코프: 'list'(전체) 또는 'mine'
+  const SCOPE = '{{ scope|escapejs }}' || 'list';
+  const isAuth = JSON.parse('{{ request.user.is_authenticated|yesno:"true,false"|escapejs }}');
+  const centerLat = parseFloat('{{ center.lat|default:"37.668"|escapejs }}');
+  const centerLng = parseFloat('{{ center.lng|default:"127.047"|escapejs }}');
 
-        <!-- (선택) 카테고리: map:list 뷰에서 categories 내려줄 때만 표시 -->
-        {% if categories %}
-          <div class="row">
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              {% for c in categories %}
-                <label style="display:inline-flex; gap:6px; align-items:center;">
-                  <input type="checkbox" name="category" value="{{ c.id }}"> {{ c.name }}
-                </label>
-              {% endfor %}
-            </div>
-          </div>
-        {% endif %}
-
-        <!-- 지도 클릭 좌표 주입 -->
-        <input type="hidden" name="latitude" id="form-lat" />
-        <input type="hidden" name="longitude" id="form-lng" />
-
-        <div class="actions">
-          <button type="button" id="closeModalBtn">닫기</button>
-          <button type="submit">저장</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-
-  <!-- 서버에서 넘어온 포스트들 -->
-<script id="posts-data" type="application/json">{{ posts_json|default:"[]"|safe }}</script>
-
-<script>
-  // Kakao SDK 로드 확인 (가끔 로딩 이슈 방지)
-  if (!window.kakao || !kakao.maps) {
-    console.error('카카오 지도 스크립트가 로드되지 않았습니다.');
-  }
-
-  // 1) 지도 초기화 (한 번만!)
+  // 1) 지도(도봉구 중심) — 한 번만 생성
   const map = new kakao.maps.Map(document.getElementById('map'), {
-    center: new kakao.maps.LatLng(37.668, 127.047),
+    center: new kakao.maps.LatLng(centerLat, centerLng),
     level: 6
   });
 
-  // 2) 모달 엘리먼트
-  const modal    = document.getElementById('postModal');
-  const closeBtn = document.getElementById('closeModalBtn');
-  const latInput = document.getElementById('form-lat');
-  const lngInput = document.getElementById('form-lng');
+  // 2) 마커 관리 — 한 번만 선언
+  let markers = [];
+  function clearMarkers(){ markers.forEach(m=>m.setMap(null)); markers=[]; }
 
-  function openModal()  { modal.style.display = 'block'; modal.setAttribute('aria-hidden','false'); }
-  function closeModal() { modal.style.display = 'none';  modal.setAttribute('aria-hidden','true'); }
-  closeBtn.addEventListener('click', closeModal);
-
-  // 로그인 여부에 따라 모달 오픈 제어(옵션)
-  const isAuth =  JSON.parse('{{ request.user.is_authenticated|yesno:"true,false"|lower }}');
-  kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-    if (!isAuth) {
-      // 비로그인 시 로그인 페이지로 유도하려면 주석 해제
-      location.href = "{% url 'account:login' %}?next={% url 'map:mine' %}";
-      return;
-    }
-    const ll = mouseEvent.latLng;
-    latInput.value = ll.getLat();
-    lngInput.value = ll.getLng();
-    openModal();
-  });
-
-  // 3) 항상 DB의 포스트들 마커로 그리기
-  const POSTS = JSON.parse(document.getElementById('posts-data').textContent || "[]");
-  const markers = [];
-  POSTS.forEach(p => {
-    const pos = new kakao.maps.LatLng(p.lat, p.lng);
-    const m = new kakao.maps.Marker({ position: pos });
-    m.setMap(map);
-    const iw = new kakao.maps.InfoWindow({ content: `<div style="padding:6px 10px">${p.title}</div>` });
-    kakao.maps.event.addListener(m, 'click', () => iw.open(map, m));
-    markers.push(m);
-  });
-
-  // 4) 저장 직후 하이라이트(쿼리로 lat/lng 넘어온 경우)
-  const params  = new URLSearchParams(location.search);
-  const sLat    = parseFloat(params.get('lat'));
-  const sLng    = parseFloat(params.get('lng'));
-  if (!isNaN(sLat) && !isNaN(sLng)) {
-    const pos = new kakao.maps.LatLng(sLat, sLng);
-    map.setCenter(pos);
-    const m = new kakao.maps.Marker({ position: pos });
-    m.setMap(map);
-    const iw = new kakao.maps.InfoWindow({ content: `<div style="padding:6px 10px; font-size:13px;">저장 완료!</div>` });
-    iw.open(map, m);
-    setTimeout(() => iw.close(), 2000);
-    history.replaceState(null, "", location.pathname); // 새로고침 시 중복 방지
+  // 좌표 안전 파서
+  function getPos(p){
+    const lat = Number(p.lat ?? p.latitude);
+    const lng = Number(p.lng ?? p.longitude);
+    if (Number.isNaN(lat) || Number.isNaN(lng)) return null;
+    return new kakao.maps.LatLng(lat, lng);
   }
+
+  function renderMarkers(posts){
+    clearMarkers();
+    const bounds = new kakao.maps.LatLngBounds();
+    let added = 0, skipped = 0;
+
+    posts.forEach(p=>{
+      const pos = getPos(p);
+      if (!pos){ skipped++; return; }
+      const m = new kakao.maps.Marker({ position: pos });
+      m.setMap(map);
+      markers.push(m);
+      bounds.extend(pos);
+      added++;
+    });
+
+    if (added > 0) map.setBounds(bounds, 40, 40, 40, 40);
+    const $count = document.getElementById('count');
+    if ($count) $count.textContent = `표시된 포스트: ${added}개${skipped ? ' (좌표 없음 제외: '+skipped+'개)' : ''}`;
+    console.log(`받은 글:${posts.length} / 마커 생성:${added} / 스킵:${skipped}`);
+  }
+
+  // 3) 데이터 로드 — 기본: /map/api/posts/  → 404면 /api/posts/로 재시도
+  async function fetchPosts(scope){
+    const urls = [`/map/api/posts/?scope=${scope}`, `/api/posts/?scope=${scope}`];
+    for (const u of urls){
+      try{
+        const res = await fetch(u);
+        console.log('GET', u, res.status);
+        if (res.status === 401) { alert('로그인이 필요합니다.'); return []; }
+        if (res.ok) return await res.json();
+        if (res.status !== 404) { console.error('API 오류', u, await res.text()); return []; }
+      }catch(e){ console.error('요청 실패', u, e); }
+    }
+    console.error('posts API 경로를 찾지 못했습니다. map/urls.py 확인!');
+    return [];
+  }
+
+  async function load(scope){
+    const posts = await fetchPosts(scope);
+    renderMarkers(posts);
+  }
+
+  // 4) 지도 클릭 → 작성 페이지로 이동
+  kakao.maps.event.addListener(map, 'click', (e)=>{
+    const lat = e.latLng.getLat().toFixed(6);
+    const lng = e.latLng.getLng().toFixed(6);
+    const back = location.pathname; // /map/ 또는 /map/mine/
+    const createUrl = `{% url 'post:create' %}?lat=${lat}&lng=${lng}&next=${encodeURIComponent(back)}`;
+    if (isAuth) location.href = createUrl;
+    else location.href = `{% url 'account:login' %}?next=${encodeURIComponent(createUrl)}`;
+  });
+
+  // 5) 첫 로드 + 저장 직후 하이라이트
+  (async function init(){
+    await load(SCOPE); // ← 들어오자마자 전체 마커 로드
+    const params = new URLSearchParams(location.search);
+    const hLat = parseFloat(params.get('lat'));
+    const hLng = parseFloat(params.get('lng'));
+    if (!Number.isNaN(hLat) && !Number.isNaN(hLng)) {
+      const pos = new kakao.maps.LatLng(hLat, hLng);
+      map.setCenter(pos);
+      const m = new kakao.maps.Marker({ position: pos, map });
+      const iw = new kakao.maps.InfoWindow({ content: '<div style="padding:6px 10px;font-size:13px;">저장 완료!</div>' });
+      iw.open(map, m);
+      setTimeout(()=> iw.close(), 1800);
+      history.replaceState(null, "", location.pathname);
+    }
+  })();
 </script>
 
 

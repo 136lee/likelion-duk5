@@ -9,20 +9,17 @@ from urllib.parse import urlencode
 
 @login_required
 def create(request):
-    categories = Category.objects.all()
 
     if request.method =="POST":
         title = request.POST.get('title') 
         content = request.POST.get('content')
         image = request.FILES.get('image')
-        video = request.FILES.get('video')
 
 # 지도에서 심어줄 hidden input 이름은 latitude / longitude 로 가정
-        lat = request.POST.get('latitude')  
-        lng = request.POST.get('longitude')  
-
-        category_ids = request.POST.getlist('category')
-        category_list = [get_object_or_404(Category, id=category_id) for category_id in category_ids]
+        lat_raw = request.POST.get('latitude')  
+        lng_raw = request.POST.get('longitude')
+        lat = float(lat_raw) if lat_raw else None
+        lng = float(lng_raw) if lng_raw else None  
 
 
         post = Post.objects.create(
@@ -30,19 +27,17 @@ def create(request):
             content= content,
             author=request.user,
             image = image,
-            video = video,
-            latitude=lat or None,
-            longitude=lng or None,
+            latitude=lat ,
+            longitude=lng,
         )
-
-        for category in category_list:
-            post.category.add(category)
-
-    # ✅ 저장 후: 지도 페이지로 리다이렉트하면서 방금 좌표/ID를 쿼리로 전달
-        #   예) /map/list?lat=37.66&lng=127.04&id=123
-        map_url = reverse('map:list')  # 너가 쓰는 메인 지도 URL 네임
-        q = urlencode({"lat": post.latitude or "", "lng": post.longitude or "", "id": post.pk})
-        return redirect(f"{reverse('map:list')}?scope=mine")
+        
+        # ✅ 저장 후 보던 지도 페이지로 복귀 + 하이라이트
+        next_url = request.POST.get("next") or reverse("map:list")
+        if post.latitude is not None and post.longitude is not None:
+            return redirect(f"{next_url}?lat={post.latitude}&lng={post.longitude}")
+        return redirect(next_url)
+    # GET: 폼 렌더 (지도로부터 ?lat&lng&next 받음)
+    return render(request, "post/create.html")
 
 #자세히 (마이페이지, 지도?)
 def detail(request, id):
@@ -57,15 +52,11 @@ def update(request,id):
         post.title = request.POST.get('title')
         post.content = request.POST.get('content')
         image = request.FILES.get('image')
-        video = request.FILES.get('video')
 
         if image:
             post.image.delete()
             post.image = image
         
-        if video:
-            post.video.delete()
-            post.video = video
 
         post.save()
 

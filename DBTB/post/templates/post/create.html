@@ -1,25 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>글 작성</title>
 </head>
 <body>
-    <h2>글 작성</h2>
-    <form method ="POST" action ="{% url 'post:create'%}" enctype="multipart/form-data">
-        {% csrf_token%}
-        제목 -<input type="text" name = 'title'><br><br>
-        내용 - <textarea name = "content"></textarea><br><br>
-        이미지 - <input type="file" name="image"/><br><br>
-        카테고리 -
-        <select name="category" multiple>
-            {% for category in categories %}
-            <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-        </select>
-        <br/> <br/>
-        <input type ="submit" value="작성하기">
-    </form>
+  <h2>글 작성</h2>
+
+  <!-- 디버그: 지도에서 받은 좌표가 들어오는지 잠깐 확인해도 좋아요
+  <div>lat={{ request.GET.lat }}, lng={{ request.GET.lng }}, next={{ request.GET.next }}</div>
+  -->
+
+  <form method="POST" action="{% url 'post:create' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- ✅ 지도에서 받은 좌표/복귀 경로를 그대로 POST로 넘김 -->
+    <input type="hidden" name="latitude"  value="{{ request.GET.lat }}">
+    <input type="hidden" name="longitude" value="{{ request.GET.lng }}">
+    <input type="hidden" name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'map:list' %}{% endif %}">
+
+    제목 - <input type="text" name="title" required><br><br>
+    내용 - <textarea name="content" rows="6"></textarea><br><br>
+    이미지 - <input type="file" name="image" accept="image/*"/><br><br>
+
+    <br/><br/>
+    <input type="submit" value="작성하기">
+  </form>
 </body>
 </html>
