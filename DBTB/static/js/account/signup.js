@@ -69,3 +69,25 @@ document.querySelector("form").addEventListener("submit", function (e) {
 
   e.target.submit();
 });
+
+// 가입설정
+const visitor = document.getElementById("chBGW");
+const resident = document.getElementById("chBGWM");
+const hd = document.getElementById("WMhidden");
+
+function resetBackground() {
+  visitor.style.backgroundColor = "";
+  resident.style.backgroundColor = "";
+}
+
+visitor.addEventListener("click", () => {
+  resetBackground();
+  visitor.style.backgroundColor = "#A9DFC066";
+  hd.style.display = "none";
+});
+
+resident.addEventListener("click", () => {
+  resetBackground();
+  resident.style.backgroundColor = "#A9DFC066";
+  hd.style.display = "block";
+});
