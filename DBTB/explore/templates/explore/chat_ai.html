@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="chat"></div>
+<input id="msg" placeholder="메시지 입력..." />
+<button onclick="send()">보내기</button>
+
+<script>
+async function send(){
+  const msg = document.getElementById("msg").value;
+  const res = await fetch("{% url 'chat_api' %}", {
+    method:"POST", headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({message: msg})
+  });
+  const data = await res.json();
+  document.getElementById("chat").innerHTML += "<div>👤: "+msg+"</div>";
+  document.getElementById("chat").innerHTML += "<div>🤖: "+data.reply+"</div>";
+  document.getElementById("msg").value = "";
+}
+</script>
+</body>
+</html>
