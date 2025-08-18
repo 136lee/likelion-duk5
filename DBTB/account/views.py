@@ -10,7 +10,9 @@ def signup(request):
         return render(request, 'account/signup.html', {'form':form})
     form=SignUpForm(request.POST)
     if form.is_valid():
-        form.save()
+        user=form.save(commit=False)
+        user.username=user.email
+        user.save()
         return redirect('account:login')
     else:
         return render(request, 'account/signup.html', {'form':form})
@@ -21,7 +23,8 @@ def login(request):
     form=AuthenticationForm(request, request.POST)
     if form.is_valid():
         auth_login(request,  form.user_cache)
-        return redirect('map:home')
+        #return redirect('map:home')
+        return redirect('account:login')
     return render(request, 'account/login.html', {'form':form})
 
 def logout(request):
