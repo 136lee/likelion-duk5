@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="{% url 'map:list' %}">홈으로</a><br>
+
+    {% if request.user.is_authenticated %}
+    {{request.user.username}}님 환영합니다. <br/>
+    <h2>마이페이지</h2>
+    <a href="{% url 'account:user-info' %}">내 프로필</a><br/>
+    <a href="{% url 'account:mypost' %}">내가 작성한 글 </a> <br/>
+    <a href="{#}">나의 할 일</a><br/>
+    <a href="{#}">내가 스크랩 한 글</a>
+    {% else %}
+    <a href="{% url 'account:login' %}">로그인 해주세요</a><br>
+    <a href="{% url 'account:signup' %}">회원가입</a>
+    {% endif %} 
+    <br/>
+</body>
+</html>
