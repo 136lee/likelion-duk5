@@ -137,3 +137,5 @@ MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL='users.User'
 
+from django.urls import reverse_lazy
+LOGIN_URL = reverse_lazy("account:login")   # ← 템플릿에서 쓰는 것과 맞춤
