@@ -1,31 +1,44 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>글 작성</title>
-</head>
+<head>  </head>
 <body>
-  <h2>글 작성</h2>
+  <a href="{% url 'map:list' %}">← 지도</a>
 
-  <!-- 디버그: 지도에서 받은 좌표가 들어오는지 잠깐 확인해도 좋아요
-  <div>lat={{ request.GET.lat }}, lng={{ request.GET.lng }}, next={{ request.GET.next }}</div>
-  -->
+  <h2>글 작성</h2>
 
   <form method="POST" action="{% url 'post:create' %}" enctype="multipart/form-data">
     {% csrf_token %}
 
-    <!-- ✅ 지도에서 받은 좌표/복귀 경로를 그대로 POST로 넘김 -->
-    <input type="hidden" name="latitude"  value="{{ request.GET.lat }}">
-    <input type="hidden" name="longitude" value="{{ request.GET.lng }}">
-    <input type="hidden" name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'map:list' %}{% endif %}">
+    <!-- 지도에서 전달된 좌표/복귀 경로를 그대로 POST로 넘긴다 -->
+<input type="hidden" name="latitude"  value="{{ request.GET.lat }}">
+<input type="hidden" name="longitude" value="{{ request.GET.lng }}">
+<input type="hidden" name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'map:list' %}{% endif %}">
 
+    <!-- (생략) hidden latitude/longitude/next ... -->
+
+    이미지 - <input type="file" name="image" id="image" accept="image/*"/><br><br>
     제목 - <input type="text" name="title" required><br><br>
-    내용 - <textarea name="content" rows="6"></textarea><br><br>
-    이미지 - <input type="file" name="image" accept="image/*"/><br><br>
+    내용 - <textarea name="content" id="content" rows="6"></textarea><br><br>
 
-    <br/><br/>
+    <!-- 결과 박스 -->
+    <div id="aiPhotoBox" style="display:none; margin-top:8px; border:1px solid #eee; border-radius:10px; padding:10px;">
+      <div id="aiPhotoLoading" style="color:#666;">AI가 사진을 분석하는 중…</div>
+      <div id="aiPhotoResult" style="display:none;">
+        <div><b>분위기</b>: <span id="aiMood"></span> <span id="aiEmojis"></span></div>
+        <div style="margin-top:6px;"><b>요약</b>: <span id="aiSummary"></span></div>
+        <div style="margin-top:6px;"><b>태그</b>: <span id="aiTags"></span></div>
+        <button type="button" id="aiApply" style="margin-top:8px;">본문에 반영</button>
+      </div>
+    </div>
+
     <input type="submit" value="작성하기">
   </form>
+
+  <!-- ✅ JS가 읽을 엔드포인트 값을 템플릿에서 주입 -->
+  <input type="hidden" id="ai-photo-url" value="{% url 'post:ai_photo' %}">
+
+  <!-- ✅ 외부 스크립트 로드 -->
+  <script src="{% static 'post/create.js' %}"></script>
 </body>
 </html>

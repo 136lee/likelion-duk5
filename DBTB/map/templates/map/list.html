@@ -27,6 +27,10 @@
         <a href="{% url 'account:login' %}?next={{ request.path|urlencode }}">로그인</a>
       {% endif %}
     </div>
+    <a href="{#}">피드</a>
+    <a href="{#}">탐험</a>
+    <a href="{% url 'account:mypage' %}">마이페이지</a>
+    <a href="{#}">프로필</a>
   </header>
 
   <div id="map"></div>
