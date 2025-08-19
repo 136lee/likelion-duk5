@@ -1,41 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Chat (텍스트+이미지)</title>
 </head>
 <body>
-    <div id="chat"></div>
-<input id="msg" placeholder="메시지 입력..." />
-<button onclick="send()">보내기</button>
-<script>
-async function send(){
-  const msgEl = document.getElementById("msg");
-  const chat = document.getElementById("chat");
-  const msg = msgEl.value.trim();
-  if(!msg) return;
+  <div id="chat" style="margin-bottom:10px;"></div>
 
-  // 사용자가 보낸 메시지 먼저 표시
-  chat.insertAdjacentHTML("beforeend", `<div>👤: ${msg}</div>`);
-  msgEl.value = "";
+  <input id="msg" placeholder="메시지 입력..." />
+  <input id="img" type="file" accept="image/*" />
+  <button id="sendBtn">보내기</button>
 
-  try {
-    const res = await fetch("{% url 'explore:chat_api' %}", {
-      method:"POST",
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({message: msg})
-    });
-    const data = await res.json();
-    chat.insertAdjacentHTML(
-      "beforeend",
-      `<div>🤖: ${data.reply ?? ("에러: " + (data.error || res.status))}</div>`
-    );
-  } catch(e){
-    chat.insertAdjacentHTML("beforeend", `<div style="color:red">요청 실패: ${e}</div>`);
+  <script>
+  async function send(){
+    const chat = document.getElementById("chat");
+    const msgEl = document.getElementById("msg");
+    const imgEl = document.getElementById("img");
+
+    const msg = msgEl.value.trim();
+    const file = imgEl.files[0];
+
+    if (!msg && !file) {
+      alert("메시지 또는 이미지를 넣어주세요!");
+      return;
+    }
+
+    // 보낸 내용 표시
+    let me = `👤: ${msg || "(이미지만 전송)"}`;
+    if (file) me += ` <small>+ [이미지 첨부]</small>`;
+    chat.insertAdjacentHTML("beforeend", `<div>${me}</div>`);
+
+    // 이미지 미리보기(선택)
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        chat.insertAdjacentHTML("beforeend",
+          `<img src="${reader.result}" style="max-width:220px;border:1px solid #ddd;margin:6px 0;"/>`
+        );
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // FormData 전송: 헤더 설정 금지(브라우저가 자동으로 멀티파트 헤더 셋업)
+    const fd = new FormData();
+    if (msg) fd.append("message", msg);
+    if (file) fd.append("image", file);
+
+    try {
+      const res = await fetch("{% url 'explore:chat_api' %}", {
+        method: "POST",
+        body: fd
+      });
+      const data = await res.json();
+      chat.insertAdjacentHTML(
+        "beforeend",
+        `<div>🤖: ${data.reply ?? ("에러: " + (data.error || res.status))}</div>`
+      );
+    } catch (e) {
+      chat.insertAdjacentHTML("beforeend",
+        `<div style="color:red">요청 실패: ${e}</div>`
+      );
+    } finally {
+      msgEl.value = "";
+      imgEl.value = "";
+    }
   }
-}
-</script>
 
+  document.getElementById("sendBtn").addEventListener("click", send);
+  </script>
 </body>
 </html>
