@@ -8,4 +8,9 @@ urlpatterns = [
     path("recom-now/<int:post_id>/", recom_now, name="recom_now"),
     path("recom-later/<int:post_id>/", recom_later, name="recom_later"),
     path("post-detail/<int:post_id>", post_detail, name="post_detail"),
+    path("create/", create, name="create"),
+    path('detail/<int:id>/',detail, name='detail'),
+    path('update/<int:id>/', update, name='update'),
+    path('delete/<int:id>/' , delete, name="delete"),
+    path("ai/photo/", ai_photo, name="ai_photo"),
 ]
