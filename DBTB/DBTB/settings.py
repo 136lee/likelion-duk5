@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "account",
     "users",
     "feed",
+    "explore",
 ]
 
 MIDDLEWARE = [
