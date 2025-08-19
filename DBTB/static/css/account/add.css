@@ -115,6 +115,13 @@
   grid-template-columns: repeat(2, 1fr);
 } */
 
+a{
+  text-decoration: none;
+}
+
+a:visited{
+  color: #000;
+}
 #postcont {
   display: flex;
   margin: 30px 7% 0 7%;
@@ -175,6 +182,7 @@
   justify-content: end;
   width: 85%;
   margin-top: 60px;
+  cursor: pointer;
 }
 #addPtBt input {
   padding: 16px 20px;
