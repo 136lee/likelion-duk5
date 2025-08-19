@@ -9,19 +9,33 @@
     <div id="chat"></div>
 <input id="msg" placeholder="메시지 입력..." />
 <button onclick="send()">보내기</button>
-
 <script>
 async function send(){
-  const msg = document.getElementById("msg").value;
-  const res = await fetch("{% url 'chat_api' %}", {
-    method:"POST", headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({message: msg})
-  });
-  const data = await res.json();
-  document.getElementById("chat").innerHTML += "<div>👤: "+msg+"</div>";
-  document.getElementById("chat").innerHTML += "<div>🤖: "+data.reply+"</div>";
-  document.getElementById("msg").value = "";
+  const msgEl = document.getElementById("msg");
+  const chat = document.getElementById("chat");
+  const msg = msgEl.value.trim();
+  if(!msg) return;
+
+  // 사용자가 보낸 메시지 먼저 표시
+  chat.insertAdjacentHTML("beforeend", `<div>👤: ${msg}</div>`);
+  msgEl.value = "";
+
+  try {
+    const res = await fetch("{% url 'explore:chat_api' %}", {
+      method:"POST",
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({message: msg})
+    });
+    const data = await res.json();
+    chat.insertAdjacentHTML(
+      "beforeend",
+      `<div>🤖: ${data.reply ?? ("에러: " + (data.error || res.status))}</div>`
+    );
+  } catch(e){
+    chat.insertAdjacentHTML("beforeend", `<div style="color:red">요청 실패: ${e}</div>`);
+  }
 }
 </script>
+
 </body>
 </html>
