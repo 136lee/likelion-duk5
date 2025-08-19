@@ -18,7 +18,7 @@ class Post(models.Model):
     AI_matching=models.TextField(blank=True)
     author=models.ForeignKey(User, on_delete=models.CASCADE, related_name="post_author")
     place=models.ManyToManyField(Place, related_name="post_place")
-    scrap = models.ManyToManyField(User, related_name="scrapped_posts", blank=True, through="PostScrap")
+    scrap = models.ManyToManyField(User, related_name="scrapped_posts", blank=True)
     video = models.FileField(upload_to=upload_filepath, blank=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
@@ -52,4 +52,3 @@ class Recommend(models.Model):
 class PostCategory(models.Model):
     post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name="post_categories")
     category = models.ForeignKey(to=Category, on_delete=models.CASCADE, related_name="post_categories")
-
