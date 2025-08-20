@@ -10,4 +10,6 @@ urlpatterns=[
     path('mypage/', mypage, name='mypage'),
     path('mypost/', mypost, name='mypost'),
     path('user-info/', user_info, name='user-info'),
+    path('myscrap/', myscrap, name='myscrap'),
+    #path('mytodo/', mytodo, name="mytodo")
 ]

@@ -2,6 +2,10 @@
   margin: 0;
   padding: 0;
 }
+a{
+  text-decoration: none;
+}
+
 
 /* 헤더 */
 #HdStyle {
@@ -78,6 +82,12 @@
   margin-top: 25px;
   border: 1px solid #d8d8d8;
   border-radius: 8px;
+  cursor: pointer;
+}
+#logSg,
+#logSg:visited {
+  text-decoration: none;
+  color: #7a7878;
 }
 #conLpw {
   display: flex;

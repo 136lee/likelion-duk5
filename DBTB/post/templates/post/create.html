@@ -1,4 +1,4 @@
-{% load static %}
+<!-- {% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>  </head>
@@ -8,21 +8,21 @@
   <h2>글 작성</h2>
 
   <form method="POST" action="{% url 'post:create' %}" enctype="multipart/form-data">
-    {% csrf_token %}
+    {% csrf_token %} -->
 
     <!-- 지도에서 전달된 좌표/복귀 경로를 그대로 POST로 넘긴다 -->
-<input type="hidden" name="latitude"  value="{{ request.GET.lat }}">
+<!-- <input type="hidden" name="latitude"  value="{{ request.GET.lat }}">
 <input type="hidden" name="longitude" value="{{ request.GET.lng }}">
-<input type="hidden" name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'map:list' %}{% endif %}">
+<input type="hidden" name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'map:list' %}{% endif %}"> -->
 
     <!-- (생략) hidden latitude/longitude/next ... -->
-
+<!-- 
     이미지 - <input type="file" name="image" id="image" accept="image/*"/><br><br>
     제목 - <input type="text" name="title" required><br><br>
-    내용 - <textarea name="content" id="content" rows="6"></textarea><br><br>
+    내용 - <textarea name="content" id="content" rows="6"></textarea><br><br> -->
 
     <!-- 결과 박스 -->
-    <div id="aiPhotoBox" style="display:none; margin-top:8px; border:1px solid #eee; border-radius:10px; padding:10px;">
+    <!-- <div id="aiPhotoBox" style="display:none; margin-top:8px; border:1px solid #eee; border-radius:10px; padding:10px;">
       <div id="aiPhotoLoading" style="color:#666;">AI가 사진을 분석하는 중…</div>
       <div id="aiPhotoResult" style="display:none;">
         <div><b>분위기</b>: <span id="aiMood"></span> <span id="aiEmojis"></span></div>
@@ -33,12 +33,66 @@
     </div>
 
     <input type="submit" value="작성하기">
-  </form>
+  </form> -->
 
   <!-- ✅ JS가 읽을 엔드포인트 값을 템플릿에서 주입 -->
-  <input type="hidden" id="ai-photo-url" value="{% url 'post:ai_photo' %}">
+  <!-- <input type="hidden" id="ai-photo-url" value="{% url 'post:ai_photo' %}"> -->
 
   <!-- ✅ 외부 스크립트 로드 -->
-  <script src="{% static 'post/create.js' %}"></script>
+  <!-- <script src="{% static 'post/create.js' %}"></script>
 </body>
+</html> -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/account/add.css'%}" />
+    <title>add</title>
+  </head>
+  <body>
+     <a id="postcont" href="{% url 'map:list' %}">
+      <img src="{% static 'img/chevron-left.svg' %}" />
+      <p>덕성여자대학교</p>
+    </a>
+    <div id="postcontmi">
+      <a href="{% url 'account:mypage' %}">
+        <img id="postpf" src="{% static 'img/profile.svg'%}" />
+      </a>
+      <div>
+        <p id="usid">봉봉봉</p>
+        <p id="usst">AI 작업 실행 중</p>
+      </div>
+    </div>
+     <form method="POST" action="{% url 'post:create' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+    <div id="addPtCon">
+     
+            <!-- 지도에서 전달된 좌표/복귀 경로를 그대로 POST로 넘긴다 -->
+<input type="hidden" name="latitude"  value="{{ request.GET.lat }}">
+<input type="hidden" name="longitude" value="{{ request.GET.lng }}">
+<input type="hidden" name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'map:list' %}{% endif %}">
+<!-- 까지       -->
+<input type="file" name="image" id="fileUpload" accept="image/*" hidden />
+      <label for="fileUpload" class="add-btn">
+        <img src="{% static 'img/circle-plus.svg'%}" />
+        <p>사진 등록하기</p>
+      </label>
+       <textarea name="content" placeholder="문구를 입력하세요..." style="width: 100%; height: 100px; margin-top: 10px;" required></textarea>
+      </div>
+    
+    <div id="addPtBt">
+      
+        <input type="submit" value="다음 단계" />
+        </div>
+      </form>
+    
+        <!-- 4. JS가 AI 분석을 요청할 URL (추가) -->
+    <input type="hidden" id="ai-photo-url" value="{% url 'post:ai_photo' %}">
+
+    <!-- 5. JS 파일 로드 (추가) -->
+    <script src="{% static 'post/create.js' %}"></script>
+  </body>
 </html>

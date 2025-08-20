@@ -53,3 +53,7 @@ def user_info(request):
 
     return render(request, 'account/user_info.html')
 
+def myscrap(request):
+    scraps = request.user.scrapped_posts.all()
+    return render(request, 'account/mypost.html', {'scraps': scraps})
+
