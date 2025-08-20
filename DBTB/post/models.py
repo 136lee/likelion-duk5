@@ -27,8 +27,6 @@ class Post(models.Model):
     def __str__(self):
         return f'{self.id})[{self.author}]-{self.content[:15]}...'
     
-class Category(models.Model):
-    name = models.CharField(max_length=20, unique=True)
     
 class AIFeedback(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="ai_post")
@@ -50,6 +48,3 @@ class Recommend(models.Model):
         base = self.recom_now or self.recom_later or ""
         return f'{self.post.pk} - {base[:20]}'
     
-class PostCategory(models.Model):
-    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name="post_categories")
-    category = models.ForeignKey(to=Category, on_delete=models.CASCADE, related_name="post_categories")

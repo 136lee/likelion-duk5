@@ -76,10 +76,10 @@ def matching(request, pk):
 def ai_feedback(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
-    # "true"면 True, 그 외는 False 처리
+    # "true"면 True, 아니면 False
     is_positive = request.POST.get("is_positive") == "true"
 
-    fb = AIFeedback.objects.update_or_create(
+    fb, created = AIFeedback.objects.update_or_create(
         post=post,
         user=request.user,
         defaults={"is_positive": is_positive},
@@ -207,8 +207,12 @@ def create_comment(request):
 
 #포스트 디테일
 def post_detail(request, post_id):
-    posts = get_object_or_404(Post, pk=post_id)
-    return render(request, "post/post.html", {'posts':posts})
+    post = get_object_or_404(
+        Post.objects.select_related("author").prefetch_related("place"),
+        pk=post_id
+    )
+    place = post.place.first() 
+    return render(request, "post/post_detail.html", {"post": post, "place": place})
 
 #def todo_toggle(request, recom_id):
 
