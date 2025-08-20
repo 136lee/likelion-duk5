@@ -12,6 +12,7 @@ def upload_filepath(instance, filename):
     return f'{instance._meta.model_name}/{today_str}/{str(uuid4())}_{file_basename}'
 
 class Post(models.Model):
+    title = models.CharField(max_length=50, default='')
     content=models.TextField()
     image=models.ImageField(upload_to=upload_filepath, blank=False)
     created_at=models.DateTimeField(auto_now_add=True)
