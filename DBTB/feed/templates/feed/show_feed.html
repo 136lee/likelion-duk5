@@ -25,11 +25,11 @@
   </form>
     <hr>
     {% for post in posts %} <!--있는 포스트 불러오기-->
-    {% if post.image %} <!--이미지 있을 시 이미지 불러오기-->
-  <img src="{{ post.image.url }}">
-  {% endif %}
-  작성자: {{ post.author.nickname|default:post.author }} <!--작성자 닉네임-->
-  <br>
+    {if post.image %} 
+    <a href="{% url 'post:post_detail' post.id %}"><img src="{{ post.image.url }}"> <!--이미지 있을 시 이미지 불러오기, 이미지 클릭 시 포스트 세부로 이동(url 바꿔야할 시 말씀 주세요.)-->
+    {% endif %}</a>
+    작성자: {{ post.author.nickname|default:post.author }} <!--작성자 닉네임-->
+    <br>
 
   <!--스크랩부분은 js로 연동해야할 거 같습니다... jsonresponse를 써서-->
   <form method="post" action="{% url 'feed:scrap' post.id %}">
