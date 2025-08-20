@@ -281,3 +281,9 @@ padding-top: 10px;
   margin-left: 5px;
   width: 15px;
 }
+#ptmy{
+  display: flex;
+  font-weight: 500;
+  color: #808080;
+  gap: 1px;
+}
