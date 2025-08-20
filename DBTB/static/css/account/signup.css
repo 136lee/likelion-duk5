@@ -30,10 +30,9 @@ a{
   gap: 5px;
 }
 /* 로고 수정 */
-/* #Hdlogoimg {
-  width:;
-  height:;
-} */
+#Hdlogoimg {
+  width:60%;
+}
 #HdText {
   color: var(--CoolGray-60, #697077);
   font-family: Roboto;
