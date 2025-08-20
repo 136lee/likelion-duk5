@@ -3,77 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/DBTB/static/css/account/postt.css" />
-    <title>post</title>
+    <link rel="stylesheet" href="/DBTB/static/css/account/add.css" />
+    <title>posting</title>
   </head>
   <body>
-    <header id="HdStyle">
-      <div id="HdLayout">
-        <div id="HdLogo">
-          <img id="Hdlogoimg" src="/DBTB/static/img/headerLogo.png" alt="로고" />
-          <p id="HdText">도봉또봉</p>
-        </div>
-        <div id="HdLogo">
-          <!-- 경로수정 -->
-          <div id="HdLogoA">
-            <a>지도</a>
-            <a>피드</a>
-            <a>탐험</a>
-          </div>
-          <a>
-            <img id="postpf" src="/DBTB/static/img/profile.svg" alt="프로필" />
-          </a>
-        </div>
-        <!-- <button type="button" id="HdAccountBt">
-          <p>로그인/회원가입</p>
-        </button> -->
-      </div>
-    </header>
     <section>
+      <!-- 지도로 이동 -->
+      <a id="postcont">
+        <img src="/DBTB/static/img/chevron-left.svg" />
+        <p>지도</p>
+      </a>
       <div id="postcontmi">
-        <!-- 피드로 이동 -->
+        <!-- 마이로 이동 -->
         <a>
           <img id="postpf" src="/DBTB/static/img/profile.svg" />
         </a>
-        <div id="poboxT">
-          <div id="postpfTxt">
-            <p id="usid">봉봉봉</p>
-            <p id="usst">방금 전</p>
-          </div>
-          <div>
-            <img id="ellipsis" src="/DBTB/static/img/ellipsis-vertical.svg" />
-          </div>
-        </div>
-        <div id="reMoT">
-          <div id="reMo">
-            <div class="reMocon">
-              <img src="/DBTB/static/img/pencil.svg" />
-              <span>수정</span>
-            </div>
-            <div class="reMocon">
-              <img src="/DBTB/static/img/trash-2.svg" />
-              <span>삭제</span>
-            </div>
-          </div>
+        <div>
+          <p id="usid">봉봉봉</p>
+          <p id="usst">AI 작업 실행 중</p>
         </div>
       </div>
-
       <article id="PTcontt">
         <div>
           <div id="aicon">
+                <div id="addPtCon">
+      <input type="file" id="fileUpload" accept="image/*" hidden />
+      <label for="fileUpload" class="add-btn">
+        <img src="/DBTB/static/img/circle-plus.svg" />
+        <p>사진 등록하기</p>
+      </label>
+    </div>
             <img id="adpts" src="/DBTB/static/img/IMG_0575 2.png" />
             <div id="aiconEx">
               <div id="PlName">
-                <div>
-                  <p id="PlNameTi">덕성여자대학교</p>
-                  <p id="PlNameAd">서울특별시 도봉구 삼양로144길 33</p>
-                </div>
-                <div id="PlNameSc">
-                  <img src="/DBTB/static/img/bookmark.svg" /><span
-                    id="PlNameScCount"
-                    >0</span
-                  >
-                </div>
+                <p id="PlNameTi">덕성여자대학교</p>
+                <p id="PlNameAd">서울특별시 도봉구 삼양로144길 33</p>
               </div>
               <div class="PtBox">
                 <div>
@@ -82,6 +46,10 @@
                     <img src="/DBTB/static/img/refresh-ccw.svg" />
                     <span>재생성</span>
                   </div>
+                </div>
+                <div class="PtLod" style="display: none">
+                  <img src="/DBTB/static/img/loader.svg" />
+                  <p>답변 생성 중...</p>
                 </div>
                 <div class="Pttextbox">
                   <ul>
@@ -109,14 +77,19 @@
             <div class="PtRe">
               <img src="/DBTB/static/img/pencil.svg" />
               <span>수정하기</span>
+              <p style="display: none">답변 생성 중...</p>
             </div>
             <p class="Pttextbox">
               여름 아침 덕성여대. 잔디밭에 앉아서 산과 하늘을 바라보면 마음이 탁
               트여요!
             </p>
           </div>
-          <div class="PtBox">
+          <!-- <div class="PtBox">
             <p class="PtBoxTT">AI 분위기 매칭</p>
+            <div class="PtLod" style="display: none">
+              <img src="/DBTB/static/img/loader.svg" />
+              <p>답변 생성 중...</p>
+            </div>
             <p class="Pttextbox">
               이 사진은 서울숲 잔디광장과 비슷한 분위기를 가지고 있습니다. 두 곳
               모두 넓은 잔디와 도심 속 여유로운 공간이 특징이에요! 다만,
@@ -148,37 +121,28 @@
                 <p>매우 동의</p>
               </div>
             </div>
-          </div>
-          <div class="PtBox">
+          </div> -->
+          <!-- <div class="PtBox">
             <p class="PtBoxTT">할 일 추천</p>
             <p id="PtBoxtxt">포스팅 완료한 후 확인할 수 있습니다.</p>
             <div id="PtBoxjo">
-              <a id="PtBoxSyjoH">
+              <a class="PtBoxSyjo">
                 <img src="/DBTB/static/img/chevron-right.svg" />
                 <span>여기서 할 일</span>
               </a>
-              <a id="PtBoxSyjoN">
+              <a class="PtBoxSyjo">
                 <img src="/DBTB/static/img/chevron-right.svg" />
                 <span>다음에 할 일</span>
               </a>
             </div>
-            <div id="PtBoxChList">
-              <label>
-                <input type="checkbox" />
-                <span>잔디밭에 앉아 아무 생각 없이 하늘 바라보기</span>
-              </label>
-              <label>
-                <input type="checkbox" />
-                <span>근처 카페에서 커피 테이크아웃해서 산책하기</span>
-              </label>
-              <label>
-                <input type="checkbox" />
-                <span>벚꽃길 걸으며 사진 한 장 남기기</span>
-              </label>
-            </div>
-          </div>
+          </div> -->
         </div>
       </article>
+      <div id="csubcon">
+        <!-- 이동태그 추가 -->
+        <a id="csubcona"> 취소 </a>
+        <button id="csubconBt" type="button">등록하기</button>
+      </div>
     </section>
     <footer id="AcFooter">
       <div id="FtLogo">
@@ -190,6 +154,5 @@
         <p id="FtAdC2">ⓒ 2025 AAA. All rights reserved.</p>
       </div>
     </footer>
-    <script src="/DBTB/static/js/account/postt.js"></script>
   </body>
 </html>
