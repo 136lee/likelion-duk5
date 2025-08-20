@@ -6,4 +6,3 @@ from .models import *
 admin.site.register(Post)
 admin.site.register(Recommend)
 # Register your models here.
-admin.site.register(Category)

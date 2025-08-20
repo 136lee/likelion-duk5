@@ -32,11 +32,15 @@
     <a href="{% url 'feed:feed_all' %}">피드</a>
     <a href="{% url 'explore:chat_ai' %}">탐험</a>
     <a href="{% url 'account:mypage' %}">마이페이지</a>
+<<<<<<< HEAD
+    <a href="#">프로필</a>
+=======
     {% if request.user.profile_image %}
     <img width="200px" src="{{request.user.profile_image.url}}" alt="Profil Image">
     {%else%}
     <img width="200px" src="{% static 'img/profile_image.jpg ' %}" alt="Default Profile">
     {% endif %}
+>>>>>>> fd46c01ed8ed7d871bae8fb927b74e5c080e92de
   </header>
 
   <div id="map"></div>
