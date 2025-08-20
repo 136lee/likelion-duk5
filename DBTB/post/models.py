@@ -53,3 +53,14 @@ class PostCategory(models.Model):
     post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name="post_categories")
     category = models.ForeignKey(to=Category, on_delete=models.CASCADE, related_name="post_categories")
 
+
+class PostScrap(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)  # 언제 스크랩했는지 기록
+
+    class Meta:
+        unique_together = ('post', 'user')  # 중복 스크랩 방지
+
+    def __str__(self):
+        return f"{self.user.username} scrapped {self.post.id}"
