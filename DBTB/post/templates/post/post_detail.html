@@ -14,23 +14,28 @@
     <img src="#" alt="내 정보" width="24" height="24">
 </a>
     <hr>
-    <img src=""> 
-    <p>{{post.author.name}}</p>
+    <img src="#"> <!--글쓴이 프사(경로 몰라서 일단 빈칸)--> 
+    <p>{{post.author.nickname}}</p>
     <p>{{ post.created_at | naturaltime }}</p>
-    <form method="post" action="{% url 'post:update' post.id %}">
+    <form method="post" action="{% url 'post:update' id=post.id %}">
         {% csrf_token %}
         <button type="submit">수정</button>
     </form>
-    <form method="post" action="{% url 'post:delete' post.id %}">
+    <form method="post" action="{% url 'post:delete' id=post.id %}">
         {% csrf_token %}
         <button type="submit">삭제</button>
     </form>
     <hr>
-    <p>{{post.image}}</p> <!--이미지-->
-    <p>{{post.place.name}}</p> <!--장소명-->
-    <p>{{post.place.address}}</p><!--주소-->
+    <p><img src="{{ post.image.url }}"></p> <!--이미지-->
+    {% if place %} <!--템플릿 언어 필수!!-->
+        <p>{{ place.name }}</p> <!--장소명-->
+        <p>{{ place.address }}</p> <!--주소-->
+    {% else %}
+        <p>장소 정보 없음</p>
+    {% endif %}
+    <!--분위기 분석 쪽은 제가 짠 코드가 아니라 더 잘 모르겠어서... 우선 API 명세서에 지피티한테 물어본 코드 기재해둘게요. 이것도 js 사용하셔야 해요.-->
     <h3>AI 분위기 분석</h3>
-    <p></p>
+    <p id="ai-result" style="display:none;"></p>
     <hr>
     <h3>소개 한 줄</h3>
     {{post.content}}

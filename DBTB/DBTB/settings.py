@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "users",
     "feed",
     "explore",
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -110,9 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ko-KR"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
@@ -142,3 +143,4 @@ AUTH_USER_MODEL='users.User'
 OPEN_API_KEY=config.OPEN_API_KEY
 from django.urls import reverse_lazy
 LOGIN_URL = reverse_lazy("account:login")   # ← 템플릿에서 쓰는 것과 맞춤
+

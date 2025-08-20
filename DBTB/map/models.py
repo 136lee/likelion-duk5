@@ -9,4 +9,4 @@ class Place(models.Model):
     long=models.FloatField()
 
     def __str__(self):
-        return f"{self.place_name} ({self.address})"
+        return f"{self.name} ({self.address})"
