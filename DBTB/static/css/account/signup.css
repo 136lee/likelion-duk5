@@ -2,6 +2,9 @@
   margin: 0;
   padding: 0;
 }
+a{
+  text-decoration: none;
+}
 
 /* 헤더 */
 #HdStyle {
@@ -9,7 +12,11 @@
   background: #fff;
   padding: 8px 0;
 }
-
+#logSg,
+#logSg:visited {
+  text-decoration: none;
+  color: #7a7878;
+}
 #HdLayout {
   display: flex;
   /* width: 100%; */
@@ -159,6 +166,11 @@ input {
   padding: 8px 0 12px 0;
   cursor: pointer;
 }
+
+#logF{
+text-decoration: underline;
+}
+
 #chBGW,
 #chBGWM {
   height: 20px;

@@ -218,7 +218,7 @@ def post_detail(request, post_id):
 def create(request):
 
     if request.method =="POST":
-        title = request.POST.get('title') 
+        # title = request.POST.get('title') 
         content = request.POST.get('content')
         image = request.FILES.get('image')
 
@@ -230,7 +230,7 @@ def create(request):
 
 
         post = Post.objects.create(
-            title=title,
+            # title=title,
             content= content,
             author=request.user,
             image = image,
@@ -256,7 +256,7 @@ def update(request,id):
     post = get_object_or_404(Post, id=id)
 
     if request.method =='POST':
-        post.title = request.POST.get('title')
+        # post.title = request.POST.get('title')
         post.content = request.POST.get('content')
         image = request.FILES.get('image')
 
