@@ -1,0 +1,68 @@
+{% load humanize %} <!--'n분 전' 이렇게 나오려면 필수-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>도봉또봉</h2>
+    <a href="{% url 'map:list' %}">지도</a>
+    <a href="{% url 'explore:chat_ai' %}">탐험</a>
+    <a href="{% url 'account:user-info' %}">
+    <img src="#" alt="내 정보" width="24" height="24">
+</a>
+    <hr>
+    <img src=""> 
+    <p>{{post.author.name}}</p>
+    <p>{{ post.created_at | naturaltime }}</p>
+    <form method="post" action="{% url 'post:update' post.id %}">
+        {% csrf_token %}
+        <button type="submit">수정</button>
+    </form>
+    <form method="post" action="{% url 'post:delete' post.id %}">
+        {% csrf_token %}
+        <button type="submit">삭제</button>
+    </form>
+    <hr>
+    <p>{{post.image}}</p> <!--이미지-->
+    <p>{{post.place.name}}</p> <!--장소명-->
+    <p>{{post.place.address}}</p><!--주소-->
+    <h3>AI 분위기 분석</h3>
+    <p></p>
+    <hr>
+    <h3>소개 한 줄</h3>
+    {{post.content}}
+    <hr>
+    <h3>AI 분위기 매칭</h3>
+    {{post.AI_matching}}
+    <p>이 답변에 동의하시나요?</p>
+    <!--답변 피드백 부분은 jsonresponse로 짜 놧기에 이 코드로 짜는 건 비추하고... 자스로 데이터 불러와야 할 것 같아요. 
+    다만 제가 자스를 모르기에 우선 이렇게 짜놨고, 자스 부분 지피티한테 물어본 건 API 명세서에 써놨습니다.
+    지금 상태로는 json 페이지로 이동하게 돼요.-->
+    <form method="POST" action="{% url 'post:ai_feedback' post.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="is_positive" value="true">
+        <button type="submit">이 답변 좋아요</button>
+    </form>
+    <form method="POST" action="{% url 'post:ai_feedback' post.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="is_positive" value="false">
+        <button type="submit">이 답변 싫어요</button>
+    </form>
+    <hr>
+    <h2>할 일 추천</h2>
+    <!--여기 또한 실제 코드는 자스로 해야 할 거 같아서 우선 API 명세서에 자스 어떻게 할지 돌려본 거 추가해놓겠습니다.
+    지금 상태로는 json 페이지로 이동하게 돼요.-->
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" formaction="{% url 'post:recom_now' post.id %}">
+            여기서 할 일
+        </button>
+        <button type="submit" formaction="{% url 'post:recom_later' post.id %}">
+            다음에 할 일
+        </button>
+    </form>
+</body>
+</html>

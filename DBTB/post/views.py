@@ -76,10 +76,10 @@ def matching(request, pk):
 def ai_feedback(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
-    # "true"면 True, 그 외는 False 처리
+    # "true"면 True, 아니면 False
     is_positive = request.POST.get("is_positive") == "true"
 
-    fb = AIFeedback.objects.update_or_create(
+    fb, created = AIFeedback.objects.update_or_create(
         post=post,
         user=request.user,
         defaults={"is_positive": is_positive},
