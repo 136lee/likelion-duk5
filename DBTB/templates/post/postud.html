@@ -1,27 +1,26 @@
-{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{% static 'css/account/postt.css'%}" />
-    <title>post</title>
+    <link rel="stylesheet" href="/DBTB/static/css/account/postud.css" />
+    <title>postud</title>
   </head>
   <body>
     <header id="HdStyle">
       <div id="HdLayout">
         <div id="HdLogo">
-          <img id="Hdlogoimg" src="{% static 'img/headerLogo.png' %}" alt="로고" />
+          <img id="Hdlogoimg" src="/DBTB/static/img/headerLogo.png" alt="로고" />
         </div>
         <div id="HdLogo">
           <!-- 경로수정 -->
           <div id="HdLogoA">
-            <a href="{% url 'map:list' %}">지도</a>
-            <a href="{% url 'feed:feed_all' %}">피드</a>
-            <a href="{% url 'explore:chat_ai' %}">탐험</a>
+            <a>지도</a>
+            <a>피드</a>
+            <a>탐험</a>
           </div>
-          <a href="{% url 'account:mypage' %}">
-            <img id="postpf" src="{% static 'img/profile.svg' %}" alt="프로필" />
+          <a>
+            <img id="postpf" src="/DBTB/static/img/profile.svg" alt="프로필" />
           </a>
         </div>
         <!-- <button type="button" id="HdAccountBt">
@@ -32,8 +31,8 @@
     <section>
       <div id="postcontmi">
         <!-- 피드로 이동 -->
-        <a href="{% url 'feed:feed_all' %}">
-          <img id="postpf" src="{% static 'img/profile.svg'%}" />
+        <a>
+          <img id="postpf" src="/DBTB/static/img/profile.svg" />
         </a>
         <div id="poboxT">
           <div id="postpfTxt">
@@ -41,18 +40,17 @@
             <p id="usst">방금 전</p>
           </div>
           <div>
-            <img id="ellipsis" src="{% static 'img/ellipsis-vertical.svg'%}" />
+            <img id="ellipsis" src="/DBTB/static/img/ellipsis-vertical.svg" />
           </div>
         </div>
         <div id="reMoT">
           <div id="reMo">
-            <!-- 수정으로 이동 -->
-            <a href="{% url 'post:update' %}" class="reMocon">
-              <img src="{% static 'img/pencil.svg'%}" />
-              <span>수정</span>
-            </a>
             <div class="reMocon">
-              <img src="{% static 'img/trash-2.svg'%}" />
+              <img src="/DBTB/static/img/pencil.svg" />
+              <span>수정</span>
+            </div>
+            <div class="reMocon">
+              <img src="/DBTB/static/img/trash-2.svg" />
               <span>삭제</span>
             </div>
           </div>
@@ -62,7 +60,7 @@
       <article id="PTcontt">
         <div>
           <div id="aicon">
-            <img id="adpts" src="{% static 'img/IMG_0575 2.png' %}" />
+            <img id="adpts" src="/DBTB/static/img/IMG_0575 2.png" />
             <div id="aiconEx">
               <div id="PlName">
                 <div>
@@ -70,7 +68,7 @@
                   <p id="PlNameAd">서울특별시 도봉구 삼양로144길 33</p>
                 </div>
                 <div id="PlNameSc">
-                  <img src="{% static 'img/bookmark.svg' %}" /><span
+                  <img src="/DBTB/static/img/bookmark.svg" /><span
                     id="PlNameScCount"
                     >0</span
                   >
@@ -80,7 +78,7 @@
                 <div>
                   <span class="PtBoxTT">AI 분위기 분석</span>
                   <div class="PtRe">
-                    <img src="{% static 'img/refresh-ccw.svg' %}" />
+                    <img src="/DBTB/static/img/refresh-ccw.svg" />
                     <span>재생성</span>
                   </div>
                 </div>
@@ -92,13 +90,23 @@
                     <li>자연친화적, 청량감, 여유로움</li>
                   </ul>
                 </div>
+                <div class="PtBoxSy">
+                  <div class="PtBoxSyGB">
+                    <img src="/DBTB/static/img/👍️ 올린 엄지.svg" />
+                    <span>이 답변 좋아요</span>
+                  </div>
+                  <div class="PtBoxSyGB">
+                    <img src="/DBTB/static/img/👎️ 내린 엄지.svg" />
+                    <span>이 답변 싫어요</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div class="PtBox">
             <span class="PtBoxTT">소개 한 줄</span>
             <div class="PtRe">
-              <img src="{% static 'img/pencil.svg' %}" />
+              <img src="/DBTB/static/img/pencil.svg" />
               <span>수정하기</span>
             </div>
             <p class="Pttextbox">
@@ -119,23 +127,23 @@
             <p class="PtBoxTT">이 답변에 동의하시나요?</p>
             <div class="PtBoxSy">
               <div class="SyFive">
-                <img src="{% static 'img/😟 걱정스러운 얼굴.svg'%}" />
+                <img src="/DBTB/static/img/😟 걱정스러운 얼굴.svg" />
                 <p>매우 미동의</p>
               </div>
               <div class="SyFive">
-                <img src="{% static 'img/🙁 살짝 찡그린 얼굴.svg'%}" />
+                <img src="/DBTB/static/img/🙁 살짝 찡그린 얼굴.svg" />
                 <p>미동의</p>
               </div>
               <div class="SyFive">
-                <img src="{% static 'img/🤨 눈썹을 치켜올린 얼굴.svg' %}" />
+                <img src="/DBTB/static/img/🤨 눈썹을 치켜올린 얼굴.svg" />
                 <p>모름</p>
               </div>
               <div class="SyFive">
-                <img src="{% static 'img/🙂 살짝 미소 짓는 얼굴.svg' %}" />
+                <img src="/DBTB/static/img/🙂 살짝 미소 짓는 얼굴.svg" />
                 <p>동의</p>
               </div>
               <div class="SyFive">
-                <img src="{% static 'img/😀 활짝 웃는 얼굴.svg'%}" />
+                <img src="/DBTB/static/img/😀 활짝 웃는 얼굴.svg" />
                 <p>매우 동의</p>
               </div>
             </div>
@@ -145,11 +153,11 @@
             <p id="PtBoxtxt">포스팅 완료한 후 확인할 수 있습니다.</p>
             <div id="PtBoxjo">
               <a id="PtBoxSyjoH">
-                <img src="{% static 'img/chevron-right.svg'%}" />
+                <img src="/DBTB/static/img/chevron-right.svg" />
                 <span>여기서 할 일</span>
               </a>
               <a id="PtBoxSyjoN">
-                <img src="{% static 'img/chevron-right.svg'%}" />
+                <img src="/DBTB/static/img/chevron-right.svg" />
                 <span>다음에 할 일</span>
               </a>
             </div>
@@ -173,7 +181,7 @@
     </section>
     <footer id="AcFooter">
       <div id="FtLogo">
-        <img src="{% static '' %}" alt="로고" />
+        <img src="" alt="로고" />
         <p>도봉또봉</p>
       </div>
       <div id="FtAd">
@@ -181,6 +189,6 @@
         <p id="FtAdC2">ⓒ 2025 AAA. All rights reserved.</p>
       </div>
     </footer>
-    <script src="{% static 'account/postt.js'%}"></script>
+    <script src="/DBTB/static/js/account/postt.js"></script>
   </body>
 </html>

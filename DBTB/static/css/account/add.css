@@ -116,7 +116,7 @@ a:visited{
 }
 #postcontmi {
   display: flex;
-  margin: 27px 10% 0 10%;
+  margin: 4000px 10% 0 10%;
 }
 #usid {
   font-size: 18px;
@@ -487,5 +487,5 @@ a:visited{
   cursor: pointer;
 }
 section{
-    margin: 45px 0 80px 0;
+    margin: 80px 0 90px 0;
 }
