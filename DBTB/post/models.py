@@ -44,6 +44,7 @@ class Recommend(models.Model):
     recom_now = models.TextField(blank=True)
     recom_later = models.TextField(blank=True, default="")
     comment=models.TextField(blank=True)
+    is_complete=models.BooleanField(default=False)
 
     def __str__(self):
         base = self.recom_now or self.recom_later or ""

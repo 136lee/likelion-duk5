@@ -2,19 +2,35 @@ from django.shortcuts import render, redirect, get_object_or_404
 from post.models import *
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.db.models import Q
 
 ALLOWED_DONGS = {"도봉동", "창동", "방학동", "쌍문동"}
 
 def feed(request, dong=None):
-    qs = Post.objects.all().prefetch_related("place")
+    q = (request.GET.get("q") or "").strip()
 
-    if dong:  # 동 이름이 들어온 경우만 필터
+    qs = (
+        Post.objects
+        .all()
+        .select_related("author")
+        .prefetch_related("place", "scrap")
+    )
+
+    if dong:
         if dong not in ALLOWED_DONGS:
-            return render(request, "feed/show_feed.html", {"posts": [], "dong": dong})
+            return render(request, "feed/show_feed.html", {"posts": [], "dong": dong, "q": q})
         qs = qs.filter(place__address__icontains=dong)
 
+    if q:
+        qs = qs.filter(
+            Q(place__name__icontains=q) |
+            Q(place__address__icontains=q) |
+            Q(author__nickname__icontains=q)
+        )
+
     posts = qs.order_by("-id").distinct()
-    return render(request, "feed/show_feed.html", {"posts": posts, "dong": dong})
+    return render(request, "feed/show_feed.html", {"posts": posts, "dong": dong, "q": q})
+
 
 @login_required
 def scrap(request, post_id):
@@ -33,6 +49,23 @@ def scrap(request, post_id):
         "count": post.scrap.count()         
     })
 
-def test(request):
-    posts = Post.objects.prefetch_related("scrap").order_by("-id")[:20]
-    return render(request, "feed/test.html", {"posts": posts})
+def feed_search(request):
+    q = (request.GET.get("q") or "").strip()
+    if not q:
+        return redirect("feed:feed_all")
+
+    qs = (
+        Post.objects
+        .all()
+        .select_related("author")
+        .prefetch_related("place", "scrap")
+        .filter(
+            Q(place__name__icontains=q) |
+            Q(place__address__icontains=q) |
+            Q(author__nickname__icontains=q) 
+
+        )
+        .order_by("-id")
+        .distinct()
+    )
+    return render(request, "feed/show_feed.html", {"posts": qs, "q": q, "dong": None})

@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from openai import OpenAI
 from .forms import *
-from django.http import JsonResponse,  HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 from django.conf import settings
 import base64, mimetypes
@@ -31,7 +31,7 @@ def matching(request, pk):
     place = post.place.first()
     if not place:
         return HttpResponseBadRequest("이 포스트에 연결된 장소가 없습니다.")
-    place_name = place.place_name.strip()
+    place_name = place.name.strip()
 
     if not (post.author_id == request.user.id or request.user.is_staff or request.user.is_superuser):
         return JsonResponse({"ok": False, "error": "권한이 없습니다."}, status=403)
@@ -99,7 +99,7 @@ def recom_now(request, post_id):
     place = post.place.first()
     if not place:
         return HttpResponseBadRequest("이 포스트에 연결된 장소가 없습니다.")
-    place_name = (getattr(place, "place_name", "") or "").strip()
+    place_name = (getattr(place, "name", "") or "").strip()
     place_address = (getattr(place, "address", "") or "").strip()
     if not place_name:
         return HttpResponseBadRequest("장소명이 비어 있습니다.")
@@ -150,7 +150,7 @@ def recom_later(request, post_id):
     place = post.place.first()
     if not place:
         return HttpResponseBadRequest("이 포스트에 연결된 장소가 없습니다.")
-    place_name = (getattr(place, "place_name", "") or "").strip()
+    place_name = (getattr(place, "name", "") or "").strip()
     place_address = (getattr(place, "address", "") or "").strip()
     if not place_name:
         return HttpResponseBadRequest("장소명이 비어 있습니다.")
@@ -209,6 +209,9 @@ def create_comment(request):
 def post_detail(request, post_id):
     posts = get_object_or_404(Post, pk=post_id)
     return render(request, "post/post.html", {'posts':posts})
+
+#def todo_toggle(request, recom_id):
+
 
 
 @login_required
