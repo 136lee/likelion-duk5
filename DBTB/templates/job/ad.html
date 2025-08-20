@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/account/add.css'%}" />
+    <title>add</title>
+  </head>
+  <body>
+     <a id="postcont" href="{% url 'map:list' %}">
+      <img src="{% static 'img/chevron-left.svg' %}" />
+      <p>덕성여자대학교</p>
+    </a>
+    <div id="postcontmi">
+      <a href="{% url 'account:mypage' %}">
+        <img id="postpf" src="{% static 'img/profile.svg'%}" />
+      </a>
+      <div>
+        <p id="usid">봉봉봉</p>
+        <p id="usst">AI 작업 실행 중</p>
+      </div>
+    </div>
+    <div id="addPtCon">
+      <form method="POST" action="{% url 'post:create' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+            <!-- 지도에서 전달된 좌표/복귀 경로를 그대로 POST로 넘긴다 -->
+<input type="hidden" name="latitude"  value="{{ request.GET.lat }}">
+<input type="hidden" name="longitude" value="{{ request.GET.lng }}">
+<input type="hidden" name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'map:list' %}{% endif %}">
+<!-- 까지       -->
+<input type="file" name="image" id="fileUpload" accept="image/*" hidden />
+      <label for="fileUpload" class="add-btn">
+        <img src="{% static 'img/circle-plus.svg'%}" />
+        <p>사진 등록하기</p>
+      </label>
+      
+    
+    <div id="addPtBt">
+      
+        <input type="button" value="다음 단계" />
+        </div>
+      </form>
+    
+    </div>
+  </body>
+</html>

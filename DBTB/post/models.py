@@ -18,7 +18,7 @@ class Post(models.Model):
     AI_matching=models.TextField(blank=True)
     author=models.ForeignKey(User, on_delete=models.CASCADE, related_name="post_author")
     place=models.ManyToManyField(Place, related_name="post_place")
-    scrap = models.ManyToManyField(User, related_name="scrapped_posts", blank=True, through="PostScrap")
+    scrap = models.ManyToManyField(User, related_name="scrapped_posts", blank=True)
     video = models.FileField(upload_to=upload_filepath, blank=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
@@ -44,6 +44,7 @@ class Recommend(models.Model):
     recom_now = models.TextField(blank=True)
     recom_later = models.TextField(blank=True, default="")
     comment=models.TextField(blank=True)
+    is_complete=models.BooleanField(default=False)
 
     def __str__(self):
         base = self.recom_now or self.recom_later or ""
@@ -52,15 +53,3 @@ class Recommend(models.Model):
 class PostCategory(models.Model):
     post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name="post_categories")
     category = models.ForeignKey(to=Category, on_delete=models.CASCADE, related_name="post_categories")
-
-
-class PostScrap(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)  # 언제 스크랩했는지 기록
-
-    class Meta:
-        unique_together = ('post', 'user')  # 중복 스크랩 방지
-
-    def __str__(self):
-        return f"{self.user.username} scrapped {self.post.id}"

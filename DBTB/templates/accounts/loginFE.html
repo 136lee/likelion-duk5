@@ -1,40 +1,20 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h2>로그인</h2>
-    <form method="POST" action="{% url 'account:login'%}">
-        {%csrf_token %} {{form.as_p}}
-        <button type="submit">로그인</button>
-    </form>
-
-    <p><a href="{% url 'account:signup' %}">
-    아직 회원이 아니신가요? 회원가입 하러 가기</a></p>
-</body>
-</html> -->
-
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{% static 'css/account/login.css'%}" />
+    <link rel="stylesheet" href="/DBTB/static/css/account/login.css" />
     <title>login</title>
   </head>
   <body>
     <header id="HdStyle">
       <div id="HdLayout">
-        <a href="{% url 'map:list' %}" id="HdLogo">
-          <img id="Hdlogoimg" src="{% static '' %}" alt="로고" />
+        <div id="HdLogo">
+          <img id="Hdlogoimg" src="" alt="로고" />
           <p id="HdText">도봉또봉</p>
-      </a>
+        </div>
         <button type="button" id="HdAccountBt">
-          <a id="logSg" href="{% url 'account:signup' %}">로그인/회원가입</a>
+          <p>로그인/회원가입</p>
         </button>
       </div>
     </header>
@@ -45,19 +25,17 @@
           <p>로그인</p>
         </div>
         <div id="formCon">
-          <form  method="POST" action="{% url 'account:login'%}">
-            {%csrf_token %}
+          <form>
             <div>
-              <input name="username" id="LId" type="text" placeholder="아이디를 입력하세요." />
+              <input id="LId"  type="text" placeholder="아이디를 입력하세요." />
             </div>
             <input
               id="LPw"
               type="password"
-              name="password"
               placeholder="비밀번호를 입력하세요."
             />
             <div>
-              <input  id="Lsb" type="submit" value="로그인" />
+              <input id="Lsb"  type="submit" value="로그인" />
             </div>
           </form>
         </div>
@@ -69,14 +47,14 @@
           <div>
             <p>아이디 찾기</p>
             <p>비밀번호 찾기</p>
-            <a id="logSg" href="{% url 'account:signup' %}">회원가입</a>
+            <p>회원가입</p>
           </div>
         </div>
       </article>
     </section>
     <footer id="AcFooter">
       <div id="FtLogo">
-        <img src="{% static '' %}" alt="로고" />
+        <img src="" alt="로고" />
         <p>도봉또봉</p>
       </div>
       <div id="FtAd">
