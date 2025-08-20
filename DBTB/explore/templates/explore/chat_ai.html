@@ -6,6 +6,7 @@
   <title>AI Chat (텍스트+이미지)</title>
 </head>
 <body>
+  {% if request.user.is_authenticated %}
   <div id="chat" style="margin-bottom:10px;"></div>
 
   <input id="msg" placeholder="메시지 입력..." />
@@ -69,5 +70,12 @@
 
   document.getElementById("sendBtn").addEventListener("click", send);
   </script>
+  
+  {% else %}
+  <a href="{% url 'account:login' %}?next={{ request.path|urlencode }}">로그인 해주세요
+  </a>
+  {% endif %}
+
+  
 </body>
 </html>
