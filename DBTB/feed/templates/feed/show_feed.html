@@ -6,7 +6,10 @@
     <title>Document</title>
 </head>
 <body>
-    <h2>도봉또봉</h2>
+
+  {% if request.user.is_authenticated %}
+    
+  <h2>도봉또봉</h2>
     <a href="{% url 'map:list' %}">지도</a>
     <a href="{% url 'explore:chat_ai' %}">탐험</a>
     <a href="{% url 'account:user-info' %}">
@@ -25,7 +28,7 @@
   </form>
     <hr>
     {% for post in posts %} <!--있는 포스트 불러오기-->
-    {if post.image %} 
+    {% if post.image %} 
     <a href="{% url 'post:post_detail' post.id %}"><img src="{{ post.image.url }}"> <!--이미지 있을 시 이미지 불러오기, 이미지 클릭 시 포스트 세부로 이동(url 바꿔야할 시 말씀 주세요.)-->
     {% endif %}</a>
     작성자: {{ post.author.nickname|default:post.author }} <!--작성자 닉네임-->
@@ -54,6 +57,12 @@
     게시물이 없습니다.
   {% endif %}
 {% endfor %}
+    
+    {% else %}
+    <a href="{% url 'account:login' %}">로그인 해주세요</a><br>
+    {% endif %} 
+  
+
 
 </body>
 </html>
