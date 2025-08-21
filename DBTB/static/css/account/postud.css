@@ -1,0 +1,332 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* 헤더 */
+#HdStyle {
+  border-bottom: 1px solid #d8d8d8;
+  background: #fff;
+  padding: 8px 0;
+}
+
+#Hdlogoimg{
+  width: 60%;
+}
+
+#HdLayout {
+  display: flex;
+  height: 70%;
+  padding: 6px 5%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#HdLogo {
+  display: flex;
+  font-weight: 500;
+  justify-content: center;
+  align-items: center;
+}
+#HdLogo a {
+  cursor: pointer;
+  margin: 0 10px;
+}
+#HdLogoA {
+  margin-right: 10px;
+}
+
+#HdText {
+  color: var(--CoolGray-60, #697077);
+  font-family: Roboto;
+  font-size: 180%;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 110%;
+}
+
+/* dur; */
+#reMo {
+  position: absolute;
+  top: 150px;
+  right: 13%;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  width: 120px;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  padding: 5px 0;
+  display: none;
+  flex-direction: column;
+  z-index: 10;
+}
+
+#reMo.show {
+  display: flex;
+}
+
+/* 바디 */
+#postcont {
+  display: flex;
+  margin: 30px 7% 0 7%;
+}
+#postcont img {
+  height: 30px;
+}
+#postcont p {
+  font-weight: 700;
+  font-size: 20px;
+}
+#postcontmi {
+  display: flex;
+  margin: 10px 10% 0 10%;
+  border-bottom: 1px solid #989f9a99;
+  padding-bottom: 8px;
+}
+#usid {
+  font-size: 18px;
+  font-weight: 500;
+}
+#usst {
+  font-size: 14px;
+  font-weight: 300;
+  color: #808080;
+}
+#poboxT {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+
+#PTcontt {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#PTcontt > div {
+  max-width: 60%;
+  width: 100%;
+}
+#adpts {
+  width: 30%;
+}
+#PlNameTi {
+  color: #000;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 110%;
+}
+#PlNameAd {
+  color: #808080;
+  margin-top: 8px;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 110%;
+}
+#aicon {
+  display: flex;
+}
+#aiconEx {
+  margin-left: 20px;
+}
+
+/* 박스 */
+.PtBox {
+  border-radius: 10px;
+  background: #edf3ec;
+  padding: 20px 30px;
+  margin-top: 20px;
+  width: 100%;
+}
+.PtBoxTT {
+  color: #000;
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 160%;
+}
+.PtRe {
+  display: inline;
+  margin-left: 10px;
+  font-size: 12px;
+  color: #808080;
+  cursor: pointer;
+}
+.PtRe img {
+  width: 12px;
+}
+.PtRe p {
+  color: #c3cec6;
+  font-size: 13px;
+  margin-top: 20px;
+}
+.PtBoxSy {
+  display: flex;
+  gap: 10%;
+  justify-content: center;
+}
+.PtBoxSyGB {
+  border: 1px solid #c3cec6;
+  border-radius: 10px;
+  padding: 5px;
+  cursor: pointer;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.PtBoxSyGB img {
+  width: 28%;
+  margin-right: 5px;
+}
+.PtBoxSyGB span {
+  font-size: 14px;
+  text-align: center;
+}
+.SyFive {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 20px 0;
+  cursor: pointer;
+}
+.SyFive p {
+  color: #808080;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 160%;
+}
+#PtBoxtxt {
+  color: #808080;
+  font-family: Pretendard;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 110%;
+  margin-top: 5px;
+}
+#PtBoxjo {
+  display: flex;
+  gap: 20%;
+  margin-top: 20px;
+}
+#PtBoxSyjoH,
+#PtBoxSyjoN {
+  border: 1px solid #c3cec6;
+  border-radius: 10px;
+  padding: 5px;
+  cursor: pointer;
+  width: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Pttextbox {
+  line-height: 160%;
+  margin: 20px 0;
+  font-weight: 500;
+  color: #3d3d3d;
+  font-size: 17px;
+}
+
+#postpfTxt {
+  margin-left: 10px;
+}
+#ellipsis {
+  width: 20px;
+  cursor: pointer;
+}
+#reMo {
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  width: 80px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+#reMoT {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10%;
+}
+.reMocon {
+  padding: 2px;
+  cursor: pointer;
+}
+#PlNameSc img {
+  width: 20px;
+  cursor: pointer;
+}
+#PlNameSc {
+  display: flex;
+  justify-content: center;
+}
+#PlNameScCount {
+  color: #808080;
+  font-size: 17px;
+  font-weight: 300;
+  cursor: pointer;
+}
+#PlName {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#PtBoxChList {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0 10px 0;
+  font-weight: 500;
+  display: none;
+}
+/* 푸터 */
+#AcFooter {
+  display: flex;
+  padding: 38px 50px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
+  background-color: #f0f0f0;
+  margin-top: 20px;
+}
+#FtLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+#FtLogo p {
+  color: var(--CoolGray-60, #697077);
+  font-family: Roboto;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 110%;
+}
+#FtAd {
+  margin-top: 4%;
+}
+#FtAdC1 {
+  color: #000;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 500;
+}
+#FtAdC2 {
+  color: #999;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+section{
+  margin: 40px 0;
+}

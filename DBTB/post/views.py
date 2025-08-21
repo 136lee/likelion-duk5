@@ -222,7 +222,7 @@ def post_detail(request, post_id):
 def create(request):
 
     if request.method =="POST":
-        # title = request.POST.get('title') 
+        title = request.POST.get('title') 
         content = request.POST.get('content')
         image = request.FILES.get('image')
 
@@ -234,7 +234,7 @@ def create(request):
 
 
         post = Post.objects.create(
-            # title=title,
+            title=title,
             content= content,
             author=request.user,
             image = image,
@@ -260,8 +260,8 @@ def update(request,id):
     post = get_object_or_404(Post, id=id)
 
     if request.method =='POST':
-        # post.title = request.POST.get('title')
-        post.content = request.POST.get('content')
+        post.title = request.POST.get('title', post.title)
+        post.content = request.POST.get('content', post.content)
         image = request.FILES.get('image')
 
         if image:
@@ -271,14 +271,14 @@ def update(request,id):
 
         post.save()
 
-        return redirect ('post:detail', id)
+        return redirect ('post:post_detail', post_id=post.id)
     return render(request, 'post/update.html', {'post':post})
 
 # 삭제 (마이페이지에서)
 def delete(request, id):
     post = get_object_or_404(Post, id=id)
     post.delete()
-    return redirect ('post:list') 
+    return redirect ('map:list') 
 
 
 try:
