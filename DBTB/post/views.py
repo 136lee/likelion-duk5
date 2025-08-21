@@ -10,6 +10,7 @@ import base64, mimetypes
 from django.urls import reverse
 import os, json, base64, time, random , requests , re
 from io import BytesIO
+import re
 
 
 #openai가 미디어 인식하게 하는 함수
@@ -230,7 +231,8 @@ def create(request):
         lat_raw = request.POST.get('latitude')  
         lng_raw = request.POST.get('longitude')
         lat = float(lat_raw) if lat_raw else None
-        lng = float(lng_raw) if lng_raw else None  
+        lng = float(lng_raw) if lng_raw else None 
+        addr = request.POST.get("address")   or None
 
 
         post = Post.objects.create(
@@ -240,6 +242,7 @@ def create(request):
             image = image,
             latitude=lat ,
             longitude=lng,
+            address=addr,
         )
         
         # ✅ 저장 후 보던 지도 페이지로 복귀 + 하이라이트

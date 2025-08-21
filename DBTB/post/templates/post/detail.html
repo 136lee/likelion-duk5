@@ -16,7 +16,7 @@
     {% if post.image %}
         <img width="320" height="240" src="{{post.image.url}}">
     {%endif%}
-    <div>위치: {{ post.latitude }}, {{ post.longitude }}</div>
+    <div>위치: {{post.address}} </div>
     </p>
     <hr><br>
     {% if request.user == post.author %}
