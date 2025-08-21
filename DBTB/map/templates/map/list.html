@@ -1,11 +1,13 @@
 {% load static %}
-
 <!doctype html>
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
   <title>지도 - {% if scope == 'mine' %}내 지도{% else %}전체 지도{% endif %}</title>
-  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b76f141ae739da5b568454a96523a207"></script>
+
+  <!-- Kakao SDK: 반드시 libraries=services 포함 + 도메인 등록 -->
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b76f141ae739da5b568454a96523a207&libraries=services"></script>
+
   <style>
     body{margin:0;font-family:system-ui,Arial,sans-serif}
     header{padding:12px;background:#f5f5f5;display:flex;gap:10px;align-items:center}
@@ -13,6 +15,9 @@
     nav a.active{background:#222;color:#fff;border-color:#222}
     #map{width:100%;height:70vh;border-top:1px solid #eee}
     #count{padding:8px 12px;color:#666;font-size:14px}
+    #addrbar{padding:8px 12px;color:#333;font-size:14px;border-top:1px solid #eee}
+    .profile {display:flex; align-items:center; gap:8px}
+    .profile img {width:32px;height:32px;border-radius:50%;object-fit:cover}
   </style>
 </head>
 <body>
@@ -22,40 +27,41 @@
       <a href="{% url 'map:list' %}" class="{% if scope == 'list' %}active{% endif %}">전체지도</a>
       <a href="{% url 'map:mine' %}" class="{% if scope == 'mine' %}active{% endif %}">내지도</a>
     </nav>
-    <div style="margin-left:auto;">
+    <div style="margin-left:auto;" class="profile">
       {% if request.user.is_authenticated %}
-        {{ request.user.username }}님 | <a href="{% url 'account:logout' %}">로그아웃</a>
+        <span>{{ request.user.username }}님</span> | <a href="{% url 'account:logout' %}">로그아웃</a>
       {% else %}
         <a href="{% url 'account:login' %}?next={{ request.path|urlencode }}">로그인</a>
+      {% endif %}
+      {% if request.user.profile_image %}
+        <img src="{{ request.user.profile_image.url }}" alt="Profile Image">
+      {% else %}
+        <img src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
       {% endif %}
     </div>
     <a href="{% url 'feed:feed_all' %}">피드</a>
     <a href="{% url 'explore:chat_ai' %}">탐험</a>
     <a href="{% url 'account:mypage' %}">마이페이지</a>
-    {% if request.user.profile_image %}
-    <img width="200px" src="{{request.user.profile_image.url}}" alt="Profil Image">
-    {%else%}
-    <img width="200px" src="{% static 'img/profile_image.jpg ' %}" alt="Default Profile">
-    {% endif %}
   </header>
 
   <div id="map"></div>
   <div id="count">표시된 포스트: 0개</div>
+  <div id="addrbar">주소: -</div>
 
   <script>
-  // 스코프: 'list'(전체) 또는 'mine'
-  const SCOPE = '{{ scope|escapejs }}' || 'list';
-  const isAuth = JSON.parse('{{ request.user.is_authenticated|yesno:"true,false"|escapejs }}');
+  // ====== 템플릿 변수 ======
+  const SCOPE     = '{{ scope|escapejs }}' || 'list';
+  const isAuth    = JSON.parse('{{ request.user.is_authenticated|yesno:"true,false"|escapejs }}');
   const centerLat = parseFloat('{{ center.lat|default:"37.668"|escapejs }}');
   const centerLng = parseFloat('{{ center.lng|default:"127.047"|escapejs }}');
 
-  // 1) 지도(도봉구 중심) — 한 번만 생성
+  // ====== 지도 생성 (도봉구 중심) ======
   const map = new kakao.maps.Map(document.getElementById('map'), {
     center: new kakao.maps.LatLng(centerLat, centerLng),
     level: 6
   });
 
-  // 2) 마커 관리 — 한 번만 선언
+  // ====== 마커 관리 ======
   let markers = [];
   function clearMarkers(){ markers.forEach(m=>m.setMap(null)); markers=[]; }
 
@@ -67,35 +73,111 @@
     return new kakao.maps.LatLng(lat, lng);
   }
 
+  // ====== 역지오코딩 유틸 ======
+  const geocoder   = new kakao.maps.services.Geocoder();
+  const infowindow = new kakao.maps.InfoWindow({ zIndex: 2 });
+  const addrCache  = new Map(); // "lat,lng" -> address (간단 캐시)
+
+  function keyOf(lat, lng){ return `${lat.toFixed(6)},${lng.toFixed(6)}`; }
+
+  // 동 정보 얻기 (법정동/행정동)
+function getRegion(lat, lng){
+  return new Promise((resolve, reject)=>{
+    geocoder.coord2RegionCode(lng, lat, (result, status)=>{
+      if (status !== kakao.maps.services.Status.OK) return reject(status);
+      const B = result.find(r => r.region_type === 'B'); // 법정동
+      const H = result.find(r => r.region_type === 'H'); // 행정동
+      resolve({
+        dong: (B?.region_3depth_name || H?.region_3depth_name || ''), // 우리가 쓸 동
+      });
+    });
+  });
+}
+
+
+  function pickAddress(result){
+  const road  = result?.[0]?.road_address?.address_name || '';
+  const jibun = result?.[0]?.address?.address_name || '';
+  return jibun || road || '주소 없음';   // ✅ 지번 먼저!
+}
+
+
+  function reverseGeocode(lat, lng){
+    const k = keyOf(lat, lng);
+    if (addrCache.has(k)) return Promise.resolve(addrCache.get(k));
+    return new Promise((resolve, reject)=>{
+      geocoder.coord2Address(lng, lat, (result, status)=>{
+        if (status !== kakao.maps.services.Status.OK) return reject(status);
+        const addr = pickAddress(result);
+        addrCache.set(k, addr);
+        resolve(addr);
+      });
+    });
+  }
+
+  function setAddrBar(text){
+    const el = document.getElementById('addrbar');
+    if (el) el.textContent = `주소: ${text}`;
+  }
+
+  // ====== 마커 렌더링 ======
   function renderMarkers(posts){
     clearMarkers();
     const bounds = new kakao.maps.LatLngBounds();
     let added = 0, skipped = 0;
 
-    const detailPattern = "{% url 'post:detail' 12345 %}";
-    const detailUrlFor = (id) => detailPattern.replace(/12345\/?$/, id + "/");
+    // NOTE: URL 리버스 규칙에 따라 필요한 형식으로 바꾸세요.
+    // 1) 위치 인자 버전:
+    const detailPattern = "{% url 'post:detail' id=12345 %}";
+    // 2) 키워드 인자 버전(예: post_id=):
+    // const detailPattern = "{% url 'post:detail' id=12345 %}";
 
+    const detailUrlFor = (id) => detailPattern.replace(/12345\/?$/, String(id) + "/");
 
     posts.forEach(p=>{
       const pos = getPos(p);
       if (!pos){ skipped++; return; }
-      const m = new kakao.maps.Marker({ position: pos });
+      if (!p.id) { skipped++; return; }
+
+      const m = new kakao.maps.Marker({ position: pos, clickable: true });
       m.setMap(map);
+
+      // 1) 마커 클릭 → 상세 페이지 이동
       kakao.maps.event.addListener(m, 'click', () => {
-      location.href = detailUrlFor(p.id);   // ✅ 마커 클릭 → 상세 페이지로 이동
+        location.href = detailUrlFor(p.id);
       });
+
+      // 2) 마커 hover → 주소 풍선 + 하단바
+      kakao.maps.event.addListener(m, 'mouseover', async () => {
+        const lat = Number(p.lat ?? p.latitude);
+        const lng = Number(p.lng ?? p.longitude);
+        if (Number.isNaN(lat) || Number.isNaN(lng)) return;
+        try {
+          // 서버 API가 address를 주면 이 줄 대신 p.address 사용 가능
+          const addr = await reverseGeocode(lat, lng);
+          infowindow.setContent('<div style="padding:8px 12px;white-space:nowrap;">'+ addr +'</div>');
+          infowindow.open(map, m);
+          setAddrBar(addr);
+        } catch(_) {}
+      });
+
+      kakao.maps.event.addListener(m, 'mouseout', () => {
+        infowindow.close();
+      });
+
       markers.push(m);
       bounds.extend(pos);
       added++;
     });
 
     if (added > 0) map.setBounds(bounds, 40, 40, 40, 40);
+
     const $count = document.getElementById('count');
     if ($count) $count.textContent = `표시된 포스트: ${added}개${skipped ? ' (좌표 없음 제외: '+skipped+'개)' : ''}`;
     console.log(`받은 글:${posts.length} / 마커 생성:${added} / 스킵:${skipped}`);
   }
 
-  // 3) 데이터 로드 — 기본: /map/api/posts/  → 404면 /api/posts/로 재시도
+  // ====== 포스트 데이터 로드 ======
   async function fetchPosts(scope){
     const urls = [`/map/api/posts/?scope=${scope}`, `/api/posts/?scope=${scope}`];
     for (const u of urls){
@@ -104,7 +186,10 @@
         console.log('GET', u, res.status);
         if (res.status === 401) { alert('로그인이 필요합니다.'); return []; }
         if (res.ok) return await res.json();
-        if (res.status !== 404) { console.error('API 오류', u, await res.text()); return []; }
+        if (res.status !== 404) {
+          console.error('API 오류', u, await res.text());
+          return [];
+        }
       }catch(e){ console.error('요청 실패', u, e); }
     }
     console.error('posts API 경로를 찾지 못했습니다. map/urls.py 확인!');
@@ -116,19 +201,57 @@
     renderMarkers(posts);
   }
 
-  // 4) 지도 클릭 → 작성 페이지로 이동
-  kakao.maps.event.addListener(map, 'click', (e)=>{
-    const lat = e.latLng.getLat().toFixed(6);
-    const lng = e.latLng.getLng().toFixed(6);
-    const back = location.pathname; // /map/ 또는 /map/mine/
+  // ====== 지도 좌클릭: addr + dong 함께 전달 ======
+kakao.maps.event.addListener(map, 'click', async (e)=>{
+  const lat  = Number(e.latLng.getLat().toFixed(6));
+  const lng  = Number(e.latLng.getLng().toFixed(6));
+  const back = location.pathname; // /map/ 또는 /map/mine/
+
+  try {
+    // 주소 문자열 + 동 이름을 동시에 조회
+    const [addr, region] = await Promise.all([
+      reverseGeocode(lat, lng), // 이미 있는 함수
+      getRegion(lat, lng),      // 위에 추가한 함수
+    ]);
+
+    // 쿼리 파라미터 안전하게 구성
+    const params = new URLSearchParams({
+      lat, lng,
+      addr,
+      next: back,
+      dong: region.dong || '',  // 동 이름 (없으면 빈 문자열)
+    });
+
+    const createUrl = `{% url 'post:create' %}?${params.toString()}`;
+    if (isAuth) location.href = createUrl;
+    else location.href = `{% url 'account:login' %}?next=${encodeURIComponent(createUrl)}`;
+  } catch (err) {
+    // 실패 시 주소만 없이 좌표만 전달 (폴백)
     const createUrl = `{% url 'post:create' %}?lat=${lat}&lng=${lng}&next=${encodeURIComponent(back)}`;
     if (isAuth) location.href = createUrl;
     else location.href = `{% url 'account:login' %}?next=${encodeURIComponent(createUrl)}`;
+  }
+});
+
+
+  // ====== 지도 우클릭: 그 위치 주소만 보여주기 ======
+  kakao.maps.event.addListener(map, 'rightclick', async (e)=>{
+    const lat = e.latLng.getLat();
+    const lng = e.latLng.getLng();
+    try {
+      const addr = await reverseGeocode(lat, lng);
+      setAddrBar(addr);
+      infowindow.setContent('<div style="padding:8px 12px;white-space:nowrap;">'+ addr +'</div>');
+      infowindow.setPosition(e.latLng);
+      infowindow.open(map);
+    } catch(_) {}
   });
 
-  // 5) 첫 로드 + 저장 직후 하이라이트
+  // ====== 초기 로드 & 저장 직후 하이라이트 ======
   (async function init(){
-    await load(SCOPE); // ← 들어오자마자 전체 마커 로드
+    await load(SCOPE);
+
+    // 저장 완료 후 돌아올 때 ?lat=&lng= 쿼리로 하이라이트
     const params = new URLSearchParams(location.search);
     const hLat = parseFloat(params.get('lat'));
     const hLng = parseFloat(params.get('lng'));
@@ -142,8 +265,6 @@
       history.replaceState(null, "", location.pathname);
     }
   })();
-</script>
-
-
+  </script>
 </body>
 </html>

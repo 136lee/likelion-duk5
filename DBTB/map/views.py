@@ -30,5 +30,6 @@ def posts_api(request):
             "title": p.title or "",
             "lat": lat,   # ← 프론트가 기대하는 이름
             "lng": lng,
+            "address": p.address,
         })
     return JsonResponse(data, safe=False)

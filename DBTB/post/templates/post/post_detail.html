@@ -16,7 +16,7 @@
     
 </a>
     <hr>
-    <img width="100px" src="{% static 'img/profile_image.jpg ' %}" alt="Default Profile">
+    <img width="100px" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
     <p>{{post.author.username}}</p>
     <p>{{ post.created_at | naturaltime }}</p>
     <a href ="{% url 'post:update' post.id %}">수정하기</a>
@@ -24,9 +24,9 @@
     <hr>
     <h2> {{ post.title}} </h2>
     <p><img src="{{ post.image.url }}"></p> <!--이미지-->
-    {% if place %} <!--템플릿 언어 필수!!-->
-        <p>{{ place.name }}</p> <!--장소명-->
-        <p>{{ place.address }}</p> <!--주소-->
+    {% if post.dong %} <!--템플릿 언어 필수!!-->
+        <p>{{ post.dong }}</p> <!--장소명-->
+        <p>{{ post.address }}</p> <!--주소-->
     {% else %}
         <p>장소 정보 없음</p>
     {% endif %}
