@@ -23,9 +23,10 @@ class Post(models.Model):
     video = models.FileField(upload_to=upload_filepath, blank=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
-    address = models.CharField(max_length=255, null=True, blank=True)         # 통합 주소(도로명 우선)
-    address_road = models.CharField(max_length=255, null=True, blank=True)    # (옵션) 도로명
+    address = models.CharField(max_length=255, null=True, blank=True)         # 통합 주소
     address_jibun = models.CharField(max_length=255, null=True, blank=True)   # (옵션) 지번
+    dong = models.CharField(max_length=40, null=True, blank=True, db_index=True)
+
 
     def __str__(self):
         return f'{self.id})[{self.author}]-{self.content[:15]}...'

@@ -218,40 +218,51 @@ def post_detail(request, post_id):
 #def todo_toggle(request, recom_id):
 
 
+DONG_RE = re.compile(r'([가-힣0-9]+동)')  # '...동' 한 번 추출
 
 @login_required
 def create(request):
+    if request.method == "POST":
+        title   = request.POST.get('title') or ''
+        content = request.POST.get('content') or ''
+        image   = request.FILES.get('image')
 
-    if request.method =="POST":
-        title = request.POST.get('title') 
-        content = request.POST.get('content')
-        image = request.FILES.get('image')
-
-# 지도에서 심어줄 hidden input 이름은 latitude / longitude 로 가정
-        lat_raw = request.POST.get('latitude')  
+        # 좌표/주소
+        lat_raw = request.POST.get('latitude')
         lng_raw = request.POST.get('longitude')
         lat = float(lat_raw) if lat_raw else None
-        lng = float(lng_raw) if lng_raw else None 
-        addr = request.POST.get("address")   or None
+        lng = float(lng_raw) if lng_raw else None
+        addr = request.POST.get("address") or None
 
+        # ✅ 동: 프런트에서 넘어온 값 우선
+        dong = request.POST.get("dong") or None
+        # ✅ 없으면 address에서 정규식으로 추출(지번주소일 때 잘 잡힘)
+        if not dong and addr:
+            m = DONG_RE.search(addr)
+            if m:
+                dong = m.group(1)  # 예: '창동', '쌍문동'
 
+        # 저장
         post = Post.objects.create(
             title=title,
-            content= content,
+            content=content,
             author=request.user,
-            image = image,
-            latitude=lat ,
+            image=image,
+            latitude=lat,
             longitude=lng,
             address=addr,
+            dong=dong,            # ✅ 여기!
         )
-        
-        # ✅ 저장 후 보던 지도 페이지로 복귀 + 하이라이트
-        next_url = request.POST.get("next") or reverse("map:list")
+
+        # 저장 후 보던 지도 페이지로 복귀(+하이라이트)
+        next_url = request.POST.get("next") or request.GET.get("next") or reverse("map:list")
         if post.latitude is not None and post.longitude is not None:
             return redirect(f"{next_url}?lat={post.latitude}&lng={post.longitude}")
         return redirect(next_url)
-    # GET: 폼 렌더 (지도로부터 ?lat&lng&next 받음)
+
+    # GET: 폼 렌더 (지도로부터 ?lat&lng&addr&dong&next 받음)
     return render(request, "post/create.html")
+
 
 #자세히 (마이페이지, 지도?)
 def detail(request, id):

@@ -80,11 +80,27 @@
 
   function keyOf(lat, lng){ return `${lat.toFixed(6)},${lng.toFixed(6)}`; }
 
+  // 동 정보 얻기 (법정동/행정동)
+function getRegion(lat, lng){
+  return new Promise((resolve, reject)=>{
+    geocoder.coord2RegionCode(lng, lat, (result, status)=>{
+      if (status !== kakao.maps.services.Status.OK) return reject(status);
+      const B = result.find(r => r.region_type === 'B'); // 법정동
+      const H = result.find(r => r.region_type === 'H'); // 행정동
+      resolve({
+        dong: (B?.region_3depth_name || H?.region_3depth_name || ''), // 우리가 쓸 동
+      });
+    });
+  });
+}
+
+
   function pickAddress(result){
-    const road  = result?.[0]?.road_address?.address_name;
-    const jibun = result?.[0]?.address?.address_name;
-    return road || jibun || '주소 없음';
-  }
+  const road  = result?.[0]?.road_address?.address_name || '';
+  const jibun = result?.[0]?.address?.address_name || '';
+  return jibun || road || '주소 없음';   // ✅ 지번 먼저!
+}
+
 
   function reverseGeocode(lat, lng){
     const k = keyOf(lat, lng);
@@ -185,24 +201,38 @@
     renderMarkers(posts);
   }
 
-  // ====== 지도 좌클릭: 역지오코딩 후 글쓰기 이동 (lat/lng/addr 전달) ======
-  kakao.maps.event.addListener(map, 'click', async (e)=>{
-    const lat = Number(e.latLng.getLat().toFixed(6));
-    const lng = Number(e.latLng.getLng().toFixed(6));
-    const back = location.pathname; // /map/ 또는 /map/mine/
+  // ====== 지도 좌클릭: addr + dong 함께 전달 ======
+kakao.maps.event.addListener(map, 'click', async (e)=>{
+  const lat  = Number(e.latLng.getLat().toFixed(6));
+  const lng  = Number(e.latLng.getLng().toFixed(6));
+  const back = location.pathname; // /map/ 또는 /map/mine/
 
-    try {
-      const addr = await reverseGeocode(lat, lng);
-      const createUrl = `{% url 'post:create' %}?lat=${lat}&lng=${lng}&addr=${encodeURIComponent(addr)}&next=${encodeURIComponent(back)}`;
-      if (isAuth) location.href = createUrl;
-      else location.href = `{% url 'account:login' %}?next=${encodeURIComponent(createUrl)}`;
-    } catch (err) {
-      // 실패 시 주소 없이 좌표만 전달
-      const createUrl = `{% url 'post:create' %}?lat=${lat}&lng=${lng}&next=${encodeURIComponent(back)}`;
-      if (isAuth) location.href = createUrl;
-      else location.href = `{% url 'account:login' %}?next=${encodeURIComponent(createUrl)}`;
-    }
-  });
+  try {
+    // 주소 문자열 + 동 이름을 동시에 조회
+    const [addr, region] = await Promise.all([
+      reverseGeocode(lat, lng), // 이미 있는 함수
+      getRegion(lat, lng),      // 위에 추가한 함수
+    ]);
+
+    // 쿼리 파라미터 안전하게 구성
+    const params = new URLSearchParams({
+      lat, lng,
+      addr,
+      next: back,
+      dong: region.dong || '',  // 동 이름 (없으면 빈 문자열)
+    });
+
+    const createUrl = `{% url 'post:create' %}?${params.toString()}`;
+    if (isAuth) location.href = createUrl;
+    else location.href = `{% url 'account:login' %}?next=${encodeURIComponent(createUrl)}`;
+  } catch (err) {
+    // 실패 시 주소만 없이 좌표만 전달 (폴백)
+    const createUrl = `{% url 'post:create' %}?lat=${lat}&lng=${lng}&next=${encodeURIComponent(back)}`;
+    if (isAuth) location.href = createUrl;
+    else location.href = `{% url 'account:login' %}?next=${encodeURIComponent(createUrl)}`;
+  }
+});
+
 
   // ====== 지도 우클릭: 그 위치 주소만 보여주기 ======
   kakao.maps.event.addListener(map, 'rightclick', async (e)=>{
