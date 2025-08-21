@@ -26,7 +26,7 @@
         <button type="submit">삭제</button>
     </form>
     <hr>
-    <p><img src="{{ post.image.url }}"></p> <!--이미지-->
+    <p><img src="{{ post.image.url }}" width="240" height="240"></p> <!--이미지-->
     {% if place %} <!--템플릿 언어 필수!!-->
         <p>{{ place.name }}</p> <!--장소명-->
         <p>{{ place.address }}</p> <!--주소-->
