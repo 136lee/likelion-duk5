@@ -283,11 +283,6 @@ def create(request):
     return render(request, "post/create.html")
 
 
-#자세히 (마이페이지, 지도?)
-def detail(request, id):
-    post = get_object_or_404(Post, id=id)
-    return render (request, 'post/detail.html', {'post':post})
-
 #수정 (마이페이지에서)
 def update(request,id):
     post = get_object_or_404(Post, id=id)

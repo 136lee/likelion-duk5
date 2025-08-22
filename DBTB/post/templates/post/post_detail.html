@@ -17,7 +17,7 @@
 </a>
     <hr>
     <img width="100px" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
-    <p>{{post.author.username}}</p>
+    <p>{{post.author.nickname}}</p>
     <p>{{ post.created_at | naturaltime }}</p>
     <a href ="{% url 'post:update' post.id %}">수정하기</a>
     <a href ="{% url 'post:delete' post.id %}">삭제하기</a>

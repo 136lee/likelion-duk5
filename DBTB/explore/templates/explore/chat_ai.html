@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="{% static 'css/account/explore.css'%}">
   <link rel="stylesheet" href="{% static 'css/account/feed.css'%}">
+  <style>
+    #chat .bot { white-space: pre-line; line-height: 1.6; margin: 8px 0 16px; }
+  </style>
   <title>AI Chat (텍스트+이미지)</title>
 </head>
 
@@ -187,10 +190,10 @@ async function send(){
       body: fd
     });
     const data = await res.json();
-    chat.insertAdjacentHTML(
-      "beforeend",
-      `<div>🤖: ${data.reply ?? ("에러: " + (data.error || res.status))}</div>`
-    );
+    const bot = document.createElement("div");
+      bot.className = "bot";
+      bot.textContent = `🤖: ${data.reply ?? ("에러: " + (data.error || res.status))}`;
+      chat.appendChild(bot);
   } catch (e) {
     chat.insertAdjacentHTML("beforeend",
       `<div style="color:red">요청 실패: ${e}</div>`
