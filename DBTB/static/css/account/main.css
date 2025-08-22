@@ -4,7 +4,7 @@
 position: relative;
   }
 
-#left_bar{
+#left_bar{ 
   position: absolute;
   display: flex;
     flex-direction: column;
@@ -18,6 +18,10 @@ justify-content: space-between;
     z-index: 999;
     border-right:1px solid rgb(182,189,184);
     font-weight: bold;
+}
+#DBTB_button_img{
+  width: 50px;
+  height: 50px;
 }
 #img{
   height: 40%;
@@ -48,7 +52,10 @@ justify-content: space-between;
     width: 30px;
     height: 30px;
 }
-
+a{
+  text-decoration: none;
+color:black;
+}
 
 .image_sort{
   position: relative;
@@ -56,6 +63,7 @@ justify-content: space-between;
 flex-direction: column;
 text-align: center; 
 align-items: center;  
+text-decoration: none;
 margin-top: 20px; 
 }
 #move_to_myact{
@@ -80,14 +88,18 @@ cursor: pointer;
     align-items: flex-end;    
     object-fit: cover;
 }
-
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
 #mypage_circle_hole{
   margin-bottom: 40px;
     width: 60px;
     height: 60px;
     border-radius: 50%;
     overflow: hidden;
-
+border: 1px solid rgb(152,159,154);
 }
 img{
     cursor: pointer;
@@ -96,16 +108,57 @@ img{
 cursor: pointer;
 }
 #header_main {
+right: 40px;
     position: absolute; 
-    top: 30px;
+    top: 20px;
     left: 160px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 40px;     
     z-index: 10;
 
   }
-  
+  .mapVer_and_log{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+min-width: 130px;
+
+
+  }
+  .map_version{
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 500;
+ 
+  }
+  .map_version >a{
+    border: 1px solid rgb(213,213,213);
+    background-color: white;
+    padding: 5px 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0px 5px 10px rgb(152,159,154);
+
+  }
+  .login_or_logout{
+    font-size: 15px;
+    font-weight: 500;
+    border: 1px solid rgb(213,213,213);
+    box-shadow: 0px 5px 10px rgb(152,159,154);
+    background-color: white;
+    padding: 5px 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+justify-content: center;
+    text-align: center;
+  }
   #search_div {
     display: flex;
     align-items: center;

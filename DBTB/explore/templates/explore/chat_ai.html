@@ -12,20 +12,22 @@
 <body> 
   <header>
     <div id="head_feed">
-        <div id="img_hole_header"><img id="DBTB_img" src="{%static 'img/likelion.png'%}"></div>
-        <span id="DBTB">도봉또봉</span>
+        <a class="move_to_home" href="{% url 'map:list' %}">
+          <img class="header_DBTB" src="{% static 'img/DBTB.png' %}">
+        </a>
     </div>
      <div id="move">
-        <div id="move_to_map">지도</div>
+        <a id="move_to_map" href="{% url 'map:list' %}">지도</a >
         <a id="move_to_feed"  href="{% url 'feed:feed_all' %}">피드</a>
         <a id="move_to_EX" href="{% url 'explore:chat_ai' %}">탐험</a>
-        <a id="img_hole_header"  href="{% url 'account:mypage' %}">
-          {% if request.user.profile_image %}
-            <img id="mypage_img" width="200px" src="{{ request.user.profile_image.url }}" alt="Profile Image">
-        {% else %}
-            <img id="mypage_img" width="200px" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
-        {% endif %}
-    </a>
+    <a id="img_hole_header"  href="{% url 'account:user-info' %}">
+    <!--  <img src="#" alt="내 프로필" width="24" height="24">-->
+    {% if request.user.profile_image %}
+    <img id="mypage_img" width="200px" src="{{ request.user.profile_image.url }}" alt="Profile Image">
+{% else %}
+    <img id="mypage_img" width="200px" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
+{% endif %}
+  </a>
     </div>
 </header>
 <hr>
