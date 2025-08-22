@@ -5,7 +5,7 @@
     flex-direction: row;
     align-items: center;
     font-size:26px ;
-    gap:10px;
+    gap:10px; 
 }
 .header2{
     padding: 10px 20px;
@@ -30,7 +30,7 @@ hr{
     align-items: center;
     gap:30px;
     }
-.head2_1>div{
+.head2_1>a{
     display: flex;
     flex-direction: row;
     gap:5px;
@@ -39,6 +39,16 @@ hr{
     font-size: 15px;
     font-weight: 700;
 
+}
+.search_Btn{
+    border: none;
+    background-color: white;
+    height: 100%;
+
+}
+.header_DBTB{
+    width: 155px;
+    height: 65px;
 }
 .number{
     padding: 0 2px 2px 2px;
@@ -77,7 +87,7 @@ body{
     margin: 0;
     padding: 0;
 }
-.loc_searchBar>img{
+.search_Btn>img{
     width: 30px;
     height: 30px;
     cursor: pointer;
@@ -88,12 +98,16 @@ body{
     gap:40px;
     align-items: center;
 }
-#move>div{
+#move>a{
     color:black;
     font-weight: bold;
     font-size: 20px;
     cursor: pointer;
+    
 }
+a{
+    text-decoration: none;
+    color:black;}
 #img_hole_header{
     width: 70px;
     height: 70px;
@@ -108,13 +122,15 @@ body{
 
 user_img_hole>img{
     width: 100%;
-    height: 100%;
+    height: 100%; 
 }
 .scrap>img{
+    cursor: pointer;
     width: 15px;
+   
     height: 18px;
 }
-.scrap{
+.scrap{margin-right: 5px;
     font-size: 15px;
     display: flex;
     flex-direction: row;
@@ -122,6 +138,7 @@ user_img_hole>img{
     color:rgb(152,159,154);
 }
 .feed_article{
+    align-items: center;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -131,9 +148,13 @@ user_img_hole>img{
 height: 400px;
 overflow: hidden;
 }
+.feed_img_place{
+    width: 100%;
+    height: 85%; object-fit: cover;
+}
 .feed_img{
     width: 100%;
-    height: 85%;
+    height: 100%;
     object-fit: cover;
 }
 .writer_info{
@@ -141,6 +162,8 @@ overflow: hidden;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    gap:5px;
+    margin-left:10px ;
     font-size: 13px;
 }
 .writer_info>img{
@@ -148,13 +171,15 @@ overflow: hidden;
     height: 30px;
     border:1px solid rgb(152,159,154);
     border-radius: 50%;
+    gap:5px;
 }
 #feed_info{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding:10px;
+    width: 100%;
+    padding:10px 10px;
 }
 .feed_main{
     display: flex;
@@ -163,3 +188,32 @@ overflow: hidden;
   gap:40px;
   padding:20px;
 }
+.none_answer{
+    font-weight: bold;
+    border:none;
+    margin-top: 20px;
+}
+article:has(span.none_answer) {
+    border: none;
+    background: none;
+ 
+  }
+  .scrap_img{
+    width: 18px;
+    cursor: pointer;
+    height: 18px;
+  }
+  #scrap_Btn{
+    width: 20px;    border:none;
+    height: 20px;background:white;
+  }
+  .scrap_form{
+   display: flex;
+   flex-direction: row;
+   width: 30px;
+   gap:5px;
+   align-items: center;
+   margin-right: 5px;
+
+
+  }
