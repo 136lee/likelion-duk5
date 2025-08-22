@@ -3,24 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/DBTB/static/css/account/mypage.css" />
+    <link rel="stylesheet" href="{% static 'css/account/mypage.css' %}" />
     <title>mypage</title>
   </head>
   <body>
     <header id="HdStyle">
       <div id="HdLayout">
         <div id="HdLogo">
-          <img id="Hdlogoimg" src="/DBTB/static/img/headerLogo.png" alt="로고" />
+          <img id="Hdlogoimg" src="{% static 'img/headerLogo.png' %}" alt="로고" />
         </div>
         <div id="HdLogo">
           <!-- 경로수정 -->
           <div id="HdLogoA">
-            <a>지도</a>
-            <a>피드</a>
-            <a>탐험</a>
+            <a href="{% url 'map:list' %}">지도</a>
+            <a href="{% url 'feed:feed_all' %}">피드</a>
+            <a href="{% url 'explore:chat_ai' %}">탐험</a>
           </div>
           <a>
-            <img id="postpf" src="/DBTB/static/img/profile.svg" alt="프로필" />
+            <img id="postpf" src="{% static 'img/profile.svg' %}" alt="프로필" />
           </a>
         </div>
         <!-- <button type="button" id="HdAccountBt">
@@ -40,7 +40,7 @@
           <div id="myAtTopId">
             <div id="image-preview-box">
             <div>
-              <img id="postpf" src="/DBTB/static/img/Group 2.png" />
+              <img id="postpf" src="{% static 'img/Group 2.png' %}" />
             </div>
              <input type="file" id="image-input" accept="image/*" style="display: none;" />
             </div>
@@ -101,7 +101,7 @@
               </div>
           </div>
           <div>
-            <img id="Postsc" src="/DBTB/static/img/bookmark.svg">
+            <img id="Postsc" src="{% static 'img/bookmark.svg' %}">
           </div>
           </div>
                       <div id="mySE">
@@ -115,7 +115,7 @@
               </div>
           </div>
           <div>
-            <img id="Postsc" src="/DBTB/static/img/bookmark.svg">
+            <img id="Postsc" src="{% static 'img/bookmark.svg' %}">
           </div>
           </div>
                       <div id="mySE">
@@ -129,7 +129,7 @@
               </div>
           </div>
           <div>
-            <img id="Postsc" src="/DBTB/static/img/bookmark.svg">
+            <img id="Postsc" src="{% static 'img/bookmark.svg' %}">
           </div>
           </div>
           </div>
@@ -139,7 +139,7 @@
 
     <footer id="AcFooter">
       <div id="FtLogo">
-        <img src="" alt="로고" />
+        <img src="{% static '' %}" alt="로고" />
         <p>도봉또봉</p>
       </div>
       <div id="FtAd">
@@ -147,6 +147,6 @@
         <p id="FtAdC2">ⓒ 2025 AAA. All rights reserved.</p>
       </div>
     </footer>
-    <script src="/DBTB/static/js/account/mypage.js"></script>
+    <script src="{% static 'js/account/mypage.js' %}"></script>
   </body>
 </html>

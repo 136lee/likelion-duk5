@@ -14,3 +14,31 @@ document.addEventListener("DOMContentLoaded", function () {
     bookImg.classList.toggle("filled"); 
   });
 });
+
+
+// 프로필사진
+document.addEventListener('DOMContentLoaded', function() {
+
+  const imagePreviewBox = document.getElementById('image-preview-box');
+  const imageInput = document.getElementById('image-input');       
+  const imagePreview = document.getElementById('postpf');                
+
+  imagePreviewBox.addEventListener('click', function() {
+    imageInput.click();
+  });
+
+  imageInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        imagePreview.src = e.target.result;
+      }
+
+      reader.readAsDataURL(file);
+    }
+  });
+
+});
