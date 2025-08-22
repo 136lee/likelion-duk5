@@ -27,6 +27,21 @@
     <title>login</title>
   </head>
   <body>
+    {% if form.non_field_errors %}
+  <div class="error">
+    {% for e in form.non_field_errors %}{{ e }}{% endfor %}
+  </div>
+{% endif %}
+
+{% if form.errors %}
+  <div class="error">
+    {% for field, errs in form.errors.items %}
+      <p>{{ field }}:
+        {% for e in errs %}{{ e }} {% endfor %}
+      </p>
+    {% endfor %}
+  </div>
+{% endif %}
     <header id="HdStyle">
       <div id="HdLayout">
         <a href="{% url 'map:list' %}" id="HdLogo">
