@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,14 +10,44 @@
 <body>
     {% if request.user.is_authenticated %}
     {{request.user.username}}님 환영합니다. <br/>
+    <a href="{% url 'map:list' %}"> 지도  </a>
     <h2>마이페이지</h2>
-    <a href="{% url 'account:user-info' %}">내 프로필</a><br/>
-    <a href="{% url 'account:mypost' %}">내가 작성한 글 </a> <br/>
-    <a href="{#}">나의 할 일</a><br/>
-    <a href="{% url 'account:myscrap' %}">내가 스크랩 한 글</a>
+
+    <!-- 이미지 변경 폼-->
+    {% if request.user.profile_image %}
+    <img width="200px" src="{{request.user.profile_image.url}}" alt="Profil Image">
+    {%else%}
+    <img width="200px" src="{% static 'img/profile_image.jpg ' %}" alt="Default Profile">
+    {% endif %}
+
+    <form method="POST" action="{% url 'account:mypage'%}" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        이미지 변경 - <input type="file" name="profile_image"><br>
+        <button type="submit">프로필 이미지 변경하기</button>
+
+    </form>
+
+    <p> email : {{request.user.email}} </p>
+    <p> nickname : {{request.user.nickname}} </p>
+
+    <h2>내가 작성한 글</h2>
+
+    {% for post in posts %}
+    <h2><a href="{% url 'post:post_detail' post.id %}">{{post.title}}</a></h2>
+    <p>{{post.address}}</p>
+    <p>{{post.created_at}}</p> <br>
+    {% empty %}
+    글이 없습니다.
+    {% endfor %}
+    <hr>
+
+
+
     {% else %}
     <a href="{% url 'account:login' %}">로그인 해주세요</a><br>
     {% endif %} 
-    <br/>
+    
+
 </body>
 </html>

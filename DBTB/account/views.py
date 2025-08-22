@@ -34,16 +34,12 @@ def logout(request):
 
     return redirect('map:list')
 
-
-def mypage(request):
-    return render(request, 'account/mypage.html')
-
-def mypost(request):
-    posts = Post.objects.filter(author=request.user)
-    return render(request, 'account/mypost.html', {'posts':posts})
-
 @login_required
-def user_info(request):
+def mypage(request):
+    posts = Post.objects.filter(author=request.user)
+
+    scraps = request.user.scrapped_posts.all()
+
     if request.method =="POST":
         profile_image = request.FILES.get('profile_image')
         if profile_image:
@@ -51,9 +47,6 @@ def user_info(request):
             request.user.profile_image = profile_image
             request.user.save()
 
-    return render(request, 'account/user_info.html')
+    return render(request, 'account/mypage.html', {'posts':posts , 'scraps': scraps})
 
-def myscrap(request):
-    scraps = request.user.scrapped_posts.all()
-    return render(request, 'account/mypost.html', {'scraps': scraps})
 
