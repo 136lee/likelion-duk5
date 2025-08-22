@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>도봉또봉 메인</title>
-    <script defer src="../../static/js/account/main.js">
+    <script defer src="{% static 'js/account/main.js'%}">
 
     </script>
-<link rel="stylesheet" href="/DBTB/css/account/main.css">
-    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlX1FzXbt9q6DXhR2lYU5z-iqbyyRj4Jo&callback=initMap"></script>
+<link rel="stylesheet" href="{% static 'css/account/main.css'%}">
 
-    <style>
+
+    <style> 
         html, body {
           margin: 0;
           padding: 0;
@@ -20,60 +20,68 @@
       </style>
 </head>
 <body>
-  <div id="map"> </div>
+  <div id="map"> </div> <!--지도 X-->
 
-    <div id="left_bar"> 
-      <div id="img">
-        <div class="image_sort">
-          <img id="DBTB_button_img" src="/DBTB/static/img/likelion.png" >
-          <span>도봉또봉</span>
-        </div>
-        <div class="image_sort">
-          <img id="feed_button_img" src="/DBTB/static/img/feed.png">
-          <span id="move_to_feed">피드</span>
-        </div>
-        <div class="image_sort" id="goto_ex">
-          <img id="ex_button_img" src="/DBTB/static/img/explore.png">
-          <span>탐험</span>
-        </div>
-        
-        <br>
-        
-        <hr id="line1">
-        <div class="image_sort">
-          <div id="move_to_myact">
-          <img id="my_act_button_img" src="/DBTB/static/img/my_act.png">
-          <div id="red_circle">1</div>
-          <div>내 활동</div>
-        </div>
-        </div>
-        
+  <div id="left_bar"> 
+    <div id="img">
+      <div class="image_sort">
+        <img id="DBTB_button_img" src="{% static 'img/likelion.png'%}" >
+        <span>도봉또봉</span>
       </div>
-      <div id="mypage_circle_hole">
-        <img id="mypage_img" src="/DBTB/static/img/Mypage1.png">
+      <a class="image_sort" id="move_to_feed"  href="{% url 'feed:feed_all' %}">
+        <img id="feed_button_img" src="{% static 'img/feed.png'%}">
+        <span>피드</span>
+      </a>
+      <a class="image_sort" id="goto_ex" href="{% url 'explore:chat_ai' %}">
+        <img id="ex_button_img" src="{% static 'img/explore.png'%}">
+        <span>탐험</span>
+      </a>
+      
+      <br>
+      
+      <hr id="line1">
+      <div class="image_sort">
+        <div id="move_to_myact">
+        <img id="my_act_button_img" src="{% static 'img/my_act.png'%}">
+        <div id="red_circle">1</div>
+        <div>내 활동</div>
       </div>
+      </div>
+      
     </div>
+    <a id="mypage_circle_hole" href="{% url 'account:mypage' %}">
+      {% if request.user.profile_image %}
+          <img id="mypage_img" width="200px" src="{{ request.user.profile_image.url }}" alt="Profile Image">
+      {% else %}
+          <img id="mypage_img" width="200px" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
+      {% endif %}
+  </a>
+  
+  </div>    <!--왼쪽 바 O-->
+
+
     <header id="header_main">
       <div id="search_div">
         <input id="search" type="search" placeholder="지도 검색">
-        <img id="search_img" src="/DBTB/static/img/search.png" alt="돋보기">
+        <img id="search_img" src="{% static 'img/search.png'%}" alt="돋보기">
       </div>
     
-    </header>
+    </header> <!--지도 검색-->
+
+
     <div id="spot_information">
   <div class="spot_info_img">
     <img id="place_img" src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.6435-9/45575110_1862062380558656_8142010257971871744_n.jpg?stp=dst-jpg_p180x540_tt6&_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=nFiAOkRY5qUQ7kNvwG6fcvV&_nc_oc=AdlUs6EPKPVT_XDa5jn7RmagCkOMrWu_GgugASGbvkcDEsug0e62bKtVUXkk1TGdcFY&_nc_zt=23&_nc_ht=scontent-ssn1-1.xx&_nc_gid=lYSQEiIjJx1__ARm7p9fgg&oh=00_AfWsgHhk-L3v-UHpIqf213n6XrRxIAoEbH0a8rqEu7qK5A&oe=68C50DE5">
   </div>
-  
   <div id="information_box">
     <div class="info_first">
     <span id="spot_name">덕성여자대학교</span>
-    <img id="img_add_address" src="/DBTB/static/img/add_address.png" width="25px" height="25px">
+    <img id="img_add_address" src="{% static 'img/add_address.png'%}" width="25px" height="25px">
     </div>
     <span id="spot_address">서울특별시 도봉구 삼양로 144길 33</span>
     
 <hr class="line2">
-<div id="post_number">포스트 <b id="post_N">N</b>개 </div>
+<div id="post_number">포스트 N개 </div>
 
 
 <div class="posting_place">
@@ -87,18 +95,18 @@
 
 <div class="post_place">
   <div class="scrap_info">
-    <img class="next_post" id="pre_button" src="/DBTB/static/img/Previous.png">
+    <img class="next_post" id="pre_button" src="{% static 'img/Previous.png'%}">
   </div>
 <article class="post">
   <img class="img_post" src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.6435-9/45575110_1862062380558656_8142010257971871744_n.jpg?stp=dst-jpg_p180x540_tt6&_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=nFiAOkRY5qUQ7kNvwG6fcvV&_nc_oc=AdlUs6EPKPVT_XDa5jn7RmagCkOMrWu_GgugASGbvkcDEsug0e62bKtVUXkk1TGdcFY&_nc_zt=23&_nc_ht=scontent-ssn1-1.xx&_nc_gid=lYSQEiIjJx1__ARm7p9fgg&oh=00_AfWsgHhk-L3v-UHpIqf213n6XrRxIAoEbH0a8rqEu7qK5A&oe=68C50DE5">
   <div class="post_info">
     <div class="USER_info">
 
-    <div id="userimg_circle_hole"><img id="user_img" src="/DBTB/static/img/likelion.png"></div>
+    <div id="userimg_circle_hole"><img id="user_img" src="{% static 'img/likelion.png'%}"></div>
     <span id="user_ID">아이디</얖>
  </div>
     <div class="scrap_info"> 
-      <img class="scrap_img" src="/DBTB/static/img/scrap.png">
+      <img class="scrap_img" src="{% static 'img/scrap.png'%}">
       <span id="scrap_number">12</span>
     </div>
     
@@ -108,7 +116,7 @@
       </div>
 </article>
 <div class="next">
-  <img class="next_post" id="next_button" src="/DBTB/static/img/next.png">
+  <img class="next_post" id="next_button" src="{% static 'img/next.png'%}">
 </div> 
 
 </div>
@@ -117,9 +125,9 @@
 </div>
     </div>
     <div id="close_infomation" class="CLOSE" style="display: none;">
-      <img src="/DBTB/static/img/close.png" class="close_img" id="close_info">
+      <img src="{% static 'img/close.png'%}" class="close_img" id="close_info">
             </div>
-
+<!--지도 상세페이지-->
           
     <div id="My_activity">
       <div class="my_act_title">내 활동</div>
@@ -128,7 +136,7 @@
         <article class="alert">
        
             <div class="alert_hole">
-              <img id="alert_img" src="/DBTB/static/img/alert.png">
+              <img id="alert_img" src="{% static 'img/alert.png'%}">
             </div>
 
             <div class="alert_big_content">
@@ -140,7 +148,7 @@
         <article class="alert">
             
             <div class="alert_hole">
-            <img id="alert_img" src="/DBTB/static/img/alert.png">
+            <img id="alert_img" src="{% static 'img/alert.png'%}">
             </div>
             <div class="alert_big_content">
               <div class="alert_content"><span>고구마</span> 님이 내 포스트를 스크랩했어요</div>
@@ -152,16 +160,17 @@
      
     </div>
     <div id="close_My_activity" style="display: none;" class="CLOSE">
-      <img src="/DBTB/static/img/close.png" id="close_my_act" class="close_img">
+      <img src="{% static 'img/close.png'%}" id="close_my_act" class="close_img">
             </div>
-  
+  <!--내활동-->
+
     <div id="recommend">
       <div id="formal_layer">
         <div id="formal_mentions">
         <div class="first_mention"><span class="user_name">로그인</span> 님에게 추천하는 도봉구 스팟!</div>
         <div id="my_location_button"> 
           <span>내 위치</span>
-          <img id="my_location_img" src="/DBTB/static/img/my_location.png" alt="내위치" >
+          <img id="my_location_img" src="{% static 'img/my_location.png'%}" alt="내위치" >
         </div>
       </div>
         <div class="second_mention">현재 날씨와 시간대에 맞춘 AI 추천 스팟</div>
@@ -170,7 +179,7 @@
       </div>
       <div class="recommend_spots">
       <div class="recommend_spot">
-        <img src="/DBTB/static/img/likelion.png">
+        <img src="{% static 'img/likelion.png'%}">
         <div class="nomal_mention">
         <span>현위치로 부터 <b>500m</b>에 위치</span>
         <span>맑은 하늘을 볼 수 있는 현재 날씨와 노을을 볼 수 있는 지금 <span class="under_line_mention">도봉구 쌍문동 ...</span> 으로 가보세요!</span>
@@ -178,7 +187,7 @@
         </div>
       </div>
       <div class="recommend_spot">
-        <img src="/DBTB/static/img/likelion.png">
+        <img src="{% static 'img/likelion.png'%}">
         <div class="nomal_mention">
         <span>현위치로 부터 <b>500m</b>에 위치</span>
         <span>맑은 하늘을 볼 수 있는 현재 날씨와 노을을 볼 수 있는 지금 <span class="under_line_mention">도봉구 쌍문동 ...</span> 으로 가보세요!</span>
@@ -186,8 +195,9 @@
         </div>
       </div>
       </div>
+      
     </div>
-    
+    <!--추천 박스-->
    
 
 
