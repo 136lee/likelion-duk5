@@ -50,17 +50,4 @@ def mypage(request):
     return render(request, 'account/mypage.html', {'posts':posts , 'scraps': scraps})
 
 
-@login_required
-def user_info(request):
-    scraps = request.user.scrapped_posts.all()
-
-    if request.method =="POST":
-        profile_image = request.FILES.get('profile_image')
-        if profile_image:
-            request.user.profile_image.delete()
-            request.user.profile_image = profile_image
-            request.user.save()
-
-    return render(request, 'account/user_info.html')
-
 
