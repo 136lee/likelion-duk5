@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/account/login.css'%}" />
+    <title>login</title>
+  </head>
+  <body>
+    <header id="HdStyle">
+      <div id="HdLayout">
+        <div id="HdLogo">
+          <img id="Hdlogoimg" src="{% static '' %}" alt="로고" />
+          <p id="HdText">도봉또봉</p>
+        </div>
+        <button type="button" id="HdAccountBt">
+          <p>로그인/회원가입</p>
+        </button>
+      </div>
+    </header>
+    <section id="AcSection">
+      <article>
+        <div id="artText">
+          <!-- 메인페이지로 이동 -->
+          <p>로그인</p>
+        </div>
+        <div id="formCon">
+          <form  method="POST" action="{% url 'account:login'%}">
+            {%csrf_token %} {{form.as_p}}
+            <div>
+              <input name="username" id="LId" type="text" placeholder="아이디를 입력하세요." />
+            </div>
+            <input
+              id="LPw"
+              type="password"
+              name="password"
+              placeholder="비밀번호를 입력하세요."
+            />
+            <div>
+              <input  id="Lsb" type="submit" value="로그인" />
+            </div>
+          </form>
+        </div>
+        <div id="AdCon">
+          <div>
+            <input type="checkbox" />
+            <p>자동 로그인</p>
+          </div>
+          <div>
+            <p>아이디 찾기</p>
+            <p>비밀번호 찾기</p>
+            <p id="logSg">회원가입</p>
+          </div>
+        </div>
+      </article>
+    </section>
+    <footer id="AcFooter">
+      <div id="FtLogo">
+        <img src="{% static '' %}" alt="로고" />
+        <p>도봉또봉</p>
+      </div>
+      <div id="FtAd">
+        <p id="FtAdC1">개인정보처리방침</p>
+        <p id="FtAdC2">ⓒ 2025 AAA. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

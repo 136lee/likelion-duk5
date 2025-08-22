@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/account/signup.css'%}" />
+    <title>signup</title>
+  </head>
+  <body>
+    <header id="HdStyle">
+      <div id="HdLayout">
+        <div id="HdLogo">
+          <img id="Hdlogoimg" src="{% static '' %}" alt="로고" />
+          <p id="HdText">도봉또봉</p>
+        </div>
+        <button type="button" id="HdAccountBt">
+          <p>로그인/회원가입</p>
+        </button>
+      </div>
+    </header>
+    <section id="AcSection">
+      <article>
+        <div id="artText">
+          <p>회원가입</p>
+        </div>
+        <div id="formCon">
+          <form method="POST" action="/account/signup/">
+            {% csrf_token %}
+            <div class="spForm">
+              <p>닉네임</p>
+              <input id="LId" name="username" type="text" placeholder="3자리 이상" />
+            </div>
+            <div class="spForm">
+              <p>이메일</p>
+              <input id="LPw" name="email" type="email" placeholder="abc12345@abc.kr" />
+            </div>
+            <div class="spForm">
+              <p>비밀번호</p>
+              <input
+                id="LPw"
+                name="password1"
+                type="password"
+                placeholder="영문, 숫자, 특수문자를 사용한 8~20자"
+              />
+            </div>
+            <div class="spForm">
+              <p>비밀번호 확인</p>
+              <input
+                id="LPw"
+                name="password2"
+                type="password"
+                placeholder="위의 비밀번호를 다시 입력해주세요."
+              />
+            </div>
+            <div class="spForm">
+              <p>가입 설정</p>
+              <div id="chBG">
+                <p id="chBGW">방문객</p>
+                <p id="chBGWM">도봉구민</p>
+              </div>
+            </div>
+            <div id="WMhidden">
+              <div class="spForm">
+                <p>도봉구 거주 기간</p>
+                <input id="yM" type="number" />
+                <span>년</span>
+              </div>
+              <div class="spForm">
+                <p>도봉 큐레이터로 가입하시겠습니까?</p>
+                <div id="YNch">
+                  <input type="radio" name="signup" /> <span>예</span>
+                  <input type="radio" name="signup" /> <span>아니요</span>
+                </div>
+              </div>
+            </div>
+            <div id="spButtom">
+              <div id="spButtomTop">
+                <div class="spButtomTopAg">
+                  <p id="agtxt">약관 동의</p>
+                  <p class="agtxtr">(필수)</p>
+                </div>
+                <div class="spButtomTopAg">
+                  <input type="checkbox" id="agreeAll" />
+                  <p class="agtxtall">전체 동의</p>
+                </div>
+              </div>
+              <div id="spBtBt">
+                <div class="spButtomTopAg">
+                  <input type="checkbox" class="agree" />
+                  <p class="agtxtall">이용약관에 동의</p>
+                  <p class="agtxtr">(필수)</p>
+                </div>
+                <div class="spButtomTopAg">
+                  <input type="checkbox" class="agree" />
+                  <p class="agtxtall">개인정보 수집 및 이용에 동의</p>
+                  <p class="agtxtr">(필수)</p>
+                </div>
+                <div class="spButtomTopAg">
+                  <input type="checkbox" class="agree" />
+                  <p class="agtxtall">마케팅 정보 수신 동의</p>
+                  <p id="agtxtg">(선택)</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <input id="Lsb" type="submit" value="다음 단계" />
+            </div>
+          </form>
+        </div>
+        <div id="AdCon">
+          <p>이미 가입 하셨다면?</p>
+          <a  href="{% url 'account:login' %}">로그인</a>
+        </div>
+      </article>
+    </section>
+    <footer id="AcFooter">
+      <div id="FtLogo">
+        <img src="{% static '' %}" alt="로고" />
+        <p>도봉또봉</p>
+      </div>
+      <div id="FtAd">
+        <p id="FtAdC1">개인정보처리방침</p>
+        <p id="FtAdC2">ⓒ 2025 AAA. All rights reserved.</p>
+      </div>
+    </footer>
+    <script src="{% static 'js/account/signup.js' %}"></script>
+  </body>
+</html>

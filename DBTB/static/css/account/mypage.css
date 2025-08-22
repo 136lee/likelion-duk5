@@ -1,0 +1,283 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* 헤더 */
+#HdStyle {
+  border-bottom: 1px solid #d8d8d8;
+  background: #fff;
+  padding: 8px 0;
+}
+
+#Hdlogoimg{
+  width: 60%;
+}
+
+#HdLayout {
+  display: flex;
+  height: 70%;
+  padding: 6px 5%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#HdLogo {
+  display: flex;
+  font-weight: 500;
+  justify-content: center;
+  align-items: center;
+}
+#HdLogo a {
+  cursor: pointer;
+  margin: 0 10px;
+}
+#HdLogoA {
+  margin-right: 10px;
+}
+
+#HdText {
+  color: var(--CoolGray-60, #697077);
+  font-family: Roboto;
+  font-size: 180%;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 110%;
+}
+
+/* dur; */
+#reMo {
+  position: absolute;
+  top: 150px;
+  right: 13%;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  width: 120px;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  padding: 5px 0;
+  display: none;
+  flex-direction: column;
+  z-index: 10;
+}
+
+#reMo.show {
+  display: flex;
+}
+
+/* 푸터 */
+#AcFooter {
+  display: flex;
+  padding: 38px 50px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
+  background-color: #f0f0f0;
+}
+#FtLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+#FtLogo p {
+  color: var(--CoolGray-60, #697077);
+  font-family: Roboto;
+  font-size: 23px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 110%; /* 39.6px */
+}
+#FtAd {
+  margin-top: 4%;
+}
+#FtAdC1 {
+  color: #000;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+#FtAdC2 {
+  color: #999;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 2px;
+}
+
+/* 바디 */
+
+#mysection {
+  display: flex;
+  /* justify-content: center; */
+  gap: 15%;
+  margin: 50px 8% 150px 8%;
+}
+#mytop {
+  font-family: Roboto;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 110%;
+  width: 150px;
+}
+#myAsList {
+  border-top: 1px solid #4b4b4b;
+  border-bottom: 1px solid #4b4b4b;
+  padding: 15px 0 15px 8px;
+  margin-top: 30px;
+}
+#mytopT {
+  font-weight: 500;
+  font-size: 20px;
+}
+.myAstopLs a {
+  display: block;
+  margin-top: 8px;
+  cursor: pointer;
+}
+#myAsTT {
+  margin: 15px 0;
+  cursor: pointer;
+}
+#myAsTT img {
+  width: 20px;
+}
+
+#mysection article {
+  margin-top: 60px;
+  /* border: 1px solid red; */
+  width: 100%;
+}
+#myAtTop {
+  display: flex;
+  border: 1px solid #c3cec6;
+  border-radius: 8px;
+  padding: 30px;
+}
+#myAtTopId {
+  display: flex;
+  /* background-color: #c06c6c; */
+  width: 60%;
+}
+#myIdsb {
+  display: block;
+  width: 100%;
+  margin-left: 8px;
+}
+#myIdsbNa {
+  font-weight: 500;
+}
+#myIdsbJb {
+  font-size: 13px;
+}
+#myAtTopSb {
+  display: flex;
+}
+.myAtSbD {
+  text-align: center;
+  margin: 0 20px;
+  cursor: pointer;
+}
+#myAtSbMd {
+  border-left: 1px solid #989f9a99;
+  border-right: 1px solid #989f9a99;
+  text-align: center;
+  padding: 0 20px;
+  cursor: pointer;
+}
+.myAtSbDTT {
+  color: #4b4b4b;
+}
+#postpf {
+  width: 100%;
+}
+.myAtSbDTTN {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+#myAsCon,
+#myAsConSeT {
+  display: flex;
+  justify-content: space-between;
+
+}
+#myAsCon{
+      border-bottom: 1.9px solid black;
+    padding-bottom: 10px;
+}
+#myAsSe {
+  margin-top: 50px;
+}
+.myAsConAll {
+  display: flex;
+}
+.myAsConAll p {
+  font-size: 12px;
+  color: #6a6a6a;
+  cursor: pointer;
+}
+#conAllR {
+  width: 20px;
+}
+#AsConT p {
+  font-size: 19px;
+  font-weight: 500;
+}
+#myAsConSe {
+
+  margin-top: 10px;
+  padding: 10px;
+  cursor: pointer;
+
+}
+#mySE{
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #A8A8A8;
+  padding: 13px 0 15px 0;
+}
+#Postsc{
+padding-top: 10px;
+}
+#myAsConSeTp {
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+#myAsConSeTl {
+  color: #808080;
+  font-family: Pretendard;
+  font-size: 12px;
+  line-height: 110%; /* 22px */
+}
+#Postsc.filled{
+  width: 25px;
+}
+.nopoS{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 180px;
+}
+
+#trashmy{
+  display: flex;
+  border: 1px solid #C8C8C8;
+  border-radius: 10px;
+  padding: 5px;
+}
+#trashmy p{
+  font-size: 13px;
+  font-weight: 500;
+  border-right: 1px solid #C8C8C8;
+  padding-right: 5px;
+}
+#trashmy img{
+  margin-left: 5px;
+  width: 15px;
+}

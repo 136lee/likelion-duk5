@@ -1,0 +1,382 @@
+.send{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+
+
+}
+.send2{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+
+ 
+}
+#add{
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+#fileInput {
+    display: none; /* 기본 파일 선택 버튼 숨기기 */
+  }
+
+  .custom-file-label {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .custom-file-label img {
+    width: 120px;  /* 버튼 대신 보일 이미지 크기 */
+    height: auto;
+  }
+
+  #fileInput2 {
+    display: none; /* 기본 파일 선택 버튼 숨기기 */
+  }
+
+  .custom-file-label2 {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .custom-file-label2 img {
+    width: 120px;  /* 버튼 대신 보일 이미지 크기 */
+    height: auto;
+  }
+
+.AI_search_bar{
+width: 100%;
+height: 50px;
+border-radius: 50px;
+overflow: hidden;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-evenly;
+color:rgb(128,128,128) ;
+background-color: rgb(234, 234, 234);
+font-size: 24px;
+}
+
+.AI_search_input{ 
+    outline: none;
+    border: none;
+    padding:0;
+    height: 45px;
+    width: 80%;
+    padding-left:5px;
+    font-size: 12px;
+    background-color: rgb(234, 234, 234);
+}
+
+.Question_box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    gap:30px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.AI_recommend_box{
+    display: flex;
+    flex-direction: column;
+gap:10px;
+    width: 300px;
+    height: 160px;
+    background-color: rgb(237,243,236);
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    padding:15px;
+}
+#article_img{
+    width: 80px;
+    height: 120px;
+    border-radius: 4px;
+}
+.article_content{
+    display: flex;
+    flex-direction: row;
+    gap:20px;
+}
+.writer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+#writerInfo{
+    font-size: 13px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:5px;
+}
+#wirter_circle{
+ border-radius: 50%;
+ width: 20px;
+ height: 20px;
+ border:1px solid rgb(195,206,198);
+ overflow: hidden;
+}
+#wirter_circle>img{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+.AI_scrap{
+    display: flex;
+    flex-direction: row;
+    font-size: 12px;
+    align-items: center;
+    color:rgb(128, 128, 128);
+}
+.AI_scrap>img{
+    width: 16px;
+    height: 16px;
+}
+.article_content_detail{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+#review{
+    font-size: 10px;
+
+}
+
+#button_recommend{
+    background-color: white;
+    border-radius:6px ;
+padding: 0 5px;
+    height: 20px;
+    font-size: 10px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+#recommend_post{
+    display: flex;
+    justify-content: end;
+}
+.AI_recommend{
+    display: flex;
+    flex-direction: row; 
+    gap:20px;
+    justify-content: center;
+    padding-bottom: 10px;
+
+}
+.AI_store_recommend_header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+}
+#button_explore_store{
+    display: flex;
+flex-direction: row;
+align-items: center;
+background-color: white;
+
+
+font-size: 10px;
+justify-content: center;
+gap:5px;
+padding:3px 5px 3px 3px;
+border-radius: 6px;
+}
+#button_explore_store>img{
+    width: 16px;
+    height: 16px;
+}
+.AI_store_header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:10px;
+    padding:5px 10px;
+
+}
+.store_info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+#store_review{
+    padding: 10px 10px;
+    font-size: 10px;
+    font-weight: 400;
+}
+#store_name{
+    font-size: 13px;
+font-weight: 500;
+}
+#store_address{
+    font-size: 10px;
+    font-weight: 500;
+}
+#explore_line{
+    color: rgb(152, 159, 154);
+}
+#store_img{
+    width: 40px;
+    height: 40px;
+}
+#ex_main{
+    display: flex;
+    flex-direction: row;
+  justify-content: space-between;
+    height: 100%;
+}
+html,body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+#information_place{
+    font-size: 13px;
+    width: 100%;
+    height: 280px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    font-weight: 400;
+
+}
+
+#button_more{
+font-size: 12px;
+    background-color: white;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    padding:3px;
+    font-weight: 400;
+}
+.button_place{
+    display: flex;
+    justify-content: center;
+}
+.Bar_img{
+    width: 18px;
+    height: 18px;
+}
+.line{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:5px;
+}
+#leftBar{
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    gap:50px;
+    width: 20%;
+    border-right: 1px solid black;
+    min-width: 100px;
+
+}
+html,body{
+    display: flex;
+    flex-direction: column;
+}
+
+hr{
+    margin: 0;
+    padding:0;
+}
+.leftBarBox>span{
+    color:rgb(128, 128, 128);
+    font-size: 11px;
+}
+.leftBarBox{
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    color:black;
+    font-weight: 500;
+    gap:5px;
+}
+.search_place{
+ display: flex;
+ width: 100%;
+ justify-content: center;
+}
+.AI_main{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+}
+.total{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 90%;
+    width: 100%;
+
+}
+
+.conversation{
+    padding-top: 10px;
+overflow-y: scroll;
+min-height: 100px;
+gap:10px;
+font-size: 13px;
+scrollbar-width: none;
+height: 100%;
+width: 90%;
+flex-direction: column;
+
+display: none;
+}
+.commend{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(237, 243, 236);
+    border-radius:30px ;
+    font-size: 15px;
+    padding:7px;
+}
+.commend_sort{
+    display: flex;
+    justify-content: end;
+}
+.answer_sort{
+    display: flex;
+    justify-content: flex-start;
+}
+.answer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(87, 116, 81);
+    border-radius:30px ;
+    font-size: 15px;
+    padding:7px;
+}
+.conversation_place{
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}

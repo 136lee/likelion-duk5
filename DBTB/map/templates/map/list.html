@@ -1,0 +1,477 @@
+{% load static %}
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>지도 - {% if scope == 'mine' %}내 지도{% else %}전체 지도{% endif %}</title>
+  <link rel="stylesheet" href="{% static 'css/account/main.css'%}">
+  <script defer src="{% static 'js/account/main.js'%}">
+
+  </script>
+  
+  
+
+  <!-- Kakao SDK: 반드시 libraries=services 포함 + 도메인 등록 -->
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b76f141ae739da5b568454a96523a207&libraries=services"></script>
+
+  <style>
+    /*body{margin:0;font-family:system-ui,Arial,sans-serif}
+    header{padding:12px;background:#f5f5f5;display:flex;gap:10px;align-items:center}
+    nav a{padding:6px 10px;border:1px solid #ddd;border-radius:8px;text-decoration:none;color:#333}
+    nav a.active{background:#222;color:#fff;border-color:#222}
+
+    map{width:100%;height:70vh;border-top:1px solid #eee}
+    #count{padding:8px 12px;color:#666;font-size:14px}
+    #addrbar{padding:8px 12px;color:#333;font-size:14px;border-top:1px solid #eee}
+    .profile {display:flex; align-items:center; gap:8px}
+    .profile img {width:32px;height:32px;border-radius:50%;object-fit:cover}*/
+  </style>
+</head>
+
+<body> 
+  <div id="map"></div>
+<!--백엔드-->
+  <!--<header>
+    <strong>{% if scope == 'mine' %}내 지도{% else %}전체 지도{% endif %}</strong>
+    <nav>
+      <a href="{% url 'map:list' %}" class="{% if scope == 'list' %}active{% endif %}">전체지도</a>
+      <a href="{% url 'map:mine' %}" class="{% if scope == 'mine' %}active{% endif %}">내지도</a>
+    </nav>
+    <div style="margin-left:auto;" class="profile">
+      {% if request.user.is_authenticated %}
+        <span>{{ request.user.username }}님</span> | <a href="{% url 'account:logout' %}">로그아웃</a>
+      {% else %}
+        <a href="{% url 'account:login' %}?next={{ request.path|urlencode }}">로그인</a>
+      {% endif %}
+      {% if request.user.profile_image %}
+        <img src="{{ request.user.profile_image.url }}" alt="Profile Image">
+      {% else %}
+        <img src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
+      {% endif %}
+    </div>-->
+<!--
+    <a href="{% url 'feed:feed_all' %}">피드</a>
+    <a href="{% url 'explore:chat_ai' %}">탐험</a>
+    <a href="{% url 'account:mypage' %}">마이페이지</a>
+  </header>
+-->
+    <div id="left_bar"> 
+      <div id="img">
+        <div class="image_sort">
+          <a href="{% url 'map:list' %}">
+          <img id="DBTB_button_img" src="{% static 'img/DBTB_main_logo.png'%}" >
+          </a>
+        </div>
+        <a class="image_sort" id="move_to_feed"  href="{% url 'feed:feed_all' %}">
+          <img id="feed_button_img" src="{% static 'img/feed.png'%}">
+          <span>피드</span>
+        </a>
+        <a class="image_sort" id="goto_ex" href="{% url 'explore:chat_ai' %}">
+          <img id="ex_button_img" src="{% static 'img/explore.png'%}">
+          <span>탐험</span>
+        </a>
+        
+        <br>
+         
+        <hr id="line1">
+        <div class="image_sort">
+          <div id="move_to_myact">
+          <img id="my_act_button_img" src="{% static 'img/my_act.png'%}">
+          <div id="red_circle">1</div>
+          <div>내 활동</div>
+        </div>
+        </div>
+        
+      </div>
+      <a id="mypage_circle_hole" href="{% url 'account:mypage' %}">
+        {% if request.user.profile_image %}
+            <img id="mypage_img" width="200px" src="{{ request.user.profile_image.url }}" alt="Profile Image">
+        {% else %}
+            <img id="mypage_img" width="200px" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
+        {% endif %}
+    </a>
+
+    
+    
+    </div><!--왼쪽 바-->
+
+    <header id="header_main">
+      <div id="search_div">
+        <input id="search" type="search" placeholder="지도 검색">
+        <img id="search_img" src="{% static 'img/search.png'%}" alt="돋보기">
+      </div>
+
+      <div class="mapVer_and_log">
+      <div class="map_version">
+        <a href="{% url 'map:list' %}" class="{% if scope == 'list' %}active{% endif %}">전체지도</a>
+        <a href="{% url 'map:mine' %}" class="{% if scope == 'mine' %}active{% endif %}">내지도</a>
+</div>
+  <div class="login_or_logout">
+    {% if request.user.is_authenticated %}
+    {{ request.user.username }}님 | <a href="{% url 'account:logout' %}">로그아웃</a>
+  {% else %}
+    <a href="{% url 'account:login' %}?next={{ request.path|urlencode }}">로그인</a>
+  {% endif %}
+  </div>
+
+      </div>
+    </header> <!--지도 검색-->
+    
+    <div id="spot_information">
+      <div class="spot_info_img">
+        <img id="place_img" src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.6435-9/45575110_1862062380558656_8142010257971871744_n.jpg?stp=dst-jpg_p180x540_tt6&_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=nFiAOkRY5qUQ7kNvwG6fcvV&_nc_oc=AdlUs6EPKPVT_XDa5jn7RmagCkOMrWu_GgugASGbvkcDEsug0e62bKtVUXkk1TGdcFY&_nc_zt=23&_nc_ht=scontent-ssn1-1.xx&_nc_gid=lYSQEiIjJx1__ARm7p9fgg&oh=00_AfWsgHhk-L3v-UHpIqf213n6XrRxIAoEbH0a8rqEu7qK5A&oe=68C50DE5">
+      </div>
+      <div id="information_box">
+        <div class="info_first">
+        <span id="spot_name">덕성여자대학교</span>
+        <img id="img_add_address" src="{% static 'img/add_address.png'%}" width="25px" height="25px">
+        </div>
+        <span id="spot_address">서울특별시 도봉구 삼양로 144길 33</span>
+        
+    <hr class="line2">
+    <div id="post_number">포스트 N개 </div>
+    
+    
+    <div class="posting_place">
+      <!--
+      <div class="new_post">
+        <div>첫 번째 포스트의 주인공이 되어주세요.</div>
+        <div class="add_post"></div>
+      </div>
+    -->
+    
+    
+    <div class="post_place">
+      <div class="scrap_info">
+        <img class="next_post" id="pre_button" src="{% static 'img/Previous.png'%}">
+      </div>
+    <article class="post">
+      <img class="img_post" src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.6435-9/45575110_1862062380558656_8142010257971871744_n.jpg?stp=dst-jpg_p180x540_tt6&_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=nFiAOkRY5qUQ7kNvwG6fcvV&_nc_oc=AdlUs6EPKPVT_XDa5jn7RmagCkOMrWu_GgugASGbvkcDEsug0e62bKtVUXkk1TGdcFY&_nc_zt=23&_nc_ht=scontent-ssn1-1.xx&_nc_gid=lYSQEiIjJx1__ARm7p9fgg&oh=00_AfWsgHhk-L3v-UHpIqf213n6XrRxIAoEbH0a8rqEu7qK5A&oe=68C50DE5">
+      <div class="post_info">
+        <div class="USER_info">
+    
+        <div id="userimg_circle_hole"><img id="user_img" src="{% static 'img/likelion.png'%}"></div>
+        <span id="user_ID">아이디</얖>
+     </div>
+        <div class="scrap_info"> 
+          <img class="scrap_img" src="{% static 'img/scrap.png'%}">
+          <span id="scrap_number">12</span>
+        </div>
+        
+        </div>
+        <div id="review">
+          "여름 아침 덕성여대. 잔디밭에 앉아서 산과 하늘을 바라보면 마음이 탁 트여요!"
+          </div>
+    </article>
+    <div class="next">
+      <img class="next_post" id="next_button" src="{% static 'img/next.png'%}">
+    </div> 
+    
+    </div>
+    
+    </div>
+    </div>
+        </div>
+        <div id="close_infomation" class="CLOSE" style="display: none;">
+          <img src="{% static 'img/close.png'%}" class="close_img" id="close_info">
+                </div>
+                <!--지도 상세페이지-->
+          
+    <div id="My_activity">
+      <div class="my_act_title">내 활동</div>
+      <hr>
+      <div class="article_place">
+        <article class="alert">
+       
+            <div class="alert_hole">
+              <img id="alert_img" src="{% static 'img/alert.png'%}">
+            </div>
+
+            <div class="alert_big_content">
+              <div class="alert_content"><span>고구마</span> 님이 내 포스트를 스크랩했어요</div>
+              <div>어제</div>
+            </div>
+          
+        </article>
+        <article class="alert">
+            
+            <div class="alert_hole">
+            <img id="alert_img" src="{% static 'img/alert.png'%}">
+            </div>
+            <div class="alert_big_content">
+              <div class="alert_content"><span>고구마</span> 님이 내 포스트를 스크랩했어요</div>
+              <div>어제</div>
+            </div>
+          
+        </article>
+      </div>
+     
+    </div>
+    <div id="close_My_activity" style="display: none;" class="CLOSE">
+      <img src="{% static 'img/close.png'%}" id="close_my_act" class="close_img">
+            </div>
+  <!--내활동-->
+  <div id="recommend">
+    <div id="formal_layer">
+      <div id="formal_mentions">
+      <div class="first_mention"><span class="user_name">로그인</span> 님에게 추천하는 도봉구 스팟!</div>
+      <div id="my_location_button"> 
+        <span>내 위치</span>
+        <img id="my_location_img" src="{% static 'img/my_location.png'%}" alt="내위치" >
+      </div>
+    </div>
+      <div class="second_mention">현재 날씨와 시간대에 맞춘 AI 추천 스팟</div>
+   
+
+    </div>
+    <div class="recommend_spots">
+    <div class="recommend_spot">
+      <img src="{% static 'img/likelion.png'%}">
+      <div class="nomal_mention">
+      <span>현위치로 부터 <b>500m</b>에 위치</span>
+      <span>맑은 하늘을 볼 수 있는 현재 날씨와 노을을 볼 수 있는 지금 <span class="under_line_mention">도봉구 쌍문동 ...</span> 으로 가보세요!</span>
+      <span class="gray">by <span class="writer_name">흥부</span> </span>
+      </div>
+    </div>
+    <div class="recommend_spot">
+      <img src="{% static 'img/likelion.png'%}">
+      <div class="nomal_mention">
+      <span>현위치로 부터 <b>500m</b>에 위치</span>
+      <span>맑은 하늘을 볼 수 있는 현재 날씨와 노을을 볼 수 있는 지금 <span class="under_line_mention">도봉구 쌍문동 ...</span> 으로 가보세요!</span>
+      <span class="gray">by <span class="writer_name">흥부</span> </span>
+      </div>
+    </div>
+    </div>
+    
+  </div>
+  <!--추천 박스-->
+
+  <!--
+  <div id="count">표시된 포스트: 0개</div>
+-->
+
+
+
+
+  <div id="addrbar">주소: -</div>
+
+  <script>
+  // ====== 템플릿 변수 ======
+  const SCOPE     = '{{ scope|escapejs }}' || 'list';
+  const isAuth    = JSON.parse('{{ request.user.is_authenticated|yesno:"true,false"|escapejs }}');
+  const centerLat = parseFloat('{{ center.lat|default:"37.668"|escapejs }}');
+  const centerLng = parseFloat('{{ center.lng|default:"127.047"|escapejs }}');
+
+  // ====== 지도 생성 (도봉구 중심) ======
+  const map = new kakao.maps.Map(document.getElementById('map'), {
+    center: new kakao.maps.LatLng(centerLat, centerLng),
+    level: 6
+  });
+
+  // ====== 마커 관리 ======
+  let markers = [];
+  function clearMarkers(){ markers.forEach(m=>m.setMap(null)); markers=[]; }
+
+  // 좌표 안전 파서
+  function getPos(p){
+    const lat = Number(p.lat ?? p.latitude);
+    const lng = Number(p.lng ?? p.longitude);
+    if (Number.isNaN(lat) || Number.isNaN(lng)) return null;
+    return new kakao.maps.LatLng(lat, lng);
+  }
+
+  // ====== 역지오코딩 유틸 ======
+  const geocoder   = new kakao.maps.services.Geocoder();
+  const infowindow = new kakao.maps.InfoWindow({ zIndex: 2 });
+  const addrCache  = new Map(); // "lat,lng" -> address (간단 캐시)
+
+  function keyOf(lat, lng){ return `${lat.toFixed(6)},${lng.toFixed(6)}`; }
+
+  // 동 정보 얻기 (법정동/행정동)
+function getRegion(lat, lng){
+  return new Promise((resolve, reject)=>{
+    geocoder.coord2RegionCode(lng, lat, (result, status)=>{
+      if (status !== kakao.maps.services.Status.OK) return reject(status);
+      const B = result.find(r => r.region_type === 'B'); // 법정동
+      const H = result.find(r => r.region_type === 'H'); // 행정동
+      resolve({
+        dong: (B?.region_3depth_name || H?.region_3depth_name || ''), // 우리가 쓸 동
+      });
+    });
+  });
+}
+
+
+  function pickAddress(result){
+  const road  = result?.[0]?.road_address?.address_name || '';
+  const jibun = result?.[0]?.address?.address_name || '';
+  return jibun || road || '주소 없음';   // ✅ 지번 먼저!
+}
+
+
+  function reverseGeocode(lat, lng){
+    const k = keyOf(lat, lng);
+    if (addrCache.has(k)) return Promise.resolve(addrCache.get(k));
+    return new Promise((resolve, reject)=>{
+      geocoder.coord2Address(lng, lat, (result, status)=>{
+        if (status !== kakao.maps.services.Status.OK) return reject(status);
+        const addr = pickAddress(result);
+        addrCache.set(k, addr);
+        resolve(addr);
+      });
+    });
+  }
+
+  function setAddrBar(text){
+    const el = document.getElementById('addrbar');
+    if (el) el.textContent = `주소: ${text}`;
+  }
+
+  // ====== 마커 렌더링 ======
+  function renderMarkers(posts){
+    clearMarkers();
+    const bounds = new kakao.maps.LatLngBounds();
+    let added = 0, skipped = 0;
+
+    // NOTE: URL 리버스 규칙에 따라 필요한 형식으로 바꾸세요.
+    // 1) 위치 인자 버전:
+    const detailPattern = "{% url 'post:detail' id=12345 %}";
+    // 2) 키워드 인자 버전(예: post_id=):
+    // const detailPattern = "{% url 'post:detail' id=12345 %}";
+
+    const detailUrlFor = (id) => detailPattern.replace(/12345\/?$/, String(id) + "/");
+
+    posts.forEach(p=>{
+      const pos = getPos(p);
+      if (!pos){ skipped++; return; }
+      if (!p.id) { skipped++; return; }
+
+      const m = new kakao.maps.Marker({ position: pos, clickable: true });
+      m.setMap(map);
+
+      // 1) 마커 클릭 → 상세 페이지 이동
+      kakao.maps.event.addListener(m, 'click', () => {
+        location.href = detailUrlFor(p.id);
+      });
+
+      // 2) 마커 hover → 주소 풍선 + 하단바
+      kakao.maps.event.addListener(m, 'mouseover', async () => {
+        const lat = Number(p.lat ?? p.latitude);
+        const lng = Number(p.lng ?? p.longitude);
+        if (Number.isNaN(lat) || Number.isNaN(lng)) return;
+        try {
+          // 서버 API가 address를 주면 이 줄 대신 p.address 사용 가능
+          const addr = await reverseGeocode(lat, lng);
+          infowindow.setContent('<div style="padding:8px 12px;white-space:nowrap;">'+ addr +'</div>');
+          infowindow.open(map, m);
+          setAddrBar(addr);
+        } catch(_) {}
+      });
+
+      kakao.maps.event.addListener(m, 'mouseout', () => {
+        infowindow.close();
+      });
+
+      markers.push(m);
+      bounds.extend(pos);
+      added++;
+    });
+
+    if (added > 0) map.setBounds(bounds, 40, 40, 40, 40);
+
+    const $count = document.getElementById('count');
+    if ($count) $count.textContent = `표시된 포스트: ${added}개${skipped ? ' (좌표 없음 제외: '+skipped+'개)' : ''}`;
+    console.log(`받은 글:${posts.length} / 마커 생성:${added} / 스킵:${skipped}`);
+  }
+
+  // ====== 포스트 데이터 로드 ======
+  async function fetchPosts(scope){
+    const urls = [`/map/api/posts/?scope=${scope}`, `/api/posts/?scope=${scope}`];
+    for (const u of urls){
+      try{
+        const res = await fetch(u);
+        console.log('GET', u, res.status);
+        if (res.status === 401) { alert('로그인이 필요합니다.'); return []; }
+        if (res.ok) return await res.json();
+        if (res.status !== 404) {
+          console.error('API 오류', u, await res.text());
+          return [];
+        }
+      }catch(e){ console.error('요청 실패', u, e); }
+    }
+    console.error('posts API 경로를 찾지 못했습니다. map/urls.py 확인!');
+    return [];
+  }
+
+  async function load(scope){
+    const posts = await fetchPosts(scope);
+    renderMarkers(posts);
+  }
+
+  // ====== 지도 좌클릭: addr + dong 함께 전달 ======
+kakao.maps.event.addListener(map, 'click', async (e)=>{
+  const lat  = Number(e.latLng.getLat().toFixed(6));
+  const lng  = Number(e.latLng.getLng().toFixed(6));
+  const back = location.pathname; // /map/ 또는 /map/mine/
+
+  try {
+    // 주소 문자열 + 동 이름을 동시에 조회
+    const [addr, region] = await Promise.all([
+      reverseGeocode(lat, lng), // 이미 있는 함수
+      getRegion(lat, lng),      // 위에 추가한 함수
+    ]);
+
+    // 쿼리 파라미터 안전하게 구성
+    const params = new URLSearchParams({
+      lat, lng,
+      addr,
+      next: back,
+      dong: region.dong || '',  // 동 이름 (없으면 빈 문자열)
+    });
+
+    const createUrl = `{% url 'post:create' %}?${params.toString()}`;
+    if (isAuth) location.href = createUrl;
+    else location.href = `{% url 'account:login' %}?next=${encodeURIComponent(createUrl)}`;
+  } catch (err) {
+    // 실패 시 주소만 없이 좌표만 전달 (폴백)
+    const createUrl = `{% url 'post:create' %}?lat=${lat}&lng=${lng}&next=${encodeURIComponent(back)}`;
+    if (isAuth) location.href = createUrl;
+    else location.href = `{% url 'account:login' %}?next=${encodeURIComponent(createUrl)}`;
+  }
+});
+
+
+  // ====== 지도 우클릭: 그 위치 주소만 보여주기 ======
+  kakao.maps.event.addListener(map, 'rightclick', async (e)=>{
+    const lat = e.latLng.getLat();
+    const lng = e.latLng.getLng();
+    try {
+      const addr = await reverseGeocode(lat, lng);
+      setAddrBar(addr);
+      infowindow.setContent('<div style="padding:8px 12px;white-space:nowrap;">'+ addr +'</div>');
+      infowindow.setPosition(e.latLng);
+      infowindow.open(map);
+    } catch(_) {}
+  });
+
+  // ====== 초기 로드 & 저장 직후 하이라이트 ======
+  (async function init(){
+    await load(SCOPE);
+
+    // 저장 완료 후 돌아올 때 ?lat=&lng= 쿼리로 하이라이트
+    const params = new URLSearchParams(location.search);
+    const hLat = parseFloat(params.get('lat'));
+    const hLng = parseFloat(params.get('lng'));
+    if (!Number.isNaN(hLat) && !Number.isNaN(hLng)) {
+      const pos = new kakao.maps.LatLng(hLat, hLng);
+      map.setCenter(pos);
+      const m = new kakao.maps.Marker({ position: pos, map });
+      const iw = new kakao.maps.InfoWindow({ content: '<div style="padding:6px 10px;font-size:13px;">저장 완료!</div>' });
+      iw.open(map, m);
+      setTimeout(()=> iw.close(), 1800);
+      history.replaceState(null, "", location.pathname);
+    }
+  })();
+  </script>
+</body>
+</html>
