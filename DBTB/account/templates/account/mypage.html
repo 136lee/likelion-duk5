@@ -11,11 +11,23 @@
     <h2>마이페이지</h2>
     <a href="{% url 'account:user-info' %}">내 프로필</a><br/>
     <a href="{% url 'account:mypost' %}">내가 작성한 글 </a> <br/>
-    <a href="{#}">나의 할 일</a><br/>
-    <a href="{#}">내가 스크랩 한 글</a>
+    <a href="{$ url 'account:myscrap' %}">내가 스크랩 한 글</a>
     {% else %}
     <a href="{% url 'account:login' %}">로그인 해주세요</a><br>
     {% endif %} 
     <br/>
+    <h2>내 스크랩</h2>
+        {% if scraps %}
+            <ul>
+                {% for post in scraps %}
+                    
+                        <p><a href="{% url 'post:detail' post.pk %}">{{ post.title }}</a></p>
+                        <p>{{post.address}}</p>
+                        <hr>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>스크랩한 글이 없습니다.</p>
+        {% endif %}
 </body>
 </html>

@@ -36,7 +36,8 @@ def logout(request):
 
 
 def mypage(request):
-    return render(request, 'account/mypage.html')
+    scraps = request.user.scrapped_posts.all()
+    return render(request, 'account/mypage.html', {'scraps': scraps})
 
 def mypost(request):
     posts = Post.objects.filter(author=request.user)
@@ -55,5 +56,5 @@ def user_info(request):
 
 def myscrap(request):
     scraps = request.user.scrapped_posts.all()
-    return render(request, 'account/mypost.html', {'scraps': scraps})
+    return render(request, 'account/mypage.html', {'scraps': scraps})
 
