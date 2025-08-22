@@ -34,6 +34,15 @@ def logout(request):
 
     return redirect('map:list')
 
+
+def mypage(request):
+    scraps = request.user.scrapped_posts.all()
+    return render(request, 'account/mypage.html', {'scraps': scraps})
+
+def mypost(request):
+    posts = Post.objects.filter(author=request.user)
+    return render(request, 'account/mypost.html', {'posts':posts})
+
 @login_required
 def mypage(request):
     posts = Post.objects.filter(author=request.user)
@@ -49,5 +58,8 @@ def mypage(request):
 
     return render(request, 'account/mypage.html', {'posts':posts , 'scraps': scraps})
 
+def myscrap(request):
+    scraps = request.user.scrapped_posts.all()
+    return render(request, 'account/mypage.html', {'scraps': scraps})
 
 
