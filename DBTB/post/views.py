@@ -11,6 +11,10 @@ from django.urls import reverse
 import os, json, base64, time, random , requests , re
 from io import BytesIO
 import re
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 
 #openai가 미디어 인식하게 하는 함수
@@ -29,47 +33,55 @@ from django.http import JsonResponse
 
 def matching(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    place = post.place.first()
-    if not place:
-        return HttpResponseBadRequest("이 포스트에 연결된 장소가 없습니다.")
-    place_name = place.name.strip()
+
+    # place가 꼭 없어도 동작하도록 완화 (없으면 그냥 이미지/제목만으로 분석)
+    place = getattr(post, "place", None)
+    if hasattr(place, "first"):
+        place = place.first()
 
     if not (post.author_id == request.user.id or request.user.is_staff or request.user.is_superuser):
         return JsonResponse({"ok": False, "error": "권한이 없습니다."}, status=403)
 
-
     try:
-        image_ref = _file_to_data_url_from_field(post.image)
-
-        client = OpenAI(
-            api_key=getattr(settings, "OPENAI_API_KEY", None) or getattr(settings, "OPEN_API_KEY", None)
-        )
-
-        system_prompt = (
-            "당신은 유능한 여행 가이드입니다. 사진의 장면 특징을 추정하세요."
-            "대한민국에서 비슷한 분위기의 유명한 장소를 한 곳 추천해 주세요. 각 장소는 다음과 같습니다."
-            f"유사한 장소를 먼저 말해줘, 그리고 줄 바꿔서 {place_name}의 장점을 부각해서 유사한 장소와 비교해줘. 유사한 장소를 비하하지는 마."
-            "응답은 3문장으로 끝내. 한국어 존댓말로."
-        )
-
-        resp = client.responses.create(
-            model="gpt-5",
-            input=[
-                {"role": "system", "content": [{"type": "input_text", "text": system_prompt}]},
-                {"role": "user", "content": [
-                    {"type": "input_text", "text": "아래 사진과 비슷하게 보이는 유명한 장소를 추천해 주시고, 비교를 작성해 주세요."},
-                    {"type": "input_image", "image_url": image_ref}
-                ]}
-            ],
-        )
-
-        ai_text = getattr(resp, "output_text", None) or resp.output[0].content[0].text
+        ai_text = run_matching(post)
         post.AI_matching = ai_text
         post.save(update_fields=["AI_matching"])
         return JsonResponse({"ok": True, "ai_text": ai_text})
-
     except Exception as e:
         return JsonResponse({"ok": False, "error": str(e)}, status=500)
+    
+def run_matching(post):
+    """포스트 이미지와 제목을 바탕으로 AI 매칭 텍스트를 생성해 반환."""
+    image_ref = _file_to_data_url_from_field(post.image)
+
+    client = OpenAI(
+        api_key=getattr(settings, "OPENAI_API_KEY", None) or getattr(settings, "OPEN_API_KEY", None)
+    )
+
+    system_prompt = (
+        "당신은 유능한 여행 가이드입니다. 사진의 장면 특징을 추정하세요."
+        "대한민국에서 비슷한 분위기의 유명한 장소를 한 곳 추천해 주세요."
+        f"유사한 장소를 먼저 말해주고, 줄 바꿔서 {post.title}의 장점을 부각해 유사한 장소와 비교해 주세요."
+        "유사한 장소를 비하하지 마세요. 응답은 3문장, 한국어 존댓말로."
+    )
+
+    resp = client.responses.create(
+        model="gpt-5",
+        input=[
+            {"role": "system", "content": [{"type": "input_text", "text": system_prompt}]},
+            {"role": "user", "content": [
+                {"type": "input_text", "text": "아래 사진과 비슷한 유명 장소를 추천하고 비교를 작성해 주세요."},
+                {"type": "input_image", "image_url": image_ref},  # ← 문자열 data URL이면 OK
+            ]},
+        ],
+    )
+
+    # SDK 버전별 호환
+    ai_text = getattr(resp, "output_text", None)
+    if not ai_text:
+        # 일부 SDK는 아래 형태
+        ai_text = resp.output[0].content[0].text
+    return ai_text
 
 
 #응답 평가
@@ -254,6 +266,13 @@ def create(request):
             dong=dong,            # ✅ 여기!
         )
 
+        try:
+            ai_text = run_matching(post)
+            Post.objects.filter(pk=post.pk).update(AI_matching=ai_text)
+        except Exception as e:
+            # 실패해도 글 등록은 성공해야 하니 조용히 패스(원하면 로깅)
+            pass
+
         # 저장 후 보던 지도 페이지로 복귀(+하이라이트)
         next_url = request.POST.get("next") or request.GET.get("next") or reverse("map:list")
         if post.latitude is not None and post.longitude is not None:
@@ -263,11 +282,6 @@ def create(request):
     # GET: 폼 렌더 (지도로부터 ?lat&lng&addr&dong&next 받음)
     return render(request, "post/create.html")
 
-
-#자세히 (마이페이지, 지도?)
-def detail(request, id):
-    post = get_object_or_404(Post, id=id)
-    return render (request, 'post/detail.html', {'post':post})
 
 #수정 (마이페이지에서)
 def update(request,id):

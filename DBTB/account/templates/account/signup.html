@@ -63,22 +63,12 @@
         <div id="formCon">
           <form method="POST" action="{% url 'account:signup' %}">
             {% csrf_token %}
-
-            {% if form.non_field_errors %}
-              <div class="error">
-                {% for e in form.non_field_errors %}{{ e }}{% endfor %}
-              </div>
-            {% endif %}
-
             <!-- 닉네임 (※ 필수: SignUpForm에 존재) -->
             <div class="spForm">
               <p>닉네임</p>
               <input
                 id="LId"                                     
                 name="{{ form.nickname.name }}"              
-              {% if form.nickname.errors %}
-                <div class="error">{% for e in form.nickname.errors %}{{ e }}{% endfor %}</div>
-              {% endif %}
             </div>
 
             <!-- 이메일 -->
@@ -92,9 +82,7 @@
                 value="{{ form.email.value|default:'' }}"
                 required
               />
-              {% if form.email.errors %}
-                <div class="error">{% for e in form.email.errors %}{{ e }}{% endfor %}</div>
-              {% endif %}
+              
             </div>
 
             <!-- 비밀번호 -->
@@ -107,9 +95,7 @@
                 placeholder="영문, 숫자, 특수문자를 사용한 8~20자"
                 required
               />
-              {% if form.password1.errors %}
-                <div class="error">{% for e in form.password1.errors %}{{ e }}{% endfor %}</div>
-              {% endif %}
+              
             </div>
 
             <!-- 비밀번호 확인 -->
@@ -122,9 +108,7 @@
                 placeholder="위의 비밀번호를 다시 입력해주세요."
                 required
               />
-              {% if form.password2.errors %}
-                <div class="error">{% for e in form.password2.errors %}{{ e }}{% endfor %}</div>
-              {% endif %}
+              
             </div>
 
             <!-- 나머지 약관/토글 등은 그대로 두세요 (폼 검증에 영향 없음) -->

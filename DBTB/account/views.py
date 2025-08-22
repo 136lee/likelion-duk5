@@ -36,14 +36,36 @@ def logout(request):
 
 
 def mypage(request):
-    return render(request, 'account/mypage.html')
+    scraps = request.user.scrapped_posts.all()
+    return render(request, 'account/mypage.html', {'scraps': scraps})
 
 def mypost(request):
     posts = Post.objects.filter(author=request.user)
     return render(request, 'account/mypost.html', {'posts':posts})
 
 @login_required
+def mypage(request):
+    posts = Post.objects.filter(author=request.user)
+
+    scraps = request.user.scrapped_posts.all()
+
+    if request.method =="POST":
+        profile_image = request.FILES.get('profile_image')
+        if profile_image:
+            request.user.profile_image.delete()
+            request.user.profile_image = profile_image
+            request.user.save()
+
+    return render(request, 'account/mypage.html', {'posts':posts , 'scraps': scraps})
+
+def myscrap(request):
+    scraps = request.user.scrapped_posts.all()
+    return render(request, 'account/mypage.html', {'scraps': scraps})
+
+@login_required
 def user_info(request):
+    scraps = request.user.scrapped_posts.all()
+
     if request.method =="POST":
         profile_image = request.FILES.get('profile_image')
         if profile_image:
@@ -53,7 +75,4 @@ def user_info(request):
 
     return render(request, 'account/user_info.html')
 
-def myscrap(request):
-    scraps = request.user.scrapped_posts.all()
-    return render(request, 'account/mypost.html', {'scraps': scraps})
 
