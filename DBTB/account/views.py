@@ -63,3 +63,28 @@ def myscrap(request):
     return render(request, 'account/mypage.html', {'scraps': scraps})
 
 
+# 추가코드(스크랩 수)
+@login_required
+def mypage(request):
+
+    if request.method == "POST":
+        profile_image = request.FILES.get('profile_image')
+        if profile_image:
+            user = request.user
+            if user.profile_image:
+                user.profile_image.delete()
+            user.profile_image = profile_image
+            user.save()
+        return redirect('account:mypage')
+
+    user_posts = Post.objects.filter(author=request.user)
+    user_scraps = request.user.scrapped_posts.all()
+
+    context = {
+        'posts': user_posts,
+        'scraps': user_scraps,
+        'post_count': user_posts.count(),     # 포스트 개수
+        'scrap_count': user_scraps.count(), # 스크랩 개수
+    }
+
+    return render(request, 'account/mypage.html', context)
