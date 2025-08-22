@@ -239,6 +239,11 @@ a{
   font-size: 17px;
 }
 
+#postpf{  
+  border-radius: 100px;
+  width: 45px;
+  height: 45px;}
+
 #postpfTxt {
   margin-left: 10px;
 }
@@ -331,4 +336,32 @@ a{
   font-size: 16px;
   font-weight: 500;
   margin-top: 2px;
+}
+
+.PtBoxSy {
+  display: flex;
+  gap: 10%;
+  justify-content: center;
+}
+.PtBoxSyGB {
+  margin-top: 20px;
+  border: 1px solid #c3cec6;
+  border-radius: 10px;
+  padding: 5px;
+  cursor: pointer;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#bbimg{
+  width: 10%;
+}
+.PtBoxSyGB img {
+  width: 28%;
+  margin-right: 5px;
+}
+.PtBoxSyGB span {
+  font-size: 14px;
+  text-align: center;
 }

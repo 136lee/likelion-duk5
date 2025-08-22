@@ -1,5 +1,5 @@
-{% load humanize %} <!--'n분 전' 이렇게 나오려면 필수-->
-{% load static %}
+<!-- {% load humanize %} 'n분 전' 이렇게 나오려면 필수 -->
+<!-- {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,12 +22,12 @@
     <a href ="{% url 'post:update' post.id %}">수정하기</a>
     <a href ="{% url 'post:delete' post.id %}">삭제하기</a>
     <hr>
-    <h2> {{ post.title}} </h2>
-    <p><img src="{{ post.image.url }}"></p> <!--이미지-->
-    {% if post.dong %} <!--템플릿 언어 필수!!-->
-        <p>{{ post.dong }}</p> <!--장소명-->
-        <p>{{ post.address }}</p> <!--주소-->
-    {% else %}
+    <h2> {{ post.title}} </h2> -->
+    <!-- <p><img src="{{ post.image.url }}"></p> 이미지 -->
+    <!-- {% if post.dong %} 템플릿 언어 필수!! -->
+        <!-- <p>{{ post.dong }}</p> 장소명 -->
+        <!-- <p>{{ post.address }}</p> 주소 -->
+    <!-- {% else %}
         <p>장소 정보 없음</p>
     {% endif %}
     <h3>소개 한 줄</h3>
@@ -35,11 +35,11 @@
     <hr>
     <h3>AI 분위기 매칭</h3>
     {{post.AI_matching}}
-    <p>이 답변에 동의하시나요?</p>
+    <p>이 답변에 동의하시나요?</p> -->
     <!--답변 피드백 부분은 jsonresponse로 짜 놧기에 이 코드로 짜는 건 비추하고... 자스로 데이터 불러와야 할 것 같아요. 
     다만 제가 자스를 모르기에 우선 이렇게 짜놨고, 자스 부분 지피티한테 물어본 건 API 명세서에 써놨습니다.
     지금 상태로는 json 페이지로 이동하게 돼요.-->
-    <form method="POST" action="{% url 'post:ai_feedback' post.id %}">
+    <!-- <form method="POST" action="{% url 'post:ai_feedback' post.id %}">
         {% csrf_token %}
         <input type="hidden" name="is_positive" value="true">
         <button type="submit">이 답변 좋아요</button>
@@ -50,10 +50,10 @@
         <button type="submit">이 답변 싫어요</button>
     </form>
     <hr>
-    <h2>할 일 추천</h2>
+    <h2>할 일 추천</h2> -->
     <!--여기 또한 실제 코드는 자스로 해야 할 거 같아서 우선 API 명세서에 자스 어떻게 할지 돌려본 거 추가해놓겠습니다.
     지금 상태로는 json 페이지로 이동하게 돼요.-->
-    <form method="POST">
+    <!-- <form method="POST">
         {% csrf_token %}
         <button type="submit" formaction="{% url 'post:recom_now' post.id %}">
             여기서 할 일
@@ -63,10 +63,9 @@
         </button>
     </form>
 </body>
-</html>
+</html> -->
 
 
-<!-- 연동코드 -->
 
 {% load humanize %} <!--'n분 전' 이렇게 나오려면 필수-->
 {% load static %}
@@ -92,7 +91,7 @@
             <a href="{% url 'explore:chat_ai' %}">탐험</a>
           </div>
           <a href="{% url 'account:user-info' %}">
-            <img id="postpf" src="{% static 'img/profile.svg' %}" alt="프로필" />
+            <img id="postpf" src="{% static 'img/profile_image.jpg ' %}" alt="프로필" />
           </a>
         </div>
         <!-- <button type="button" id="HdAccountBt">
@@ -104,11 +103,11 @@
       <div id="postcontmi">
         <!-- 피드로 이동 -->
         <a href="{% url 'account:mypage' %}">
-          <img id="postpf" src="{% static 'img/profile.svg' %}" />
+          <img id="postpf" src="{% static 'img/profile_image.jpg ' %}" />
         </a>
         <div id="poboxT">
           <div id="postpfTxt">
-            <p id="usid">{{post.author.username}}</p>
+            <p id="usid">{{post.author.nickname}}</p>
             <p id="usst">{{ post.created_at | naturaltime }}</p>
           </div>
           <div>
@@ -187,15 +186,15 @@
             <p class="PtBoxTT">AI 분위기 매칭</p>
             <p class="Pttextbox">
                 {{post.AI_matching}}
-              이 사진은 서울숲 잔디광장과 비슷한 분위기를 가지고 있습니다. 두 곳
+              <!-- 이 사진은 서울숲 잔디광장과 비슷한 분위기를 가지고 있습니다. 두 곳
               모두 넓은 잔디와 도심 속 여유로운 공간이 특징이에요! 다만,
               덕성여자대학교 캠퍼스는 더 조용하고 프라이빗한 느낌이 강해
               혼자만의 시간을 갖거나 산책하기에 좋아요. 서울숲이 시민들의 활기와
               다양한 액티비티로 활발한 곳이라면, 여기는 한적하고 깊은 휴식이
-              필요한 날에 추천합니다.
+              필요한 날에 추천합니다. -->
             </p>
             <p class="PtBoxTT">이 답변에 동의하시나요?</p>
-            <div class="PtBoxSy">
+            <!-- <div class="PtBoxSy">
               <div class="SyFive">
                 <img src="{% static 'img/😟 걱정스러운 얼굴.svg' %}" />
                 <p>매우 미동의</p>
@@ -216,7 +215,17 @@
                 <img src="{% static 'img/😀 활짝 웃는 얼굴.svg' %}" />
                 <p>매우 동의</p>
               </div>
-            </div>
+            </div> -->
+                            <div class="PtBoxSy">
+                  <div class="PtBoxSyGB">
+                    <img id="bbimg" src="{% static 'img/👍️ 올린 엄지.svg' %}" />
+                    <span>이 답변 좋아요</span>
+                  </div>
+                  <div class="PtBoxSyGB">
+                    <img id="bbimg" src="{% static 'img/👎️ 내린 엄지.svg' %}" />
+                    <span>이 답변 싫어요</span>
+                  </div>
+                </div>
           </div>
           <div class="PtBox">
             <p class="PtBoxTT">할 일 추천</p>
