@@ -1,11 +1,144 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{% static 'css/account/explore.css'%}">
+  <link rel="stylesheet" href="{% static 'css/account/feed.css'%}">
   <title>AI Chat (텍스트+이미지)</title>
 </head>
-<body>
+
+<body> 
+  <header>
+    <div id="head_feed">
+        <a class="move_to_home" href="{% url 'map:list' %}">
+          <img class="header_DBTB" src="{% static 'img/DBTB.png' %}">
+        </a>
+    </div>
+     <div id="move">
+        <a id="move_to_map" href="{% url 'map:list' %}">지도</a >
+        <a id="move_to_feed"  href="{% url 'feed:feed_all' %}">피드</a>
+        <a id="move_to_EX" href="{% url 'explore:chat_ai' %}">탐험</a>
+    <a id="img_hole_header"  href="{% url 'account:user-info' %}">
+    <!--  <img src="#" alt="내 프로필" width="24" height="24">-->
+    {% if request.user.profile_image %}
+    <img id="mypage_img" width="200px" src="{{ request.user.profile_image.url }}" alt="Profile Image">
+{% else %}
+    <img id="mypage_img" width="200px" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
+{% endif %}
+  </a>
+    </div>
+</header>
+<hr>
+  
+
+<main id="ex_main">
+  <div id="leftBar">
+    <div class="leftBarBox">
+        <div class="line">
+            <img src="{% static 'img/new_explore.png'%}" class="Bar_img">
+            <div>새 탐험</div>
+        </div>
+        <div class="line"> 
+            <img src="{% static 'img/search_pest.png'%}" class="Bar_img">
+            <div>내역 검색</div>
+        </div>        
+    </div>
+    <div class="leftBarBox">
+        <span>탐험</span>
+        <div>도봉구 맛집 찾기</div>
+        <div>오늘의 인기 게시물 찾기</div>
+    </div>
+</div>
+  
+<div class="AI_main">
+    <!--왼쪽 바-->
+   
+    <div class="Question_box">
+        <div class="Question">도봉구 탐험을 시작하시겠습니까?</div>
+        <div class="total"  style="display: none;">
+          <div class="conversation_place">
+    <div id="chat" class="conversation">
+      <!--<div class="commend_sort">
+      <div class="commend">도봉구 맛집 추천해줘</div>
+      </div>
+    
+    <div class="answer_sort"> 
+      <div class="answer">네 알겠습니다</div>
+    </div>-->
+    </div>
+  </div> 
+      </div>
+    
+        <div class="AI_search_bar">
+          <input type="file" id="fileInput" accept="image/*">
+          <label for="fileInput" class="custom-file-label">
+            <img id="add" src="{% static 'img/addition.png'%}" alt="파일 선택">
+          </label>   
+          <input id="msg" class="AI_search_input" type="search" placeholder="무엇이든 검색하세요">
+          <img class="send" id="sendBtn" src="{% static 'img/send.png'%}">
+        </div>
+    </div>
+
+    </div>
+</main>
+
+<div class="AI_recommend">
+  <article class="AI_recommend_box">
+      <div id="article_title">오늘의 인기 포스트를 확인하세요!</div>
+      <div class="article_content">
+          <img id="article_img" src="{% static 'img/likelion.png'%}">
+          <div class="article_content_detail">
+              <div class="writer">
+                  <div id="writerInfo">
+                      <div id="wirter_circle"><img id="writer_img" src="{% static 'img/likelion.png'%}"></div>
+                      <span id="userID">봉봉봉</span>
+                  </div>
+                  <div class="AI_scrap">
+                      <img src="{% static 'img/scrap_AI.png'%}">
+                      <span>12</span>
+                  </div>
+              </div>
+              <div id="review">여름아침 덕성여대. 잔디밭에 앉아서 산과 하늘을 바라보면 마음이 탁 트여요!</div>
+              <div id="recommend_post"><div id="button_recommend">추천 포스트 검색</div></div>
+          </div>
+      </div>
+  </article>
+  <article class="AI_recommend_box">
+      <div class="AI_store_recommend_header">
+          <div id="article_title">도봉구에서 점심을 드시나요?</div>
+              <div id="button_explore_store">
+              <img class="explore_store_img" src="{% static 'img/explore_store.png'%}">
+              <span>맛집 탐험</span>
+      </div>
+  </div>
+  <div>
+      <div class="AI_store_header">
+          <img id="store_img" src="{% static 'img/likelion.png'%}">
+          <div class="store_info">
+              <span id="store_name">다몬초밥</span>
+              <span id="store_address">서울 도봉구 우이천로 350</span>
+          </div>
+      </div>
+      <hr id="explore_line">
+<div id="store_review">
+  저렴하고 푸짐한 ......많아 배부르다는 후기가 많아요!
+</div>
+
+      </div>
+  </article>
+<article class="AI_recommend_box">
+  <div id="article_title">도봉구의 숨겨진 이야기</div>
+  <div id="information_place"><b>덕성여자대학교</b>는 도봉구에서 유일한 대학이라, 사실상 이동네의 '랜드마크'아애요. 교내에서 북한산이 바로 보이고 실제로 '등산'수업도 개설되어 있답니다.</div>
+  <div class="button_place"><span id="button_more">더 알아보기</span></div>
+</article>
+
+</div>
+
+
+<!--
+
   {% if request.user.is_authenticated %}
   <div id="chat" style="margin-bottom:10px;"></div>
 
@@ -13,64 +146,65 @@
   <input id="img" type="file" accept="image/*" />
   <button id="sendBtn">보내기</button>
 
-  <script>
-  async function send(){
-    const chat = document.getElementById("chat");
-    const msgEl = document.getElementById("msg");
-    const imgEl = document.getElementById("img");
+-->
+<script>
+async function send(){
+  const chat = document.getElementById("chat");
+  const msgEl = document.getElementById("msg");
+  const imgEl = document.getElementById("img");
+  const msg = msgEl.value.trim();
+  const file = imgEl && imgEl.files.length > 0 ? imgEl.files[0] : null;
 
-    const msg = msgEl.value.trim();
-    const file = imgEl.files[0];
-
-    if (!msg && !file) {
-      alert("메시지 또는 이미지를 넣어주세요!");
-      return;
-    }
-
-    // 보낸 내용 표시
-    let me = `👤: ${msg || "(이미지만 전송)"}`;
-    if (file) me += ` <small>+ [이미지 첨부]</small>`;
-    chat.insertAdjacentHTML("beforeend", `<div>${me}</div>`);
-
-    // 이미지 미리보기(선택)
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        chat.insertAdjacentHTML("beforeend",
-          `<img src="${reader.result}" style="max-width:220px;border:1px solid #ddd;margin:6px 0;"/>`
-        );
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // FormData 전송: 헤더 설정 금지(브라우저가 자동으로 멀티파트 헤더 셋업)
-    const fd = new FormData();
-    if (msg) fd.append("message", msg);
-    if (file) fd.append("image", file);
-
-    try {
-      const res = await fetch("{% url 'explore:chat_api' %}", {
-        method: "POST",
-        body: fd
-      });
-      const data = await res.json();
-      chat.insertAdjacentHTML(
-        "beforeend",
-        `<div>🤖: ${data.reply ?? ("에러: " + (data.error || res.status))}</div>`
-      );
-    } catch (e) {
-      chat.insertAdjacentHTML("beforeend",
-        `<div style="color:red">요청 실패: ${e}</div>`
-      );
-    } finally {
-      msgEl.value = "";
-      imgEl.value = "";
-    }
+  if (!msg && !file) {
+    alert("메시지 또는 이미지를 넣어주세요!");
+    return;
   }
 
-  document.getElementById("sendBtn").addEventListener("click", send);
-  </script>
-  
+  // 보낸 내용 표시
+  let me = `👤: ${msg || "(이미지만 전송)"}`;
+  if (file) me += ` <small>+ [이미지 첨부]</small>`;
+  chat.insertAdjacentHTML("beforeend", `<div>${me}</div>`);
+
+  // 이미지 미리보기
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      chat.insertAdjacentHTML("beforeend",
+        `<img src="${reader.result}" style="max-width:220px;border:1px solid #ddd;margin:6px 0;"/>`
+      );
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // FormData 전송
+  const fd = new FormData();
+  if (msg) fd.append("message", msg);
+  if (file) fd.append("image", file);
+
+  try {
+    const res = await fetch("{% url 'explore:chat_api' %}", {
+      method: "POST",
+      body: fd
+    });
+    const data = await res.json();
+    chat.insertAdjacentHTML(
+      "beforeend",
+      `<div>🤖: ${data.reply ?? ("에러: " + (data.error || res.status))}</div>`
+    );
+  } catch (e) {
+    chat.insertAdjacentHTML("beforeend",
+      `<div style="color:red">요청 실패: ${e}</div>`
+    );
+  } finally {
+    msgEl.value = "";
+    if (imgEl) imgEl.value = "";
+  }
+}
+
+document.getElementById("sendBtn").addEventListener("click", send);
+</script>
+   <script src="{% static 'js/account/explore.js'%}"></script>
+   <script src="{% static 'js/account/feed.js'%}"></script>
   {% else %}
   <a href="{% url 'account:login' %}?next={{ request.path|urlencode }}">로그인 해주세요
   </a>
