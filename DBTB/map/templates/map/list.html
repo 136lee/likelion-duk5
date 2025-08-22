@@ -15,16 +15,16 @@
   <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b76f141ae739da5b568454a96523a207&libraries=services"></script>
 
   <style>
-    body{margin:0;font-family:system-ui,Arial,sans-serif}
+    /*body{margin:0;font-family:system-ui,Arial,sans-serif}
     header{padding:12px;background:#f5f5f5;display:flex;gap:10px;align-items:center}
     nav a{padding:6px 10px;border:1px solid #ddd;border-radius:8px;text-decoration:none;color:#333}
     nav a.active{background:#222;color:#fff;border-color:#222}
 
-    #map{width:100%;height:70vh;border-top:1px solid #eee}
+    map{width:100%;height:70vh;border-top:1px solid #eee}
     #count{padding:8px 12px;color:#666;font-size:14px}
     #addrbar{padding:8px 12px;color:#333;font-size:14px;border-top:1px solid #eee}
     .profile {display:flex; align-items:center; gap:8px}
-    .profile img {width:32px;height:32px;border-radius:50%;object-fit:cover}
+    .profile img {width:32px;height:32px;border-radius:50%;object-fit:cover}*/
   </style>
 </head>
 
@@ -49,17 +49,18 @@
         <img src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
       {% endif %}
     </div>-->
-
+<!--
     <a href="{% url 'feed:feed_all' %}">피드</a>
     <a href="{% url 'explore:chat_ai' %}">탐험</a>
     <a href="{% url 'account:mypage' %}">마이페이지</a>
   </header>
-
+-->
     <div id="left_bar"> 
       <div id="img">
         <div class="image_sort">
-          <img id="DBTB_button_img" src="{% static 'img/likelion.png'%}" >
-          <span>도봉또봉</span>
+          <a href="{% url 'map:list' %}">
+          <img id="DBTB_button_img" src="{% static 'img/DBTB_main_logo.png'%}" >
+          </a>
         </div>
         <a class="image_sort" id="move_to_feed"  href="{% url 'feed:feed_all' %}">
           <img id="feed_button_img" src="{% static 'img/feed.png'%}">
@@ -71,7 +72,7 @@
         </a>
         
         <br>
-        
+         
         <hr id="line1">
         <div class="image_sort">
           <div id="move_to_myact">
