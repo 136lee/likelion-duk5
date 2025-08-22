@@ -85,3 +85,91 @@ document.addEventListener("DOMContentLoaded", function () {
     bookImg.classList.toggle("filled"); 
   });
 });
+
+//따봉
+document.addEventListener('DOMContentLoaded', function() {
+
+  const likeButton = document.getElementById("PtBoxSyGBG");
+  const dislikeButton = document.getElementById("PtBoxSyGBB");
+
+  let activeButton = null; 
+
+  function resetFeedbackStyles() {
+    likeButton.style.backgroundColor = "";
+    dislikeButton.style.backgroundColor = ""; 
+  }
+
+  likeButton.addEventListener("click", () => {
+    if (activeButton === likeButton) {
+      resetFeedbackStyles(); 
+      activeButton = null; 
+    } 
+
+    else {
+      resetFeedbackStyles(); 
+      likeButton.style.backgroundColor =  "#A9DFC0";; 
+      activeButton = likeButton;
+    }
+  });
+
+  dislikeButton.addEventListener("click", () => {
+
+    if (activeButton === dislikeButton) {
+      resetFeedbackStyles();
+      activeButton = null;
+    } 
+
+    else {
+      resetFeedbackStyles();
+      dislikeButton.style.backgroundColor =  "#A9DFC0";;
+      activeButton = dislikeButton;
+    }
+  });
+});
+
+
+// 스크랩
+document.addEventListener('DOMContentLoaded', function() {
+  
+  const scrapForms = document.querySelectorAll('.scrap_form');
+
+  scrapForms.forEach(form => {
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const url = this.action;
+      const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+      const button = this.querySelector('button[type="submit"]');
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken,
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('서버 응답 오류');
+        return response.json();
+      })
+      .then(data => {
+        
+        // 1. 스크랩 수 갱신
+        const scrapNumberSpan = this.querySelector('.scrap_number');
+        if (scrapNumberSpan) {
+          scrapNumberSpan.textContent = data.count;
+        }
+
+        // 2. 스크랩 이미지 갱신
+        const scrapImg = this.querySelector('.scrap_img');
+        const scrappedImgSrc = button.dataset.scrappedSrc;
+        const unscrappedImgSrc = button.dataset.unscrappedSrc;
+
+        if (scrapImg) {
+          scrapImg.src = data.scrapped ? scrappedImgSrc : unscrappedImgSrc;
+        }
+      })
+      .catch(err => console.error('스크랩 처리 중 오류 발생:', err));
+    });
+  });
+});

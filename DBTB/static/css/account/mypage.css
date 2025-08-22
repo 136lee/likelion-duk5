@@ -13,6 +13,9 @@
 #Hdlogoimg{
   width: 60%;
 }
+#HdLogoA a{
+  color: #000;
+}
 
 #HdLayout {
   display: flex;
@@ -128,6 +131,9 @@ article{
   line-height: 110%;
   width: 150px;
 }
+a{
+  text-decoration: none;
+}
 #myAsList {
   border-top: 1px solid #4b4b4b;
   border-bottom: 1px solid #4b4b4b;
@@ -197,7 +203,8 @@ article{
 }
 #postpf {
   width: 45px;
-  border-radius: 100%;
+    border-radius: 100%;
+  object-fit: cover;
   margin-right: 10px;
   cursor: pointer;
 }
@@ -254,6 +261,9 @@ padding-top: 10px;
   font-weight: 600;
   margin-bottom: 3px;
 }
+a #myAsConSeTp{
+  color: #000;
+}
 #myAsConSeTl {
   color: #808080;
   font-family: Pretendard;
@@ -287,3 +297,20 @@ padding-top: 10px;
   width: 15px;
 }
 
+ #scrap_Btn{
+    width: 20px;    border:none;
+    height: 20px;background:white;
+  }
+  .scrap_form{
+   display: flex;
+   flex-direction: row;
+   width: 30px;
+   gap:5px;
+   align-items: center;
+   margin-right: 5px;
+  }
+  .scrap_img{
+    width: 25px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }

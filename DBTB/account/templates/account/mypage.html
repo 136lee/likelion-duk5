@@ -1,4 +1,4 @@
-{% load static %}
+<!-- {% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,17 +12,17 @@
   <p>{{ request.user.username }}님 환영합니다.</p>
   <p><a href="{% url 'map:list' %}">지도</a></p>
 
-  <h2>마이페이지</h2>
+  <h2>마이페이지</h2> -->
 
   <!-- 프로필 이미지 -->
-  {% if request.user.profile_image %}
+  <!-- {% if request.user.profile_image %}
     <img width="200" src="{{ request.user.profile_image.url }}" alt="Profile Image">
   {% else %}
     <img width="200" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
-  {% endif %}
+  {% endif %} -->
 
   <!-- 이미지 변경 폼: views.py에서 mypage가 POST 처리 중 -->
-  <form method="POST" action="{% url 'account:mypage' %}" enctype="multipart/form-data">
+  <!-- <form method="POST" action="{% url 'account:mypage' %}" enctype="multipart/form-data">
     {% csrf_token %}
     <label>이미지 변경:
       <input type="file" name="profile_image" accept="image/*">
@@ -55,6 +55,7 @@
       <p><a href="{% url 'post:post_detail' post.id %}">{{ post.title }}</a></p>
       <p>{{ post.address }}</p>
       <p>{{post.created_at}}</p>
+
       <form class="scrap_form" method="post" action="{% url 'feed:scrap' post.id %}">
               {% csrf_token %}
               <input type="hidden" name="next" value="{{ request.get_full_path }}">
@@ -81,4 +82,174 @@
 
 </body>
 
+</html> -->
+
+
+
+<!-- 연동 -->
+ {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/account/mypage.css' %}" />
+    <title>mypage</title>
+  </head>
+  <body>
+    <header id="HdStyle">
+      <div id="HdLayout">
+        <div id="HdLogo">
+          <a href="{% url 'map:list' %}">
+          <img id="Hdlogoimg" src="{% static 'img/headerLogo.png' %}" alt="로고" />
+          </a>
+        </div>
+        <div id="HdLogo">
+          <!-- 경로수정 -->
+          <div id="HdLogoA">
+            <a href="{% url 'map:list' %}">지도</a>
+            <a href="{% url 'feed:feed_all' %}">피드</a>
+            <a href="{% url 'explore:chat_ai' %}">탐험</a>
+          </div>
+          <a>
+  {% if request.user.profile_image %}
+                       <img id="postpf" src="{% static 'img/profile_image.jpg ' %}" alt="프로필" />
+              {% else %}
+                  <img id="postpf" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
+  {% endif %}
+          </a>
+        </div>
+        <!-- <button type="button" id="HdAccountBt">
+          <p>로그인/회원가입</p>
+        </button> -->
+      </div>
+    </header>
+
+    <section id="mysection">
+      <aside>
+        <div id="mytop">
+          <p>마이페이지</p>
+        </div>
+      </aside>
+      <article>
+        <div id="myAtTop">
+          <div id="myAtTopId">
+            <div id="image-preview-box">
+            <div>
+              <img id="postpf" src="{% static 'img/Group 2.png' %}" />
+            </div>
+             <input type="file" id="image-input" accept="image/*" style="display: none;" />
+            </div>
+             <div id="myIdsb">
+              <p id="myIdsbNa">봉봉봉</p>
+              <p id="myIdsbJb">방문객</p>
+            </div>
+          </div>
+          <div id="myAtTopSb">
+            <div class="myAtSbD">
+              <p class="myAtSbDTT">포스트</p>
+              <p class="myAtSbDTTN">{{ post_count }}</p>
+            </div>
+            <div id="myAtSbMd">
+              <p class="myAtSbDTT">스크랩</p>
+              <p class="myAtSbDTTN">{{ scrap_count }}</p>
+            </div>
+          </div>
+        </div>
+        <!-- 포스트 -->
+        <div id="myAsSe">
+          <div id="myAsCon">
+            <div id="AsConT"><p>포스트 내역</p></div>
+          </div>
+           {% if posts %}
+          {% for post in posts %}
+          <div id="myAsConSe" >
+            <div id="mySE">
+              <a href="{% url 'post:post_detail' post.id %}">
+            <div>
+            <div id="myAsConSeT">
+              <p id="myAsConSeTp">{{ post.title }}</p>
+            </div>
+            <p id="myAsConSeTl">{{ post.address }}</p>
+                        <div class="myAsConAll">
+                <p>{{ post.created_at }}</p>
+              </div>
+          </div>
+          </a>
+          </div>
+          </div>
+        {% endfor %}
+
+                      {% else %}
+    <p class="nopoS">최근 포스트 내역이 없습니다</p>
+  {% endif %}
+        </div>
+
+
+        <!-- 스크랩 -->
+        <div id="myAsSe">
+          <div id="myAsCon">
+            <div id="AsConT"><p>스크랩 내역</p></div>
+          </div>
+            {% if scraps %}
+          <!-- <p class="nopoS" style="display: none;">최근 스크랩 내역이 없습니다</p> -->
+               {% for post in scraps %}
+          <div id="myAsConSe">
+            <div id="mySE">
+            <div>
+              <a href="{% url 'post:post_detail' post.id %}">
+            <div id="myAsConSeT">
+              <p id="myAsConSeTp">{{ post.title }}</p>
+            </div>
+            <p id="myAsConSeTl">{{ post.address }}</p>
+                        <div class="myAsConAll">
+                <p>{{post.created_at}}</p>
+              </div>
+              </a>
+          </div>
+          <!-- 스크랩 -->
+      <form class="scrap_form" method="post" action="{% url 'feed:scrap' post.id %}">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.get_full_path }}">
+              <button id="scrap_Btn" type="submit"  data-scrap-url="{% static 'img/scrap.png' %}"
+              data-added-scrap-url="{% static 'img/added_scrap.png' %}">
+              
+                {% if user.is_authenticated and user in post.scrap.all %}
+                <!-- <img class="scrap_img" src="{% static 'img/added_scrap.png'%}"> -->
+                <img class="scrap_img" src="{% static 'img/bookmarkfull.svg' %}">
+                {% else %}
+                <img id="Postsc" src="{% static 'img/bookmark.svg' %}">
+                {% endif %}
+              </button>
+            </form>
+          
+          <!-- <div>
+            <img id="Postsc" src="{% static 'img/bookmark.svg' %}">
+          </div> -->
+          </div>
+
+
+          </div>
+          {% endfor %}
+
+          {% else %}
+    <p class="nopoS">최근 스크랩 내역이 없습니다</p>
+  {% endif %}
+        </div>
+
+      </article>
+    </section>
+
+    <footer id="AcFooter">
+      <div id="FtLogo">
+        <img src="{% static '' %}" alt="로고" />
+        <p>도봉또봉</p>
+      </div>
+      <div id="FtAd">
+        <p id="FtAdC1">개인정보처리방침</p>
+        <p id="FtAdC2">ⓒ 2025 AAA. All rights reserved.</p>
+      </div>
+    </footer>
+    <script src="{% static 'js/account/mypage.js' %}"></script>
+  </body>
 </html>
