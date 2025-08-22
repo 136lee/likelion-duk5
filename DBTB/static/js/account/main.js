@@ -21,12 +21,7 @@ function initMap() {
 
   });
 }
-  document.getElementById("feed_button_img").addEventListener("click", function() {
-    window.location.href = "/DBTB/templates/feed/feed.html";
-  });
-  document.getElementById("move_to_feed").addEventListener("click", function() {
-    window.location.href = "/DBTB/templates/feed/feed.html";
-  });
+ 
 
   document.getElementById("My_activity").style.display = "none";
   
