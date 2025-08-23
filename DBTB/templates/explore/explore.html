@@ -6,8 +6,9 @@
     <link rel="stylesheet" href="/DBTB/css/account/feed.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>탐험 페이지</title>
-</head>
+</head> 
 <body>
+      <!--헤더-->
     <header>
         <div id="head_feed">
             <div id="img_hole_header"><img id="DBTB_img" src="/DBTB/static/img/likelion.png"></div>
@@ -22,7 +23,11 @@
         </div>
     </header>
     <hr>
+  
+
+    <!--메인 1번(질문 입력전)-->
 <main id="ex_main">
+    <!--질문 바-->
         <div class="Question_box">
             <div class="Question">도봉구 탐험을 시작하시겠습니까?</div>
 
@@ -35,7 +40,7 @@
             </div>
         </div>
 
-
+<!--추천 박스들-->
 <div class="AI_recommend">
     <article class="AI_recommend_box">
         <div id="article_title">오늘의 인기 포스트를 확인하세요!</div>
@@ -87,17 +92,21 @@
 </article>
 
 </div>
+
 </main>
 
+
+<!--메인 2번 질문 입력후 대화상태-->
 <main id="ex_main2">
+    <!--왼쪽 바-->
     <div id="leftBar">
         <div class="leftBarBox">
             <div class="line">
-                <img src="/DBTB/static/img/new_explore.png" class="Bar_img">
+                <img src="{% static 'img/new_explore.png'%}" class="Bar_img">
                 <div>새 탐험</div>
             </div>
             <div class="line"> 
-                <img src="/DBTB/static/img/search_pest.png" class="Bar_img">
+                <img src="{% static 'img/search_pest.png'%}" class="Bar_img">
                 <div>내역 검색</div>
             </div>        
         </div>
@@ -108,6 +117,7 @@
         </div>
     </div>
 
+    <!--대화 창-->
     <div class="total">
         <div class="conversation_place">
 <div class="conversation">
@@ -124,11 +134,12 @@
 
     <div class="search_place">
         <div class="AI_search_bar">
-            <img id="add" src="/DBTB/static/img/addition.png">
+            <img id="add" src="{% static 'img/addition.png'%}">
             <input id="AI_search_input2" class="AI_search_input" type="search" placeholder="무엇이든 검색하세요">
-            <img id="send" src="/DBTB/static/img/send.png">
+            <img id="send" src="{% static 'img/send.png'%}">
         </div>
-    </div></div>
+    </div>
+</div>
 
 </main>
 

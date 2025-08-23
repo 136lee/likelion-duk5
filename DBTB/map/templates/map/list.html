@@ -74,188 +74,110 @@
         <br>
          
         <hr id="line1">
-        <div class="image_sort">
+        <a  href="{% url 'account:mypage' %}" class="image_sort">
           <div id="move_to_myact">
           <img id="my_act_button_img" src="{% static 'img/my_act.png'%}">
-          <div id="red_circle">1</div>
-          <div>내 활동</div>
+          <div>마이페이지</div>
         </div>
-        </div>
+        </a>
         
       </div>
-      <a id="mypage_circle_hole" href="{% url 'account:mypage' %}">
+      <div id="mypage_circle_hole">
         {% if request.user.profile_image %}
             <img id="mypage_img" width="200px" src="{{ request.user.profile_image.url }}" alt="Profile Image">
         {% else %}
             <img id="mypage_img" width="200px" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
         {% endif %}
-    </a>
+    </div>
 
     
     
     </div><!--왼쪽 바-->
-
-    <header id="header_main">
-      <div id="search_div">
-        <input id="search" type="search" placeholder="지도 검색">
-        <img id="search_img" src="{% static 'img/search.png'%}" alt="돋보기">
-      </div>
-
-      <div class="mapVer_and_log">
+  
+    <div class="mapVer_and_log">
       <div class="map_version">
         <a href="{% url 'map:list' %}" class="{% if scope == 'list' %}active{% endif %}">전체지도</a>
         <a href="{% url 'map:mine' %}" class="{% if scope == 'mine' %}active{% endif %}">내지도</a>
-</div>
-  <div class="login_or_logout">
+      </div>
+      <div class="login_or_logout">
     {% if request.user.is_authenticated %}
     {{ request.user.nickname }}님 | <a href="{% url 'account:logout' %}">로그아웃</a>
   {% else %}
     <a href="{% url 'account:login' %}?next={{ request.path|urlencode }}">로그인</a>
   {% endif %}
-  </div>
+      </div>
+
+   </div>
+
+    <header id="header_main">
+      <div id="search_box">
+      <div id="search_div" class="search_border">
+        <input id="search" type="search" placeholder="지도 검색">
+        <img id="search_img" src="{% static 'img/search.png'%}" alt="돋보기">
+      </div>
+      <!--검색 결과 창-->
+      <div id="menu_wrap" class="menu">
+        <ul id="placesList"></ul>
+      </div>
+    </div>
+   
+    <div  id="recommend">
+      <div id="formal_layer">
+        <div id="formal_mentions">
+         
+        
+        <div class="first_mention"><span class="user_name">  {% if request.user.is_authenticated %}{{ request.user.nickname }} {% else %} 게스트   {% endif %}
+        </span> 님에게 추천하는 도봉구 스팟!</div>
+
+
+
+        <div id="my_location_button"> 
+          <span>내 위치</span>
+          <img id="my_location_img" src="{% static 'img/my_location.png'%}" alt="내위치" >
+        </div>
+      </div>
+        <div class="second_mention">현재 날씨와 시간대에 맞춘 AI 추천 스팟</div>
+     
+  
+      </div>
+      <div class="recommend_spots">
+      <div class="recommend_spot">
+        <img src="{% static 'img/풍경사진1.jpeg'%}">
+        <div class="nomal_mention">
+        <span>현위치로 부터 <b>300m</b>에 위치</span>
+        <span>맑은 하늘을 볼 수 있는 현재 날씨와 노을을 볼 수 있는 지금 <span class="under_line_mention">도봉구 쌍문동 ...</span> 으로 가보세요!</span>
+        <span class="gray">by <span class="writer_name">흥부</span> </span>
+        </div>
+      </div>
+      <div class="recommend_spot">
+        <img src="{% static 'img/풍경사진2.jpeg'%}">
+        <div class="nomal_mention">
+        <span>현위치로 부터 <b>500m</b>에 위치</span>
+        <span>맑은 하늘을 볼 수 있는 현재 날씨와 노을을 볼 수 있는 지금 <span class="under_line_mention">도봉구 방학동 ...</span> 으로 가보세요!</span>
+        <span class="gray">by <span class="writer_name">흥부</span> </span>
+        </div>
+      </div>
+      </div>
+      
+    </div>
 
       </div>
     </header> <!--지도 검색-->
-    
-    <div id="spot_information">
-      <div class="spot_info_img">
-        <img id="place_img" src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.6435-9/45575110_1862062380558656_8142010257971871744_n.jpg?stp=dst-jpg_p180x540_tt6&_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=nFiAOkRY5qUQ7kNvwG6fcvV&_nc_oc=AdlUs6EPKPVT_XDa5jn7RmagCkOMrWu_GgugASGbvkcDEsug0e62bKtVUXkk1TGdcFY&_nc_zt=23&_nc_ht=scontent-ssn1-1.xx&_nc_gid=lYSQEiIjJx1__ARm7p9fgg&oh=00_AfWsgHhk-L3v-UHpIqf213n6XrRxIAoEbH0a8rqEu7qK5A&oe=68C50DE5">
-      </div>
-      <div id="information_box">
-        <div class="info_first">
-        <span id="spot_name">덕성여자대학교</span>
-        <img id="img_add_address" src="{% static 'img/add_address.png'%}" width="25px" height="25px">
-        </div>
-        <span id="spot_address">서울특별시 도봉구 삼양로 144길 33</span>
-        
-    <hr class="line2">
-    <div id="post_number">포스트 N개 </div>
-    
-    
-    <div class="posting_place">
-      <!--
-      <div class="new_post">
-        <div>첫 번째 포스트의 주인공이 되어주세요.</div>
-        <div class="add_post"></div>
-      </div>
-    -->
-    
-    
-    <div class="post_place">
-      <div class="scrap_info">
-        <img class="next_post" id="pre_button" src="{% static 'img/Previous.png'%}">
-      </div>
-    <article class="post">
-      <img class="img_post" src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.6435-9/45575110_1862062380558656_8142010257971871744_n.jpg?stp=dst-jpg_p180x540_tt6&_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=nFiAOkRY5qUQ7kNvwG6fcvV&_nc_oc=AdlUs6EPKPVT_XDa5jn7RmagCkOMrWu_GgugASGbvkcDEsug0e62bKtVUXkk1TGdcFY&_nc_zt=23&_nc_ht=scontent-ssn1-1.xx&_nc_gid=lYSQEiIjJx1__ARm7p9fgg&oh=00_AfWsgHhk-L3v-UHpIqf213n6XrRxIAoEbH0a8rqEu7qK5A&oe=68C50DE5">
-      <div class="post_info">
-        <div class="USER_info">
-    
-        <div id="userimg_circle_hole"><img id="user_img" src="{% static 'img/likelion.png'%}"></div>
-        <span id="user_ID">아이디</얖>
-     </div>
-        <div class="scrap_info"> 
-          <img class="scrap_img" src="{% static 'img/scrap.png'%}">
-          <span id="scrap_number">12</span>
-        </div>
-        
-        </div>
-        <div id="review">
-          "여름 아침 덕성여대. 잔디밭에 앉아서 산과 하늘을 바라보면 마음이 탁 트여요!"
-          </div>
-    </article>
-    <div class="next">
-      <img class="next_post" id="next_button" src="{% static 'img/next.png'%}">
-    </div> 
-    
-    </div>
-    
-    </div>
-    </div>
-        </div>
-        <div id="close_infomation" class="CLOSE" style="display: none;">
-          <img src="{% static 'img/close.png'%}" class="close_img" id="close_info">
-                </div>
-                <!--지도 상세페이지-->
+
+
+
+               
           
-    <div id="My_activity">
-      <div class="my_act_title">내 활동</div>
-      <hr>
-      <div class="article_place">
-        <article class="alert">
-       
-            <div class="alert_hole">
-              <img id="alert_img" src="{% static 'img/alert.png'%}">
-            </div>
-
-            <div class="alert_big_content">
-              <div class="alert_content"><span>고구마</span> 님이 내 포스트를 스크랩했어요</div>
-              <div>어제</div>
-            </div>
-          
-        </article>
-        <article class="alert">
-            
-            <div class="alert_hole">
-            <img id="alert_img" src="{% static 'img/alert.png'%}">
-            </div>
-            <div class="alert_big_content">
-              <div class="alert_content"><span>고구마</span> 님이 내 포스트를 스크랩했어요</div>
-              <div>어제</div>
-            </div>
-          
-        </article>
-      </div>
-     
-    </div>
-    <div id="close_My_activity" style="display: none;" class="CLOSE">
-      <img src="{% static 'img/close.png'%}" id="close_my_act" class="close_img">
-            </div>
-  <!--내활동-->
-  <div id="recommend">
-    <div id="formal_layer">
-      <div id="formal_mentions">
-      <div class="first_mention"><span class="user_name">로그인</span> 님에게 추천하는 도봉구 스팟!</div>
-      <div id="my_location_button"> 
-        <span>내 위치</span>
-        <img id="my_location_img" src="{% static 'img/my_location.png'%}" alt="내위치" >
-      </div>
-    </div>
-      <div class="second_mention">현재 날씨와 시간대에 맞춘 AI 추천 스팟</div>
-   
-
-    </div>
-    <div class="recommend_spots">
-    <div class="recommend_spot">
-      <img src="{% static 'img/likelion.png'%}">
-      <div class="nomal_mention">
-      <span>현위치로 부터 <b>500m</b>에 위치</span>
-      <span>맑은 하늘을 볼 수 있는 현재 날씨와 노을을 볼 수 있는 지금 <span class="under_line_mention">도봉구 쌍문동 ...</span> 으로 가보세요!</span>
-      <span class="gray">by <span class="writer_name">흥부</span> </span>
-      </div>
-    </div>
-    <div class="recommend_spot">
-      <img src="{% static 'img/likelion.png'%}">
-      <div class="nomal_mention">
-      <span>현위치로 부터 <b>500m</b>에 위치</span>
-      <span>맑은 하늘을 볼 수 있는 현재 날씨와 노을을 볼 수 있는 지금 <span class="under_line_mention">도봉구 쌍문동 ...</span> 으로 가보세요!</span>
-      <span class="gray">by <span class="writer_name">흥부</span> </span>
-      </div>
-    </div>
-    </div>
-    
-  </div>
-  <!--추천 박스-->
-
-  <!--
-  <div id="count">표시된 포스트: 0개</div>
--->
+  
 
 
+ 
 
 
+<!--
   <div id="addrbar">주소: -</div>
-
-  <script>
+-->
+<script>
   // ====== 템플릿 변수 ======
   const SCOPE     = '{{ scope|escapejs }}' || 'list';
   const isAuth    = JSON.parse('{{ request.user.is_authenticated|yesno:"true,false"|escapejs }}');
@@ -472,6 +394,99 @@ kakao.maps.event.addListener(map, 'click', async (e)=>{
       history.replaceState(null, "", location.pathname);
     }
   })();
+
+  
+// ====== 장소 검색 ======
+const ps = new kakao.maps.services.Places();  
+const searchInfowindow = new kakao.maps.InfoWindow({zIndex:1});
+
+// 검색 실행 함수
+function searchPlaces() {
+  const keyword = document.getElementById('search').value;
+  if (!keyword.trim()) {
+    alert('검색어를 입력해주세요!');
+    return;
+  }
+  ps.keywordSearch(keyword, placesSearchCB); 
+}
+
+// 검색 결과 콜백
+function placesSearchCB(data, status, pagination) {
+  if (status === kakao.maps.services.Status.OK) {
+    displaySearchResults(data);
+  } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+    alert('검색 결과가 없습니다.');
+  } else if (status === kakao.maps.services.Status.ERROR) {
+    alert('검색 중 오류가 발생했습니다.');
+  }
+}
+
+// 검색 결과 출력
+// 검색 결과 출력
+function displaySearchResults(places) {
+  const listEl = document.getElementById('placesList');
+  listEl.innerHTML = "";
+  const bounds = new kakao.maps.LatLngBounds();
+
+  // 검색에서 나온 마커는 따로 관리해서 필요시 지우기
+  let searchMarkers = [];
+
+  // 이전 검색 마커 지우기
+  searchMarkers.forEach(m => m.setMap(null));
+  searchMarkers = [];
+
+  places.forEach(place => {
+    const pos = new kakao.maps.LatLng(place.y, place.x);
+
+    // 검색 결과 리스트
+    const itemEl = document.createElement('li');
+    itemEl.textContent = place.place_name;
+    listEl.appendChild(itemEl);
+
+    // 리스트 클릭 시 → 마커 하나 찍고 줌인
+    itemEl.onclick = function() {
+      // 이전 마커 제거
+      searchMarkers.forEach(m => m.setMap(null));
+      searchMarkers = [];
+
+      // 새 마커 생성
+      const marker = new kakao.maps.Marker({ position: pos, map: map });
+      searchMarkers.push(marker);
+
+      // 지도 중심 이동 + 줌인
+      map.setCenter(pos);
+      map.setLevel(3); // 레벨 값이 작을수록 확대 (예: 3 ~ 5 정도)
+    };
+
+    bounds.extend(pos);
+  });
+
+  // 검색된 범위로 지도 이동 (처음 결과 표시 시)
+  map.setBounds(bounds);
+
+
+
+  // ✅ 검색 성공 시 search_div 스타일 변경
+  const searchDiv = document.getElementById('search_div');
+  const MENU = document.getElementById('menu_wrap')
+  searchDiv.style.boxShadow = "none";
+  searchDiv.style.borderRadius = "16px 16px 0 0";
+  MENU.style.backgroundColor = "white"; 
+  MENU.style.border = "1px solid rgb(152,159,154)"
+  MENU.style.display="flex";
+}
+
+// ====== 이벤트 연결 ======
+document.getElementById('search_img').addEventListener('click', searchPlaces);
+document.getElementById('search').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') searchPlaces();
+});
+
   </script>
+ 
+
+ 
+
+
 </body>
 </html>
