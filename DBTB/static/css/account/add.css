@@ -119,10 +119,6 @@ a:visited{
   border-radius: 100px;
 width: 40px;}
 
-#postcontmi {
-  display: flex;
-  margin: 4000px 10% 0 10%;
-}
 #usid {
   font-size: 18px;
   font-weight: 500;
@@ -184,6 +180,7 @@ width: 40px;}
   background-color: #EDF3EC;
   border: none;
   resize: none;
+    font-family: Pretendard;
 }
 
 #aiApply{
@@ -299,7 +296,7 @@ width: 40px;}
 }
 #postcontmi {
   display: flex;
-  margin: 10px 10% 0 10%;
+  margin: 60px 10% 0 10%;
 }
 #usid {
   font-size: 18px;

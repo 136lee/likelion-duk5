@@ -61,6 +61,7 @@ a{
 /* 바디 */
 #AcSection {
   padding-bottom: 60px;
+  margin-top: 130px;
   /* border: 1px solid red; */
 }
 #artText {
@@ -114,11 +115,6 @@ input {
   align-items: center;
 }
 
-#AdCon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 #AdCon a,
 #AdCon p {
   color: #9d9d9d;
@@ -132,8 +128,11 @@ input {
   font-size: 14px;
   color: #666666;
   font-family: Arial, sans-serif;
-  gap: 1%;
+  gap: 8%;
   margin-top: 8px;
+    display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #AdCon > div:first-child {
