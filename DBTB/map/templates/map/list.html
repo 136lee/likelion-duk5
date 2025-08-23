@@ -268,7 +268,16 @@ function getRegion(lat, lng){
       if (!pos){ skipped++; return; }
       if (!p.id) { skipped++; return; }
 
-      const m = new kakao.maps.Marker({ position: pos, clickable: true });
+      const imageUrl   = p.image_url || "{% static 'img/default_marker.png' %}";
+      const imageSize  = new kakao.maps.Size(48, 48);  // 48~64 권장
+      const imagePoint = new kakao.maps.Point(24, 48); // 하단 중앙이 찍히도록
+      const markerImage = new kakao.maps.MarkerImage(imageUrl, imageSize, { offset: imagePoint });
+
+      const m = new kakao.maps.Marker({
+        position: pos,
+        clickable: true,
+        image: markerImage
+      });
       m.setMap(map);
 
       // 1) 마커 클릭 → 상세 페이지 이동
