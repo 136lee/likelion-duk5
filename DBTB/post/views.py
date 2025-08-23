@@ -105,68 +105,16 @@ def ai_feedback(request, post_id):
 
 
 
+
 @require_POST
 def recom_now(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
-    place = post.place.first()
-    if not place:
-        return HttpResponseBadRequest("이 포스트에 연결된 장소가 없습니다.")
-    place_name = (getattr(place, "name", "") or "").strip()
-    place_address = (getattr(place, "address", "") or "").strip()
+    place_name = (post.title or "").strip()
+    place_address = (post.address or "").strip()
+
     if not place_name:
-        return HttpResponseBadRequest("장소명이 비어 있습니다.")
-    if not place_address:
-        return HttpResponseBadRequest("주소가 비어 있습니다.")
-
-    client = OpenAI(
-        api_key=getattr(settings, "OPENAI_API_KEY", None) or getattr(settings, "OPEN_API_KEY", None)
-    )
-
-    system_prompt = (
-        "당신은 유능한 여행 가이드입니다. 주어진 장소 주변에서 "
-        "지금 바로 할 수 있는 활동을 1가지만 40자 내로 추천하세요. "
-        "한 줄 한국어(존댓말)로 답하세요."
-        "'기' 로 끝나는 어미"
-    )
-
-    created = []
-    for _ in range(3):
-        resp = client.responses.create(
-            model="gpt-5",
-            input=[
-                {"role": "system", "content": [{"type": "input_text", "text": system_prompt}]},
-                {"role": "user", "content": [
-                    {"type": "input_text",
-                     "text": f"장소: {place_name}\n주소: {place_address}\n"
-                             f"나중에 계획해서 할 수 있는 활동 1가지를 반환하세요."},
-                ]}
-            ]
-        )
-        text = getattr(resp, "output_text", "").strip()
-        if not text:
-            continue
-
-        rec = Recommend.objects.create(
-            post=post,
-            recom_now=text,
-        )
-        created.append(rec.recom_now)
-
-    return JsonResponse({"ok": True, "created_count": len(created), "items": created}, json_dumps_params={"ensure_ascii": False},)
-
-
-@require_POST
-def recom_later(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-
-    place = post.place.first()
-    if not place:
-        return HttpResponseBadRequest("이 포스트에 연결된 장소가 없습니다.")
-    place_name = (getattr(place, "name", "") or "").strip()
-    place_address = (getattr(place, "address", "") or "").strip()
-    if not place_name:
-        return HttpResponseBadRequest("장소명이 비어 있습니다.")
+        return HttpResponseBadRequest("제목(장소명)이 비어 있습니다.")
     if not place_address:
         return HttpResponseBadRequest("주소가 비어 있습니다.")
 
@@ -177,7 +125,53 @@ def recom_later(request, post_id):
     system_prompt = (
         "당신은 유능한 여행 가이드입니다. 주어진 장소 주변에서 "
         "나중에 계획해서 할 만한 활동을 정확히 1가지만 40자 내로 한 줄 추천하세요. "
-        "정중한 한국어(존댓말)로 작성하세요. "
+        "'기' 로 끝나는 어미"
+    )
+
+    created = []
+    for _ in range(3):
+        resp = client.responses.create(
+            model="gpt-5",
+            input=[
+                {"role": "system", "content": [{"type": "input_text", "text": system_prompt}]},
+                {"role": "user", "content": [
+                    {"type": "input_text",
+                     "text": f"장소: {place_name}\n주소: {place_address}\n"
+                             f"지금 바로 할 수 있는 활동 1가지를 반환하세요."},
+                ]}
+            ]
+        )
+        text = getattr(resp, "output_text", "").strip()
+        if not text:
+            continue
+        rec = Recommend.objects.create(post=post, recom_now=text)
+        created.append(rec.recom_now)
+
+    return JsonResponse(
+        {"ok": True, "created_count": len(created), "items": created},
+        json_dumps_params={"ensure_ascii": False},
+    )
+
+
+@require_POST
+def recom_later(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+
+    place_name = (post.title or "").strip()
+    place_address = (post.address or "").strip()
+
+    if not place_name:
+        return HttpResponseBadRequest("제목(장소명)이 비어 있습니다.")
+    if not place_address:
+        return HttpResponseBadRequest("주소가 비어 있습니다.")
+
+    client = OpenAI(
+        api_key=getattr(settings, "OPENAI_API_KEY", None) or getattr(settings, "OPEN_API_KEY", None)
+    )
+
+    system_prompt = (
+        "당신은 유능한 여행 가이드입니다. 주어진 장소 주변에서 "
+        "나중에 계획해서 할 만한 활동을 정확히 1가지만 40자 내로 한 줄 추천하세요. "
         "'기' 로 끝나는 어미"
     )
 
@@ -197,14 +191,14 @@ def recom_later(request, post_id):
         text = getattr(resp, "output_text", "").strip()
         if not text:
             continue
-
-        rec = Recommend.objects.create(
-            post=post,
-            recom_later=text,
-        )
+        rec = Recommend.objects.create(post=post, recom_later=text)
         created.append(rec.recom_later)
 
-    return JsonResponse({"ok": True, "created_count": len(created), "items": created}, json_dumps_params={"ensure_ascii": False},)
+    return JsonResponse(
+        {"ok": True, "created_count": len(created), "items": created},
+        json_dumps_params={"ensure_ascii": False},
+    )
+
 
 
 #소감 작성
