@@ -87,6 +87,7 @@ cursor: pointer;
     justify-content: center;  
     align-items: flex-end;    
     object-fit: cover;
+    cursor: default;
 }
 html, body {
   margin: 0;
@@ -108,22 +109,32 @@ img{
 cursor: pointer;
 }
 #header_main {
-right: 40px;
+
+
     position: absolute; 
     top: 20px;
     left: 160px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 40px;     
+    flex-direction: column;
+
+    align-items: start;
+    gap: 20px;     
     z-index: 10;
+
+    
 
   }
   .mapVer_and_log{
     display: flex;
     flex-direction: column;
+   right: 40px;
+   position: absolute;
     gap: 5px;
+    z-index: 10;
 min-width: 130px;
+  
+top: 20px;
+
 
 
   }
@@ -136,6 +147,7 @@ min-width: 130px;
     font-weight: 500;
  
   }
+
   .map_version >a{
     border: 1px solid rgb(213,213,213);
     background-color: white;
@@ -159,22 +171,31 @@ min-width: 130px;
 justify-content: center;
     text-align: center;
   }
+  #search_box{
+    width: 350px;
+  }
   #search_div {
+ overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 350px;
+    width:100%;
     height: 40px;
-    padding: 0 15px;
+   
     background: white;
     border: 1px solid rgb(152,159,154);
     border-radius: 16px;
     box-shadow: 0px 5px 10px rgb(152,159,154);
   }
-
+  
+  .search_border{
+    border-radius: 16px 16px 0 0;   
+    box-shadow: none;
+  }
   #search {
     width: 90%;
-    height: 100%;
+    height: 90%;
+    padding-left:10px;
     border: none;
   }
   
@@ -185,6 +206,7 @@ justify-content: center;
   #search_img {
     width: 18px;
     height: 18px;
+    margin-right: 10px;
   }
   
 
@@ -222,22 +244,24 @@ justify-content: center;
 
 display: flex;
 flex-direction: column;
-position: absolute;
-top:90px;
-left: 160px;
+
+
   width: 350px;
-  height: 250px;
+  height: 240px;
   background-color: white;
   z-index: 100;
   border-radius: 16px;
   border: 1px solid rgb(182,189,184);
-padding:15px;
+padding:15px 0;
 
 }
-
+#recommend>div{
+  padding: 0 15px;
+}
 .recommend_spot{
   display: flex;
-  flex-direction: row;  
+  flex-direction: row;
+  gap:5px;  
 
 }
 .recommend_spot > img{
@@ -250,11 +274,11 @@ padding:15px;
   font-weight: bold;
 }
 .first_mention{
-  font-size: 17px;
+  font-size: 16px;
   }
 .second_mention{
   font-size: 15px;
-  margin:10px 0 20px 0;
+  margin:10px 0 10px 0;
 }
 .nomal_mention{
   display: flex;
@@ -279,12 +303,16 @@ padding:15px;
   justify-content: space-between;
 }
 #my_location_img{
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
+}
+.recommend_spots{
+  margin-top: 10px;
 }
 #my_location_button{
   color:rgb(152,159,154);
   font-weight: bold;
+  font-size: 12px;
   cursor: pointer;
   display: flex;
   flex-direction: row;
@@ -624,4 +652,25 @@ justify-content: center;
   flex-direction: column;
   height: 100%;
   justify-content: center;
+}
+#menu_wrap{
+  width:100%;
+  max-height:200px;
+  overflow-y:scroll;
+  scrollbar-width: none;
+  border-radius: 0 0 16px 16px;
+  display: none;
+  background-color: transparent;
+  
+}
+li{
+  list-style-type: none; /* 점 없애기 */
+  padding:7px 10px;            
+  cursor: pointer;
+  
+}
+ul{
+  padding:5px 0;
+  width: 100%;
+  margin: 0;
 }

@@ -1,93 +1,4 @@
-<!-- {% load static %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>마이페이지</title>
-</head>
-<body>
-{% if request.user.is_authenticated %}
-  <p>{{ request.user.username }}님 환영합니다.</p>
-  <p><a href="{% url 'map:list' %}">지도</a></p>
-
-  <h2>마이페이지</h2> -->
-
-  <!-- 프로필 이미지 -->
-  <!-- {% if request.user.profile_image %}
-    <img width="200" src="{{ request.user.profile_image.url }}" alt="Profile Image">
-  {% else %}
-    <img width="200" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
-  {% endif %} -->
-
-  <!-- 이미지 변경 폼: views.py에서 mypage가 POST 처리 중 -->
-  <!-- <form method="POST" action="{% url 'account:mypage' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label>이미지 변경:
-      <input type="file" name="profile_image" accept="image/*">
-    </label>
-    <button type="submit">프로필 이미지 변경하기</button>
-  </form>
-
-  <p>email : {{ request.user.email }}</p>
-  <p>nickname : {{ request.user.nickname }}</p>
-
-  <hr>
-
-  <h2>내가 작성한 글</h2>
-  {% if posts %}
-    {% for post in posts %}
-      <h3><a href="{% url 'post:post_detail' post.id %}">{{ post.title }}</a></h3>
-      <p>{{ post.address }}</p>
-      <p>{{ post.created_at }}</p>
-      <br>
-    {% endfor %}
-  {% else %}
-    <p>글이 없습니다.</p>
-  {% endif %}
-
-  <hr>
-
-  <h2>내가 스크랩한 글</h2>
-  {% if scraps %}
-    {% for post in scraps %}
-      <p><a href="{% url 'post:post_detail' post.id %}">{{ post.title }}</a></p>
-      <p>{{ post.address }}</p>
-      <p>{{post.created_at}}</p>
-
-      <form class="scrap_form" method="post" action="{% url 'feed:scrap' post.id %}">
-              {% csrf_token %}
-              <input type="hidden" name="next" value="{{ request.get_full_path }}">
-              <button id="scrap_Btn" type="submit"  data-scrap-url="{% static 'img/scrap.png' %}"
-              data-added-scrap-url="{% static 'img/added_scrap.png' %}">
-              
-                {% if user.is_authenticated and user in post.scrap.all %}
-                <img class="scrap_img" src="{% static 'img/added_scrap.png'%}">
-                {% else %}
-                <img class="scrap_img" src="{% static 'img/scrap.png'%}">
-                {% endif %}
-              </button>
-              <span class="scrap_number">{{ post.scrap.count }}</span>
-            </form>
-      <hr>
-    {% endfor %}
-  {% else %}
-    <p>스크랩한 글이 없습니다.</p>
-  {% endif %}
-
-{% else %}
-  <a href="{% url 'account:login' %}">로그인 해주세요</a>
-{% endif %}
-
-</body>
-
-</html> -->
-
-
-
-<!-- 연동 -->
- {% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -97,12 +8,11 @@
     <title>mypage</title>
   </head>
   <body>
+    {% if request.user.is_authenticated %}
     <header id="HdStyle">
       <div id="HdLayout">
         <div id="HdLogo">
-          <a href="{% url 'map:list' %}">
           <img id="Hdlogoimg" src="{% static 'img/headerLogo.png' %}" alt="로고" />
-          </a>
         </div>
         <div id="HdLogo">
           <!-- 경로수정 -->
@@ -113,9 +23,9 @@
           </div>
           <a>
   {% if request.user.profile_image %}
-                       <img id="postpf" src="{% static 'img/profile_image.jpg ' %}" alt="프로필" />
+            <img id="postpf" src="{% static 'img/profile.svg' %}" alt="프로필" />
               {% else %}
-                  <img id="postpf" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
+                  <img width="200" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
   {% endif %}
           </a>
         </div>
@@ -148,11 +58,11 @@
           <div id="myAtTopSb">
             <div class="myAtSbD">
               <p class="myAtSbDTT">포스트</p>
-              <p class="myAtSbDTTN">{{ post_count }}</p>
+              <p class="myAtSbDTTN">1</p>
             </div>
             <div id="myAtSbMd">
               <p class="myAtSbDTT">스크랩</p>
-              <p class="myAtSbDTTN">{{ scrap_count }}</p>
+              <p class="myAtSbDTTN">3</p>
             </div>
           </div>
         </div>
@@ -160,12 +70,11 @@
         <div id="myAsSe">
           <div id="myAsCon">
             <div id="AsConT"><p>포스트 내역</p></div>
+              {% if posts %}
           </div>
-           {% if posts %}
-          {% for post in posts %}
+          <!-- <p class="nopoS" style="display: none;">최근 포스트 내역이 없습니다</p> -->
           <div id="myAsConSe" >
             <div id="mySE">
-              <a href="{% url 'post:post_detail' post.id %}">
             <div>
             <div id="myAsConSeT">
               <p id="myAsConSeTp">{{ post.title }}</p>
@@ -174,15 +83,15 @@
                         <div class="myAsConAll">
                 <p>{{ post.created_at }}</p>
               </div>
+                  {% endfor %}
           </div>
-          </a>
-          </div>
-          </div>
-        {% endfor %}
-
-                      {% else %}
+            {% else %}
     <p class="nopoS">최근 포스트 내역이 없습니다</p>
   {% endif %}
+          <div>
+          </div>
+          </div>
+          </div>
         </div>
 
 
@@ -190,14 +99,13 @@
         <div id="myAsSe">
           <div id="myAsCon">
             <div id="AsConT"><p>스크랩 내역</p></div>
+  {% if scraps %}
+      {% for post in scraps %}
           </div>
-            {% if scraps %}
           <!-- <p class="nopoS" style="display: none;">최근 스크랩 내역이 없습니다</p> -->
-               {% for post in scraps %}
           <div id="myAsConSe">
             <div id="mySE">
             <div>
-              <a href="{% url 'post:post_detail' post.id %}">
             <div id="myAsConSeT">
               <p id="myAsConSeTp">{{ post.title }}</p>
             </div>
@@ -205,7 +113,6 @@
                         <div class="myAsConAll">
                 <p>{{post.created_at}}</p>
               </div>
-              </a>
           </div>
           <!-- 스크랩 -->
       <form class="scrap_form" method="post" action="{% url 'feed:scrap' post.id %}">
@@ -215,28 +122,26 @@
               data-added-scrap-url="{% static 'img/added_scrap.png' %}">
               
                 {% if user.is_authenticated and user in post.scrap.all %}
-                <!-- <img class="scrap_img" src="{% static 'img/added_scrap.png'%}"> -->
-                <img class="scrap_img" src="{% static 'img/bookmarkfull.svg' %}">
-                {% else %}
+                <img class="scrap_img" src="{% static 'img/added_scrap.png'%}">
                 <img id="Postsc" src="{% static 'img/bookmark.svg' %}">
+                {% else %}
+                <img class="scrap_img" src="{% static 'img/scrap.png'%}">
                 {% endif %}
               </button>
+              <span class="scrap_number">{{ post.scrap.count }}</span>
             </form>
           
-          <!-- <div>
+          <div>
             <img id="Postsc" src="{% static 'img/bookmark.svg' %}">
-          </div> -->
+          </div>
           </div>
 
 
           </div>
-          {% endfor %}
-
-          {% else %}
-    <p class="nopoS">최근 스크랩 내역이 없습니다</p>
-  {% endif %}
         </div>
-
+          {% else %}
+    <p class="nopoS" style="display: none;">최근 스크랩 내역이 없습니다</p>
+  {% endif %}
       </article>
     </section>
 

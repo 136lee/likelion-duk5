@@ -13,6 +13,9 @@
 #Hdlogoimg{
   width: 60%;
 }
+#HdLogoA a{
+  color: #000;
+}
 
 #HdLayout {
   display: flex;
@@ -114,9 +117,12 @@
 
 #mysection {
   display: flex;
-  /* justify-content: center; */
-  gap: 15%;
-  margin: 50px 8% 150px 8%;
+  gap: 10%;
+  margin: 50px 8% 150px 12%;
+}
+article{
+  align-items: center;
+    justify-content: center;
 }
 #mytop {
   font-family: Roboto;
@@ -124,6 +130,9 @@
   font-weight: 700;
   line-height: 110%;
   width: 150px;
+}
+a{
+  text-decoration: none;
 }
 #myAsList {
   border-top: 1px solid #4b4b4b;
@@ -151,7 +160,7 @@
 #mysection article {
   margin-top: 60px;
   /* border: 1px solid red; */
-  width: 100%;
+  width: 50%;
 }
 #myAtTop {
   display: flex;
@@ -185,7 +194,6 @@
 }
 #myAtSbMd {
   border-left: 1px solid #989f9a99;
-  border-right: 1px solid #989f9a99;
   text-align: center;
   padding: 0 20px;
   cursor: pointer;
@@ -194,7 +202,11 @@
   color: #4b4b4b;
 }
 #postpf {
-  width: 100%;
+  width: 45px;
+    border-radius: 100%;
+  object-fit: cover;
+  margin-right: 10px;
+  cursor: pointer;
 }
 .myAtSbDTTN {
   font-size: 20px;
@@ -249,6 +261,9 @@ padding-top: 10px;
   font-weight: 600;
   margin-bottom: 3px;
 }
+a #myAsConSeTp{
+  color: #000;
+}
 #myAsConSeTl {
   color: #808080;
   font-family: Pretendard;
@@ -281,3 +296,21 @@ padding-top: 10px;
   margin-left: 5px;
   width: 15px;
 }
+
+ #scrap_Btn{
+    width: 20px;    border:none;
+    height: 20px;background:white;
+  }
+  .scrap_form{
+   display: flex;
+   flex-direction: row;
+   width: 30px;
+   gap:5px;
+   align-items: center;
+   margin-right: 5px;
+  }
+  .scrap_img{
+    width: 25px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }

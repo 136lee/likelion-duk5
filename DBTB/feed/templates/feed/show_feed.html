@@ -10,30 +10,34 @@
     <title>Document</title>
 </head>
 <body> 
-
- 
-  <!--공통해더-->
-  <header>
-    <div id="head_feed">
-        <a class="move_to_home" href="{% url 'map:list' %}">
-          <img class="header_DBTB" src="{% static 'img/DBTB.png' %}">
+  <header id="HdStyle">
+    <div id="HdLayout">
+      <a href="{% url 'map:list' %}" >
+        <img id="Hdlogoimg"  src="{% static 'img/headerLogo.png' %}" alt="로고" />
+      </a>
+      <div id="HdLogo">
+        <!-- 경로수정 -->
+        <div id="HdLogoA">
+          <a href="{% url 'map:list' %}">지도</a>
+          <a href="{% url 'feed:feed_all' %}">피드</a>
+          <a href="{% url 'explore:chat_ai' %}">탐험</a>
+        </div>
+        <a href="{% url 'account:mypage' %}">
+        
+          {% if request.user.profile_image %}
+          <img id="postpf" width="200px" src="{{ request.user.profile_image.url }}" alt="Profile Image">
+      {% else %}
+          <img id="postpf" width="200px" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
+      {% endif %}
         </a>
+      </div>
+      <!-- <button type="button" id="HdAccountBt">
+        <p>로그인/회원가입</p>
+      </button> -->
     </div>
-     <div id="move">
-        <a id="move_to_map" href="{% url 'map:list' %}">지도</a >
-        <a id="move_to_feed"  href="{% url 'feed:feed_all' %}">피드</a>
-        <a id="move_to_EX" href="{% url 'explore:chat_ai' %}">탐험</a>
-    <a id="img_hole_header"  href="{% url 'account:mypage' %}">
-    <!--  <img src="#" alt="내 프로필" width="24" height="24">-->
-    {% if request.user.profile_image %}
-    <img id="mypage_img" width="200px" src="{{ request.user.profile_image.url }}" alt="Profile Image">
-{% else %}
-    <img id="mypage_img" width="200px" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
-{% endif %}
-  </a>
-    </div>
-</header>
-<hr>
+  </header>
+ 
+
 <!--두번째 지역해더-->
 <header class="header2">
   <div class="head2_1">
@@ -61,6 +65,7 @@
 <!--포스트 UI-->
 
 <main class="feed_main">
+<div class="feed_display">
   {% if request.user.is_authenticated %}
     {% for post in posts %}
       <article class="feed_article">
@@ -71,7 +76,11 @@
         {% endif %}
         <div id="feed_info">
           <div class="writer_info">
-            <img src="{% static 'img/likelion.png'%}">
+            {% if request.user.profile_image %}
+          <img  src="{{ request.user.profile_image.url }}" alt="Profile Image">
+      {% else %}
+          <img src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
+      {% endif %}
             <span id="user_name">{{ post.author.nickname|default:post.author }}</span>
           </div>
           <div class="scrap">
@@ -106,7 +115,9 @@
   {% else %}
     <a href="{% url 'account:login' %}">로그인 해주세요</a><br>
   {% endif %}
+</div>
 </main>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     // 모든 스크랩 form 선택

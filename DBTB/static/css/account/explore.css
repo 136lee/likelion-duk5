@@ -52,7 +52,7 @@
   }
 
 .AI_search_bar{
-width: 100%;
+width: 720px;
 height: 50px;
 border-radius: 50px;
 overflow: hidden;
@@ -63,6 +63,7 @@ justify-content: space-evenly;
 color:rgb(128,128,128) ;
 background-color: rgb(234, 234, 234);
 font-size: 24px;
+margin-bottom: 20px;
 }
 
 .AI_search_input{ 
@@ -75,7 +76,12 @@ font-size: 24px;
     font-size: 12px;
     background-color: rgb(234, 234, 234);
 }
-
+.try_login{
+    font-weight: 500;
+    display: flex;flex-direction: row;
+    justify-content: center;
+    padding-top: 20px;
+}
 .Question_box{
     display: flex;
     flex-direction: column;
@@ -176,7 +182,7 @@ padding: 0 5px;
     flex-direction: row; 
     gap:20px;
     justify-content: center;
-    padding-bottom: 10px;
+   
 
 }
 .AI_store_recommend_header{
@@ -235,6 +241,7 @@ font-weight: 500;
 #store_img{
     width: 40px;
     height: 40px;
+    border-radius: 10px;
 }
 #ex_main{
     display: flex;
@@ -254,7 +261,7 @@ html,body{
     overflow-y: scroll;
     scrollbar-width: none;
     font-weight: 400;
-
+margin-top: 10px;
 }
 
 #button_more{
@@ -281,6 +288,7 @@ font-size: 12px;
     gap:5px;
 }
 #leftBar{
+    display: none;
     padding: 30px;
     display: flex;
     flex-direction: column;
