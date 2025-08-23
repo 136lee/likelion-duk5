@@ -61,8 +61,8 @@ def run_matching(post):
     system_prompt = (
         "당신은 유능한 여행 가이드입니다. 사진의 장면 특징을 추정하세요."
         "대한민국에서 비슷한 분위기의 유명한 장소를 한 곳 추천해 주세요."
-        f"유사한 장소를 먼저 말해주고, 줄 바꿔서 {post.title}의 장점을 부각해 유사한 장소와 비교해 주세요."
-        "유사한 장소를 비하하지 마세요. 응답은 3문장, 한국어 존댓말로."
+        f"유사한 장소를 먼저 말해주고, 줄 바꿔서 {post.title} (주소: {post.address or (post.place.first().address if post.place.exists() else '')})'의 장점을 부각해 유사한 장소와 비교해 주세요."
+        "유사한 장소를 비하하지 마세요. 주소를 직접적으로 언급하지마세요. 응답은 3문장, 한국어 존댓말로."
     )
 
     resp = client.responses.create(
