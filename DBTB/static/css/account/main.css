@@ -674,3 +674,8 @@ ul{
   width: 100%;
   margin: 0;
 }
+@media (max-width: 680px) {
+  .mapVer_and_log {
+    display: none;
+  }
+}
