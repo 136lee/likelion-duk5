@@ -196,30 +196,22 @@
           <div class="PtBox">
             <p class="PtBoxTT">할 일 추천</p>
             <p id="PtBoxtxt">포스팅 완료한 후 확인할 수 있습니다.</p>
-            <div id="PtBoxjo">
-              <a id="PtBoxSyjoH">
-                <img src="{% static 'img/chevron-right.svg' %}" />
+
+            <div id="PtBoxjo"
+                 data-now-url="{% url 'post:recom_now' post.id %}"
+                 data-later-url="{% url 'post:recom_later' post.id %}">
+              <a id="PtBoxSyjoH" href="#">
+                <img src="{% static 'img/chevron-right.svg' %}" alt="여기서 할 일" />
                 <span>여기서 할 일</span>
               </a>
-              <a id="PtBoxSyjoN">
-                <img src="{% static 'img/chevron-right.svg' %}" />
+              <a id="PtBoxSyjoN" href="#">
+                <img src="{% static 'img/chevron-right.svg' %}" alt="다음에 할 일" />
                 <span>다음에 할 일</span>
               </a>
             </div>
-            <div id="PtBoxChList">
-              <label>
-                <input type="checkbox" />
-                <span>잔디밭에 앉아 아무 생각 없이 하늘 바라보기</span>
-              </label>
-              <label>
-                <input type="checkbox" />
-                <span>근처 카페에서 커피 테이크아웃해서 산책하기</span>
-              </label>
-              <label>
-                <input type="checkbox" />
-                <span>벚꽃길 걸으며 사진 한 장 남기기</span>
-              </label>
-            </div>
+
+            <!-- 결과 리스트가 여기에 JS로 그려짐 -->
+            <div id="PtBoxChList" style="display:none;"></div>
           </div>
         </div>
       </article>
