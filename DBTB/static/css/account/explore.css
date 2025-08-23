@@ -64,7 +64,7 @@ justify-content: space-evenly;
 color:rgb(128,128,128) ;
 background-color: rgb(234, 234, 234);
 font-size: 24px;
-margin-bottom: 30px;
+margin-bottom: 40px;
 }
 
 .AI_search_input{ 
@@ -336,7 +336,7 @@ hr{
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
+    height: 80%;
     width: 100%;
 
 }
