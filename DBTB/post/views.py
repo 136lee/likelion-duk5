@@ -61,8 +61,8 @@ def run_matching(post):
     system_prompt = (
         "당신은 유능한 여행 가이드입니다. 사진의 장면 특징을 추정하세요."
         "대한민국에서 비슷한 분위기의 유명한 장소를 한 곳 추천해 주세요."
-        f"유사한 장소를 먼저 말해주고, 줄 바꿔서 {post.title}의 장점을 부각해 유사한 장소와 비교해 주세요."
-        "유사한 장소를 비하하지 마세요. 응답은 3문장, 한국어 존댓말로."
+        f"유사한 장소를 먼저 말해주고, 줄 바꿔서 {post.title} (주소: {post.address or (post.place.first().address if post.place.exists() else '')})'의 장점을 부각해 유사한 장소와 비교해 주세요."
+        "유사한 장소를 비하하지 마세요. 주소를 직접적으로 언급하지마세요. 응답은 3문장, 한국어 존댓말로."
     )
 
     resp = client.responses.create(
@@ -105,17 +105,16 @@ def ai_feedback(request, post_id):
 
 
 
+
 @require_POST
 def recom_now(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
-    place = post.place.first()
-    if not place:
-        return HttpResponseBadRequest("이 포스트에 연결된 장소가 없습니다.")
-    place_name = (getattr(place, "name", "") or "").strip()
-    place_address = (getattr(place, "address", "") or "").strip()
+    place_name = (post.title or "").strip()
+    place_address = (post.address or "").strip()
+
     if not place_name:
-        return HttpResponseBadRequest("장소명이 비어 있습니다.")
+        return HttpResponseBadRequest("제목(장소명)이 비어 있습니다.")
     if not place_address:
         return HttpResponseBadRequest("주소가 비어 있습니다.")
 
@@ -125,8 +124,7 @@ def recom_now(request, post_id):
 
     system_prompt = (
         "당신은 유능한 여행 가이드입니다. 주어진 장소 주변에서 "
-        "지금 바로 할 수 있는 활동을 1가지만 40자 내로 추천하세요. "
-        "한 줄 한국어(존댓말)로 답하세요."
+        "지금 당장 계획해서 할 만한 활동을 정확히 1가지만 40자 내로 한 줄 추천하세요. "
         "'기' 로 끝나는 어미"
     )
 
@@ -139,34 +137,31 @@ def recom_now(request, post_id):
                 {"role": "user", "content": [
                     {"type": "input_text",
                      "text": f"장소: {place_name}\n주소: {place_address}\n"
-                             f"나중에 계획해서 할 수 있는 활동 1가지를 반환하세요."},
+                             f"지금 바로 할 수 있는 활동 1가지를 반환하세요."},
                 ]}
             ]
         )
         text = getattr(resp, "output_text", "").strip()
         if not text:
             continue
-
-        rec = Recommend.objects.create(
-            post=post,
-            recom_now=text,
-        )
+        rec = Recommend.objects.create(post=post, recom_now=text)
         created.append(rec.recom_now)
 
-    return JsonResponse({"ok": True, "created_count": len(created), "items": created}, json_dumps_params={"ensure_ascii": False},)
+    return JsonResponse(
+        {"ok": True, "created_count": len(created), "items": created},
+        json_dumps_params={"ensure_ascii": False},
+    )
 
 
 @require_POST
 def recom_later(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
-    place = post.place.first()
-    if not place:
-        return HttpResponseBadRequest("이 포스트에 연결된 장소가 없습니다.")
-    place_name = (getattr(place, "name", "") or "").strip()
-    place_address = (getattr(place, "address", "") or "").strip()
+    place_name = (post.title or "").strip()
+    place_address = (post.address or "").strip()
+
     if not place_name:
-        return HttpResponseBadRequest("장소명이 비어 있습니다.")
+        return HttpResponseBadRequest("제목(장소명)이 비어 있습니다.")
     if not place_address:
         return HttpResponseBadRequest("주소가 비어 있습니다.")
 
@@ -177,7 +172,6 @@ def recom_later(request, post_id):
     system_prompt = (
         "당신은 유능한 여행 가이드입니다. 주어진 장소 주변에서 "
         "나중에 계획해서 할 만한 활동을 정확히 1가지만 40자 내로 한 줄 추천하세요. "
-        "정중한 한국어(존댓말)로 작성하세요. "
         "'기' 로 끝나는 어미"
     )
 
@@ -197,14 +191,14 @@ def recom_later(request, post_id):
         text = getattr(resp, "output_text", "").strip()
         if not text:
             continue
-
-        rec = Recommend.objects.create(
-            post=post,
-            recom_later=text,
-        )
+        rec = Recommend.objects.create(post=post, recom_later=text)
         created.append(rec.recom_later)
 
-    return JsonResponse({"ok": True, "created_count": len(created), "items": created}, json_dumps_params={"ensure_ascii": False},)
+    return JsonResponse(
+        {"ok": True, "created_count": len(created), "items": created},
+        json_dumps_params={"ensure_ascii": False},
+    )
+
 
 
 #소감 작성
