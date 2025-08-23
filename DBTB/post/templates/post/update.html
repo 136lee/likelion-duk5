@@ -46,11 +46,15 @@
       <p style="margin-top: 60px;"></p>
       <div id="postcontmi">
         <!-- 마이로 이동 -->
-        <a href="{% url 'account:mypage' %}">
-          <img id="postpf" src="{% static 'img/profile_image.jpg ' %}" />
-        </a>
+          <a>
+            {% if request.user.profile_image %}
+              <img id="postpf" src="{{ request.user.profile_image.url }}" alt="프로필" />
+            {% else %}
+              <img id="postpf" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
+            {% endif %}
+          </a>
         <div>
-          <p id="usid">봉봉봉</p>
+          <p id="usid">{{ request.user.nickname }}</p>
           <p id="usst">AI 작업 실행 중</p>
         </div>
       </div>
@@ -65,7 +69,7 @@
       <article id="PTcontt">
         <div>
             <div id="aicon">
-                    <img width="30%" src="{{post.image.url}}">
+                    <img width="30%" id="postImagePreview" alt="미리보기 이미지" src="{{post.image.url}}">
                     
             <div id="aiconEx">
               <div id="PlName">
@@ -77,12 +81,6 @@
                       <p id="PlNameAd">장소 정보 없음</p>
                           {% endif %}
                 </div>
-                <!-- <div id="PlNameSc">
-                  <img src="{% static 'img/bookmark.svg' %}" /><span
-                    id="PlNameScCount"
-                    >0</span
-                  >
-                </div> -->
               </div>
               <div class="PtBox">
                 <div>
@@ -94,56 +92,14 @@
                 </div>
                 <div class="Pttextbox">
                      {{post.content}}
-                  <!-- <ul>
-                    <li>넓고 평탄한 초록 잔디</li>
-                    <li>개방적이고 조용한 공간</li>
-                    <li>배경의 산과 도심 빌딩</li>
-                    <li>자연친화적, 청량감, 여유로움</li>
-                  </ul> -->
                 </div>
               </div>
             </div>
           </div>
           <div id="adfCon">
-            <input type="file" value="사진 변경" id="addfile" name="image">
+            <!-- <input type="file" value="사진 변경" id="addfile" name="image"> -->
+            <input type="file" id="addfile" name="image" accept="image/*" hidden>
           </div>
-          <!-- <div id="aicon">
-            <img id="adpts" src="{{post.image.url}}" />
-            <img id="adpts" src="{% static 'img/IMG_0575 2.png'%}" />
-            <div id="aiconEx">
-              <div id="PlName">
-                 <input type = 'text' value="{{post.title}}" name = 'title'/>
-                <p id="PlNameAd">{{ post.dong }} {{ post.address }}</p>
-              </div>
-              <div class="PtBox">
-                <div>
-                  <span class="PtBoxTT">소개 한 줄</span>
-                  <div class="PtRe">
-                    <img src="{% static 'img/refresh-ccw.svg'%}" />
-                    <span>재생성</span>
-                  </div>
-                </div>
-                <div class="PtLod" style="display: none">
-                  <img src="{% static 'img/loader.svg' %}" />
-                  <p>답변 생성 중...</p>
-                </div>
-                <div class="Pttextbox">
-{{post.content}}
-                </div>
-                    <div id="aiPhotoBox" style="display:none; margin-top:8px; border:1px solid #eee; border-radius:10px; padding:10px;">
-      <div id="aiPhotoLoading" style="color:#666;">AI가 사진을 분석하는 중…</div>
-      <div id="aiPhotoResult" style="display:none;">
-        <div><span id="aiMood"></span> <span id="aiEmojis"></span></div>
-        <div style="margin-top:6px;"><b>요약</b>: <span id="aiSummary"></span></div>
-        <div style="margin-top:6px;"><span id="aiTags"></span></div>
-        <div id="aiApP">
-        <button type="button" id="aiApply" style="margin-top:8px;">본문에 반영</button>
-        </div>
-      </div>
-    </div>
-              </div>
-            </div>
-          </div> -->
           <div class="PtBox">
             <div>
             <span class="PtBoxTT">소개 한 줄</span>
@@ -168,16 +124,6 @@
       </div>
       </form>
     </section>
-    <footer id="AcFooter">
-      <div id="FtLogo">
-        <img src="{% static '' %}" alt="로고" />
-        <p>도봉또봉</p>
-      </div>
-      <div id="FtAd">
-        <p id="FtAdC1">개인정보처리방침</p>
-        <p id="FtAdC2">ⓒ 2025 AAA. All rights reserved.</p>
-      </div>
-    </footer>
   <input type="hidden" id="ai-photo-url" value="{% url 'post:ai_photo' %}">
 
   <script src="{% static 'js/account/addC.js' %}"></script>
