@@ -171,9 +171,9 @@ async function send(){
   }
 
   // 보낸 내용 표시
-  let me = `👤: ${msg || "(이미지만 전송)"}`;
+  let me = `${msg || "(이미지만 전송)"}`;
   if (file) me += ` <small>+ [이미지 첨부]</small>`;
-  chat.insertAdjacentHTML("beforeend", `<div>${me}</div>`);
+  chat.insertAdjacentHTML("beforeend", `<div class="commend_sort"><div class="commend">${me}</div></div>`);
 
   // 이미지 미리보기
   if (file) {

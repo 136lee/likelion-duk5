@@ -5,6 +5,7 @@ const sendBtn = document.getElementById("sendBtn");
 const questionBox = document.querySelector(".Question_box"); // 박스 전체
 const leftBar = document.getElementById("leftBar");
 const Recommend = document.querySelector(".AI_recommend"); 
+const AI_searchBar = document.querySelector(".AI_search_bar"); 
 
 // 처음에 왼쪽 바 숨김
 leftBar.style.display = "none"; 
@@ -22,7 +23,8 @@ sendBtn.addEventListener("click", () => {
   questionBox.style.flexDirection = "column";
   questionBox.style.justifyContent = "space-between";
   questionBox.style.width = "80%";
- 
+  AI_searchBar.style.width = "100%"
+
  
   // Question 텍스트는 숨기고 싶으면 따로 잡아서
   const questionText = document.querySelector(".Question");
