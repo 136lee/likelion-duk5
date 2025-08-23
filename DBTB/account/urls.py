@@ -8,5 +8,5 @@ urlpatterns=[
     path('login/', login, name='login'),
     path('logout/', logout, name='logout'),
     path('mypage/', mypage, name='mypage'),
-    #path('mytodo/', mytodo, name="mytodo")
+    path('profile-image/', upload_profile_image, name='profile_image'),
 ]
