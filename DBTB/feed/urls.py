@@ -9,3 +9,4 @@ urlpatterns=[
     path("address/<str:dong>/", feed, name="feed_by_dong"),  # 동별
     path("search/", feed_search, name="search"),   
 ]
+

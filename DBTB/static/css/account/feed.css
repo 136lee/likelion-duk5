@@ -1,4 +1,64 @@
+* {
+    margin: 0;
+    padding: 0;
+  }
+  
+  a{
+    text-decoration: none;
+    color:black;
+  }
+  
+  /* 헤더 */
+  #HdStyle {
+    border-bottom: 1px solid #d8d8d8;
+    background: #fff;
+    padding: 8px 0;
+  }
+  
+  #Hdlogoimg{
+    width: 60%;
+    cursor: pointer;
 
+  }
+  
+  #HdLayout {
+    display: flex;
+    height: 70%;
+    padding: 6px 5%;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  #HdLogo {
+    display: flex;
+    font-weight: 500;
+    justify-content: center;
+    align-items: center;
+  }
+  #HdLogo a {
+    cursor: pointer;
+    margin: 0 10px;
+  }
+  #HdLogoA {
+    margin-right: 10px;
+  }
+  
+  #HdText {
+    color: var(--CoolGray-60, #697077);
+    font-family: Roboto;
+    font-size: 180%;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 110%;
+  }
+  
+  #postpf{  
+    border-radius: 100px;
+    width: 45px;
+    height: 45px;
+    border: 1px solid rgb(152,159,154);
+}
 
 #head_feed{
     display: flex;
@@ -8,7 +68,8 @@
     gap:10px; 
 }
 .header2{
-    padding: 10px 20px;
+    padding: 10px 5%;
+
 }
 #DBTB{
     color: RGB(153, 153, 153);
@@ -28,6 +89,7 @@ hr{
     display: flex;
     flex-direction: row;
     align-items: center;
+    padding-left: 10px;
     gap:30px;
     }
 .head2_1>a{
@@ -46,10 +108,7 @@ hr{
     height: 100%;
 
 }
-.header_DBTB{
-    width: 155px;
-    height: 65px;
-}
+
 .number{
     padding: 0 2px 2px 2px;
     background-color:  RGB(153, 153, 153);
@@ -92,33 +151,12 @@ body{
     height: 30px;
     cursor: pointer;
 }
-#move{
-    display: flex;
-    flex-direction: row;
-    gap:40px;
-    align-items: center;
-}
-#move>a{
-    color:black;
-    font-weight: bold;
-    font-size: 20px;
-    cursor: pointer;
-    
-}
+
+
 a{
     text-decoration: none;
     color:black;}
-#img_hole_header{
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 1px solid rgb(152,159,154);
-}
-#img_hole_header>img{
-    width: 100%;
-    height: 100%;
-}
+
 
 user_img_hole>img{
     width: 100%;
@@ -144,8 +182,8 @@ user_img_hole>img{
     justify-content: space-between;
     border:1px solid rgb(152,159,154);
     border-radius: 10px;
-    width: 280px;
-height: 400px;
+    width: 260px;
+height: 370px;
 overflow: hidden;
 }
 .feed_img_place{
@@ -162,7 +200,7 @@ overflow: hidden;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap:5px;
+    gap:10px;
     margin-left:10px ;
     font-size: 13px;
 }
@@ -181,12 +219,24 @@ overflow: hidden;
     width: 100%;
     padding:10px 10px;
 }
+.feed_display{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 20px;
+
+   
+   
+
+}
 .feed_main{
-    display: flex;
-  flex-wrap: wrap;  
-  justify-content: center;
-  gap:40px;
-  padding:20px;
+
+display: flex;    
+
+justify-content: center;
+flex-wrap: wrap;     
+flex-direction: row;
+gap:20px;
+  padding:20px 6%;
 }
 .none_answer{
     font-weight: bold;
@@ -201,17 +251,23 @@ article:has(span.none_answer) {
   .scrap_img{
     width: 18px;
     cursor: pointer;
-    height: 18px;
+    height: 20px;
+    
+  }
+  #user_name{
+    font-size: 17px;
+  }
+  .scrap_number{
+    font-size: 18px;
   }
   #scrap_Btn{
-    width: 20px;    border:none;
+    width: 18px;    border:none;
     height: 20px;background:white;
   }
   .scrap_form{
    display: flex;
    flex-direction: row;
    width: 30px;
-   gap:5px;
    align-items: center;
    margin-right: 5px;
 
