@@ -21,7 +21,7 @@
           <img id="postpf" src="{% static 'img/profile_image.jpg ' %}" />
         </a>
         <div>
-          <p id="usid">{{ post.author.username }}</p>
+          <p id="usid">{{ request.user.nickname }}</p>
           <p id="usst">AI 작업 실행 중</p>
         </div>
       </div>

@@ -51,7 +51,8 @@ def chat_ai(request):
                 temperature=0.2,
                 max_tokens=700
             )
-            answer = resp.choices[0].message.content
+            answer = resp.choices[0].message.content or ""
+            answer = answer.replace("*", "")   # ← 별표 모두 제거
 
             history.append({"role":"assistant","content": answer})
             chat_histories[user_id] = history[-10:]  # 메모리 절약

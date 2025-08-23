@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="{% static 'css/account/explore.css'%}">
   <link rel="stylesheet" href="{% static 'css/account/feed.css'%}">
+  <style>
+    #chat .bot { white-space: pre-line; line-height: 1.6; margin: 8px 0 16px; }
+  </style>
   <title>AI Chat (텍스트+이미지)</title>
 </head>
 
@@ -20,7 +23,7 @@
         <a id="move_to_map" href="{% url 'map:list' %}">지도</a >
         <a id="move_to_feed"  href="{% url 'feed:feed_all' %}">피드</a>
         <a id="move_to_EX" href="{% url 'explore:chat_ai' %}">탐험</a>
-    <a id="img_hole_header"  href="{% url 'account:user-info' %}">
+    <a id="img_hole_header"  href="{% url 'account:mypage' %}">
     <!--  <img src="#" alt="내 프로필" width="24" height="24">-->
     {% if request.user.profile_image %}
     <img id="mypage_img" width="200px" src="{{ request.user.profile_image.url }}" alt="Profile Image">
@@ -187,10 +190,10 @@ async function send(){
       body: fd
     });
     const data = await res.json();
-    chat.insertAdjacentHTML(
-      "beforeend",
-      `<div>🤖: ${data.reply ?? ("에러: " + (data.error || res.status))}</div>`
-    );
+    const bot = document.createElement("div");
+      bot.className = "bot";
+      bot.textContent = `🤖: ${data.reply ?? ("에러: " + (data.error || res.status))}`;
+      chat.appendChild(bot);
   } catch (e) {
     chat.insertAdjacentHTML("beforeend",
       `<div style="color:red">요청 실패: ${e}</div>`

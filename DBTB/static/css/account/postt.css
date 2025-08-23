@@ -175,12 +175,14 @@ a{
   gap: 10%;
   justify-content: center;
 }
-.PtBoxSyGB {
+#PtBoxSyGBG,
+#PtBoxSyGBB {
+  margin-top: 10px;
   border: 1px solid #c3cec6;
   border-radius: 10px;
   padding: 5px;
   cursor: pointer;
-  width: 50%;
+  width: 40%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -279,7 +281,7 @@ a{
   display: flex;
   justify-content: center;
 }
-#PlNameScCount {
+.scrap_number {
   color: #808080;
   font-size: 17px;
   font-weight: 300;
@@ -365,3 +367,21 @@ a{
   font-size: 14px;
   text-align: center;
 }
+
+ #scrap_Btn{
+    width: 20px;    border:none;
+    height: 20px;background:white;
+  }
+  .scrap_form{
+   display: flex;
+   flex-direction: row;
+   width: 30px;
+   gap:5px;
+   align-items: center;
+   margin-right: 5px;
+  }
+  .scrap_img{
+    width: 25px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }

@@ -107,7 +107,7 @@
 </div>
   <div class="login_or_logout">
     {% if request.user.is_authenticated %}
-    {{ request.user.username }}님 | <a href="{% url 'account:logout' %}">로그아웃</a>
+    {{ request.user.nickname }}님 | <a href="{% url 'account:logout' %}">로그아웃</a>
   {% else %}
     <a href="{% url 'account:login' %}?next={{ request.path|urlencode }}">로그인</a>
   {% endif %}
@@ -334,9 +334,9 @@ function getRegion(lat, lng){
 
     // NOTE: URL 리버스 규칙에 따라 필요한 형식으로 바꾸세요.
     // 1) 위치 인자 버전:
-    const detailPattern = "{% url 'post:detail' id=12345 %}";
+    const detailPattern = "{% url 'post:post_detail' post_id=12345 %}";
     // 2) 키워드 인자 버전(예: post_id=):
-    // const detailPattern = "{% url 'post:detail' id=12345 %}";
+    // const detailPattern = "{% url 'post:post_detail' post_id=12345 %}";
 
     const detailUrlFor = (id) => detailPattern.replace(/12345\/?$/, String(id) + "/");
 
