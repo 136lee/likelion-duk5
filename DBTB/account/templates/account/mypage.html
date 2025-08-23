@@ -56,14 +56,12 @@
                   id="avatarImg"
                   src="{{ request.user.profile_image.url }}"
                   alt="프로필"
-                  style="width:120px;height:120px;object-fit:cover;border-radius:50%;cursor:pointer;"
                 />
               {% else %}
                 <img
                   id="avatarImg"
                   src="{% static 'img/profile_image.jpg' %}"
                   alt="프로필"
-                  style="width:120px;height:120px;object-fit:cover;border-radius:50%;cursor:pointer;"
                 />
               {% endif %}
 

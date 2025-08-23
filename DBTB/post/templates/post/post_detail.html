@@ -92,8 +92,12 @@
             <a href="{% url 'feed:feed_all' %}">피드</a>
             <a href="{% url 'explore:chat_ai' %}">탐험</a>
           </div>
-          <a href="{% url 'account:mypage' %}">
-            <img id="postpf" src="{% static 'img/profile_image.jpg ' %}" alt="프로필" />
+          <a>
+            {% if request.user.profile_image %}
+              <img id="postpf" src="{{ request.user.profile_image.url }}" alt="프로필" />
+            {% else %}
+              <img id="postpf" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
+            {% endif %}
           </a>
         </div>
         <!-- <button type="button" id="HdAccountBt">
@@ -104,9 +108,13 @@
     <section>
       <div id="postcontmi">
         <!-- 피드로 이동 -->
-        <a href="{% url 'account:mypage' %}">
-          <img id="postpf" src="{% static 'img/profile_image.jpg ' %}" />
-        </a>
+          <a>
+            {% if request.user.profile_image %}
+              <img id="postpf" src="{{ request.user.profile_image.url }}" alt="프로필" />
+            {% else %}
+              <img id="postpf" src="{% static 'img/profile_image.jpg' %}" alt="Default Profile">
+            {% endif %}
+          </a>
         <div id="poboxT">
           <div id="postpfTxt">
             <p id="usid">{{post.author.nickname}}</p>

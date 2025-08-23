@@ -96,3 +96,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// 이미지 변경
+// 페이지의 모든 요소가 로드된 후 스크립트 실행
+    document.addEventListener('DOMContentLoaded', function() {
+
+      // 미리보기 이미지와 숨겨진 파일 입력 요소를 가져옴
+      const postImagePreview = document.getElementById('postImagePreview');
+      const imageInput = document.getElementById('addfile');       
+      
+      // 두 요소가 모두 존재하는지 확인하여 오류 방지
+      if (postImagePreview && imageInput) {
+        
+        // 1. 이미지 미리보기를 클릭했을 때의 동작 정의
+        postImagePreview.addEventListener('click', function() {
+          // 숨겨진 파일 입력(imageInput)을 클릭한 것처럼 동작시킴
+          imageInput.click();
+        });
+
+        // 2. 파일 입력창에서 새로운 파일을 선택했을 때의 동작 정의
+        imageInput.addEventListener('change', function(event) {
+          // 사용자가 선택한 파일 가져오기
+          const file = event.target.files[0];
+
+          // 파일이 실제로 선택되었다면
+          if (file) {
+            // 파일을 읽기 위한 FileReader 객체 생성
+            const reader = new FileReader();
+
+            // 파일 읽기가 완료되었을 때 실행될 함수 정의
+            reader.onload = function(e) {
+              // 이미지 미리보기(postImagePreview)의 소스(src)를
+              // 방금 읽은 파일의 데이터 URL로 교체함
+              postImagePreview.src = e.target.result;
+            }
+
+            // FileReader가 파일을 데이터 URL 형태로 읽도록 명령
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+    });
