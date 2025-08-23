@@ -249,54 +249,102 @@ function getRegion(lat, lng){
     if (el) el.textContent = `주소: ${text}`;
   }
 
-  // ====== 마커 렌더링 ======
-  function renderMarkers(posts){
+// ====== 마커 렌더링 ======
+// ====== 마커 렌더링 ======
+function renderMarkers(posts){
     clearMarkers();
     const bounds = new kakao.maps.LatLngBounds();
     let added = 0, skipped = 0;
 
-    // NOTE: URL 리버스 규칙에 따라 필요한 형식으로 바꾸세요.
-    // 1) 위치 인자 버전:
     const detailPattern = "{% url 'post:post_detail' post_id=12345 %}";
-    // 2) 키워드 인자 버전(예: post_id=):
-    // const detailPattern = "{% url 'post:post_detail' post_id=12345 %}";
-
     const detailUrlFor = (id) => detailPattern.replace(/12345\/?$/, String(id) + "/");
 
     posts.forEach(p=>{
-      const pos = getPos(p);
-      if (!pos){ skipped++; return; }
-      if (!p.id) { skipped++; return; }
+        const pos = getPos(p);
+        if (!pos){ skipped++; return; }
+        if (!p.id){ skipped++; return; }
 
-      const m = new kakao.maps.Marker({ position: pos, clickable: true });
-      m.setMap(map);
+        const imageUrl = p.image_url || "{% static 'img/default_marker.png' %}";
 
-      // 1) 마커 클릭 → 상세 페이지 이동
-      kakao.maps.event.addListener(m, 'click', () => {
-        location.href = detailUrlFor(p.id);
-      });
+        // CustomOverlay content 생성
+        const markerContent = document.createElement('div');
+        markerContent.style.position = 'relative';
+        markerContent.style.width = '48px';
+        markerContent.style.height = '48px';
+        markerContent.style.cursor = 'pointer';
+        markerContent.style.userSelect = 'none'; // 드래그 방지
+        markerContent.draggable = false;
 
-      // 2) 마커 hover → 주소 풍선 + 하단바
-      kakao.maps.event.addListener(m, 'mouseover', async () => {
-        const lat = Number(p.lat ?? p.latitude);
-        const lng = Number(p.lng ?? p.longitude);
-        if (Number.isNaN(lat) || Number.isNaN(lng)) return;
-        try {
-          // 서버 API가 address를 주면 이 줄 대신 p.address 사용 가능
-          const addr = await reverseGeocode(lat, lng);
-          infowindow.setContent('<div style="padding:8px 12px;white-space:nowrap;">'+ addr +'</div>');
-          infowindow.open(map, m);
-          setAddrBar(addr);
-        } catch(_) {}
-      });
+        // 내부 HTML 삽입
+        markerContent.innerHTML = `
+            <div style="
+                width:48px;
+                height:48px;
+                background-color: rgba(156,155,80,0.5);
+                border-radius:8px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                overflow:hidden;
+                box-shadow:0 2px 6px rgba(0,0,0,0.3);
+                padding:5px;
+                user-select: none;
+            ">
+                <img src="${imageUrl}" style="width:100%;height:100%;object-fit:cover;user-select: none;" />
+            </div>
+            <div style="
+                position:absolute;
+                left:60%;
+                transform:translateX(-50%);
+                width:0;
+                height:0;
+                border-left:8px solid transparent;
+                border-right:8px solid transparent;
+                border-top:8px solid rgba(156,155,80,0.3);
+                user-select: none;
+            "></div>
+        `;
 
-      kakao.maps.event.addListener(m, 'mouseout', () => {
-        infowindow.close();
-      });
+   /*     // 내부 요소 클릭 이벤트 차단 → 최상위 div만 클릭 감지
+        markerContent.querySelectorAll('*').forEach(el=>{
+            el.style.pointerEvents = 'none';
+        });
+*/
+markerContent.addEventListener('mousedown', (e) => {
+    e.stopPropagation(); 
+});
+        // 클릭 이벤트: 상세페이지 이동
+        markerContent.addEventListener('click', ()=>{
+            location.href = detailUrlFor(p.id);
+        });
 
-      markers.push(m);
-      bounds.extend(pos);
-      added++;
+        // hover → 주소 표시
+        const overlay = new kakao.maps.CustomOverlay({
+            position: pos,
+            content: markerContent,
+            yAnchor: 1
+        });
+        overlay.setMap(map);
+
+        markerContent.addEventListener('mouseover', async ()=>{
+            const lat = Number(p.lat ?? p.latitude);
+            const lng = Number(p.lng ?? p.longitude);
+            if (Number.isNaN(lat) || Number.isNaN(lng)) return;
+            try {
+                const addr = await reverseGeocode(lat, lng);
+                infowindow.setContent('<div style="padding:8px 12px;white-space:nowrap;">'+ addr +'</div>');
+                infowindow.open(map, overlay);
+                setAddrBar(addr);
+            } catch(_) {}
+        });
+
+        markerContent.addEventListener('mouseout', ()=>{
+            infowindow.close();
+        });
+
+        markers.push(overlay);
+        bounds.extend(pos);
+        added++;
     });
 
     if (added > 0) map.setBounds(bounds, 40, 40, 40, 40);
@@ -304,7 +352,9 @@ function getRegion(lat, lng){
     const $count = document.getElementById('count');
     if ($count) $count.textContent = `표시된 포스트: ${added}개${skipped ? ' (좌표 없음 제외: '+skipped+'개)' : ''}`;
     console.log(`받은 글:${posts.length} / 마커 생성:${added} / 스킵:${skipped}`);
-  }
+}
+
+
 
   // ====== 포스트 데이터 로드 ======
   async function fetchPosts(scope){

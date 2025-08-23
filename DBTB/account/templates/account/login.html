@@ -47,7 +47,7 @@
           <form  method="POST" action="{% url 'account:login'%}">
             {%csrf_token %}
             <div>
-              <input name="username" id="LId" type="text" placeholder="아이디를 입력하세요." />
+              <input name="username" id="LId" type="text" placeholder="이메일을 입력하세요." />
             </div>
             <input
               id="LPw"
@@ -73,15 +73,5 @@
         </div>
       </article>
     </section>
-    <footer id="AcFooter">
-      <div id="FtLogo">
-        <img src="{% static '' %}" alt="로고" />
-        <p>도봉또봉</p>
-      </div>
-      <div id="FtAd">
-        <p id="FtAdC1">개인정보처리방침</p>
-        <p id="FtAdC2">ⓒ 2025 AAA. All rights reserved.</p>
-      </div>
-    </footer>
   </body>
 </html>
