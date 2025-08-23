@@ -52,6 +52,7 @@
   }
 
 .AI_search_bar{
+    z-index: 15;
 width: 720px;
 height: 50px;
 border-radius: 50px;
@@ -63,7 +64,7 @@ justify-content: space-evenly;
 color:rgb(128,128,128) ;
 background-color: rgb(234, 234, 234);
 font-size: 24px;
-margin-bottom: 20px;
+margin-bottom: 30px;
 }
 
 .AI_search_input{ 
@@ -249,11 +250,7 @@ font-weight: 500;
   justify-content: space-between;
     height: 100%;
 }
-html,body{
-    margin: 0;
-    padding: 0;
-    height: 100%;
-}
+
 #information_place{
     font-size: 13px;
     width: 100%;
@@ -302,7 +299,9 @@ font-size: 12px;
 }
 html,body{
     display: flex;
-    flex-direction: column;
+    flex-direction: column;    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
 hr{
@@ -326,7 +325,7 @@ hr{
  width: 100%;
  justify-content: center;
 }
-.AI_main{
+.AI_main{ height: calc(100vh - 60px);
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -337,7 +336,7 @@ hr{
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 90%;
+    height: 100%;
     width: 100%;
 
 }
@@ -345,7 +344,6 @@ hr{
 .conversation{
     padding-top: 10px;
 overflow-y: scroll;
-min-height: 100px;
 gap:10px;
 font-size: 13px;
 scrollbar-width: none;
@@ -361,7 +359,7 @@ display: none;
     justify-content: center;
     background-color: rgb(237, 243, 236);
     border-radius:30px ;
-    font-size: 15px;
+   
     padding:7px;
 }
 .commend_sort{
