@@ -222,7 +222,6 @@ def post_detail(request, post_id):
     place = post.place.first() 
     return render(request, "post/post_detail.html", {"post": post, "place": place})
 
-#def todo_toggle(request, recom_id):
 
 
 DONG_RE = re.compile(r'([가-힣0-9]+동)')  # '...동' 한 번 추출
