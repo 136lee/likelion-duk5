@@ -370,14 +370,14 @@ def _thumb(dj_file, max_px=768, quality=82):
 def ai_photo(request):
     """
     <input type="file" name="image"> 로 업로드된 사진을 분석.
-    키는 settings가 아니라 현재 셸의 환경변수 OPENAI_API_KEY 를 매번 읽어 사용.
+    키는 settings(→ settings가 내부에서 config.py를 읽도록 구성)에서 매번 읽어 사용.
     """
     img = request.FILES.get("image")
     if not img:
         return JsonResponse({"error":"no_image"}, status=400)
 
-    # ✅ Bash/터미널에 export 한 키를 '요청 때마다' 읽음
-    key = (os.getenv("OPENAI_API_KEY") or "").strip()
+    # ✅ settings → (내부적으로 config를 읽도록 한) 키 사용
+    key = (getattr(settings, "OPENAI_API_KEY", "") or getattr(settings, "OPEN_API_KEY", "")).strip()
     print("[ai_photo] key?", bool(key))  # 서버 콘솔에서 확인용
 
     # 키 없을 때는 스텁 반환(UX 유지)
@@ -388,6 +388,9 @@ def ai_photo(request):
             "tags":["테스트","연결확인"],
             "emojis":"✅"
         })
+
+    # OpenAI SDK를 쓰는 부분은 settings 키로 초기화
+    client = OpenAI(api_key=key)
 
     # 이미지 준비
     raw, mime = _thumb(img, max_px=768, quality=82)
@@ -422,7 +425,6 @@ def ai_photo(request):
             time.sleep(min(sleep_s, 4.0))
             continue
         if r.status_code == 403:
-            # 권한/결제 문제 시 임시 결과로 UX 유지
             return JsonResponse({
                 "mood":"잔잔 · 포근",
                 "summary":"AI 권한/결제 설정을 확인 중입니다. 임시 분석 결과예요.",
@@ -434,6 +436,7 @@ def ai_photo(request):
             return JsonResponse(json.loads(content))   # 모델이 준 JSON
         except Exception:
             return JsonResponse({"raw": content})      # 혹시 JSON이 아니면 그대로
-    # 재시도 끝
+
     return JsonResponse({"error":"rate_limited", "detail": last_text}, status=429)
+
 
