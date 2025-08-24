@@ -391,19 +391,6 @@ kakao.maps.event.addListener(map, 'click', async (e)=>{
   (async function init(){
     await load(SCOPE);
 
-    // 저장 완료 후 돌아올 때 ?lat=&lng= 쿼리로 하이라이트
-    const params = new URLSearchParams(location.search);
-    const hLat = parseFloat(params.get('lat'));
-    const hLng = parseFloat(params.get('lng'));
-    if (!Number.isNaN(hLat) && !Number.isNaN(hLng)) {
-      const pos = new kakao.maps.LatLng(hLat, hLng);
-      map.setCenter(pos);
-      const m = new kakao.maps.Marker({ position: pos, map });
-      const iw = new kakao.maps.InfoWindow({ content: '<div style="padding:6px 10px;font-size:13px;">저장 완료!</div>' });
-      iw.open(map, m);
-      setTimeout(()=> iw.close(), 1800);
-      history.replaceState(null, "", location.pathname);
-    }
   })();
 // ====== 장소 검색 ======
 const ps = new kakao.maps.services.Places();   
