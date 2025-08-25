@@ -32,11 +32,11 @@
       <form method="POST" action="{% url 'post:create' %}" enctype="multipart/form-data">
             {% csrf_token %}
                 <!-- 지도에서 전달된 좌표/복귀 경로를 그대로 POST로 넘긴다 -->
-<input type="hidden" name="latitude"  value="{{ request.GET.lat }}">
-<input type="hidden" name="longitude" value="{{ request.GET.lng }}">
-<input type="hidden" name="address"   value="{{ request.GET.addr }}">
-<input type="hidden" name="dong"      value="{{ request.GET.dong }}">
-<input type="hidden" name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'map:list' %}{% endif %}">
+          <input type="hidden" name="latitude"  value="{{ request.GET.lat }}">
+          <input type="hidden" name="longitude" value="{{ request.GET.lng }}">
+          <input type="hidden" name="address"   value="{{ request.GET.addr }}">
+          <input type="hidden" name="dong"      value="{{ request.GET.dong }}">
+          <input type="hidden" name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'map:list' %}{% endif %}">
       <article id="PTcontt">
         <div>
           <div id="aicon">
@@ -51,7 +51,7 @@
             <div id="aiconEx">
               <div id="PlName">
                 <input type="text"  name="title" required id="PlNameTi" placeholder="제목을 입력해주세요."></input>
-                                   {% if post.dong %}
+                      {% if post.dong %}
                   <p id="PlNameAd">{{ post.dong }} {{ post.address }}</p>
                       {% else %}
                       <p id="PlNameAd">장소 정보 없음</p>
