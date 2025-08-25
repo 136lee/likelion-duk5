@@ -137,3 +137,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
     });
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const el = document.getElementById('PlNameAd');
+  if (!el) return;
+
+  // hidden input에서 안전하게 꺼냄
+  const addr = (document.querySelector('input[name="address"]')?.value || '').trim();
+  const dong = (document.querySelector('input[name="dong"]')?.value || '').trim();
+
+  const text = [dong, addr].filter(Boolean).join(' ').trim();
+  if (text) el.textContent = text;  // 최종 고정
+});
