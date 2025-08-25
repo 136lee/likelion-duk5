@@ -220,7 +220,6 @@ def post_detail(request, post_id):
         Post.objects.select_related("author").prefetch_related("place"),
         pk=post_id
     )
-    print(post.address, post.dong)
     place = post.place.first() 
     return render(request, "post/post_detail.html", {"post": post, "place": place})
 
@@ -262,7 +261,6 @@ def create(request):
             dong=dong,            # ✅ 여기!
         )
 
-        print(post.address, post.dong)
 
         try:
             ai_text = run_matching(post)
