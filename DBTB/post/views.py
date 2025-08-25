@@ -11,6 +11,7 @@ from django.urls import reverse
 import os, json, base64, time, random , requests , re
 from io import BytesIO
 import re
+from django.views.decorators.csrf import csrf_exempt
 import logging
 
 logger = logging.getLogger(__name__)
@@ -235,6 +236,7 @@ def post_detail(request, post_id):
         Post.objects.select_related("author").prefetch_related("place"),
         pk=post_id
     )
+    print(post.address, post.dong)
     place = post.place.first() 
     return render(request, "post/post_detail.html", {"post": post, "place": place})
 
@@ -275,6 +277,8 @@ def create(request):
             address=addr,
             dong=dong,            # ✅ 여기!
         )
+
+        print(post.address, post.dong)
 
         try:
             ai_text = run_matching(post)
@@ -381,6 +385,7 @@ def _thumb(dj_file, max_px=768, quality=82):
     img.save(buf, format="JPEG", quality=quality, optimize=True)
     return buf.getvalue(), "image/jpeg"
 
+@csrf_exempt
 @require_POST
 def ai_photo(request):
     """
