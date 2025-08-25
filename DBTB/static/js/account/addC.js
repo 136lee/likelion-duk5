@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const formData = new FormData();
-      formData.append('image', image);
+      formData.append('image', selectedFile);
 
       const response = await fetch(endpoint, {
         method: 'POST',
