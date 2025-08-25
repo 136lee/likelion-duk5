@@ -326,131 +326,124 @@ try:
 except ImportError:
     Image = None
 
-def _thumb_bytes(dj_file, max_px=768, quality=82):
-    if Image is None:
-        data = dj_file.read()
-        ctype = getattr(dj_file, "content_type", None) or "image/jpeg"
-        return data, ctype
-    img = Image.open(dj_file).convert("RGB")
-    img.thumbnail((max_px, max_px))
-    buf = BytesIO()
-    img.save(buf, format="JPEG", quality=quality, optimize=True)
-    return buf.getvalue(), "image/jpeg"
-
-def _to_schema(obj_or_text):
-    """
-    모델이 JSON을 잘 주면 그대로 쓰고,
-    코드펜스/문장 형태여도 안전하게 스키마에 맞춰 정규화.
-    """
-    def base(summary=""):
-        return {"mood":"", "summary": summary.strip(), "tags": [], "emojis": ""}
-
-    if isinstance(obj_or_text, dict):
-        data = obj_or_text
-    else:
-        s = re.sub(r"^```(?:json)?|```$", "", str(obj_or_text).strip(), flags=re.MULTILINE).strip()
-        try:
-            data = json.loads(s)
-        except Exception:
-            return base(s[:200])
-
-    mood    = str(data.get("mood","")).strip()
-    summary = str(data.get("summary","")).strip()
-    tags    = data.get("tags", [])
-    if isinstance(tags, str):
-        tags = [t.strip().lstrip("#") for t in tags.split(",") if t.strip()]
-    emojis  = str(data.get("emojis","")).strip()
-    return {"mood": mood, "summary": summary, "tags": tags, "emojis": emojis}
-
-
-# Pillow는 있으면 사용, 없으면 원본 그대로 전송
-try:
-    from PIL import Image
-except ImportError:
-    Image = None
-
 def _thumb(dj_file, max_px=768, quality=82):
-    """이미지 축소(없으면 원본) -> (bytes, mime)"""
     try:
         dj_file.seek(0)
     except Exception:
         pass
     if Image is None:
         return dj_file.read(), getattr(dj_file, "content_type", None) or "image/jpeg"
-    img = Image.open(dj_file).convert("RGB")
+    img = Image.open(dj_file)
+    if img.mode in ("RGBA","LA"):
+        bg = Image.new("RGB", img.size, (255,255,255))
+        bg.paste(img, mask=img.split()[-1])
+        img = bg
+    else:
+        img = img.convert("RGB")
     img.thumbnail((max_px, max_px))
     buf = BytesIO()
     img.save(buf, format="JPEG", quality=quality, optimize=True)
+    buf.seek(0)
     return buf.getvalue(), "image/jpeg"
 
 @csrf_exempt
 @require_POST
 def ai_photo(request):
-    """
-    <input type="file" name="image"> 로 업로드된 사진을 분석.
-    키는 settings가 아니라 현재 셸의 환경변수 OPENAI_API_KEY 를 매번 읽어 사용.
-    """
+    # ❶ 입력 검사 + 로깅
     img = request.FILES.get("image")
     if not img:
         return JsonResponse({"error":"no_image"}, status=400)
+    try:
+        print("[ai_photo] incoming size(bytes) =", getattr(img, "size", None))
+    except Exception:
+        pass
 
-    # ✅ Bash/터미널에 export 한 키를 '요청 때마다' 읽음
-    key = (os.getenv("OPENAI_API_KEY") or "").strip()
-    print("[ai_photo] key?", bool(key))  # 서버 콘솔에서 확인용
-
-    # 키 없을 때는 스텁 반환(UX 유지)
+    # ❷ 키 확인
+    key = (os.getenv("OPEN_API_KEY") or "").strip()
     if not key:
+        # 키 없을 때도 항상 JSON 반환 (UX 유지)
         return JsonResponse({
-            "mood":"따뜻하고 잔잔함",
-            "summary":"테스트 응답(키 없음). 업로드/경로/CSRF OK!",
-            "tags":["테스트","연결확인"],
-            "emojis":"✅"
-        })
+            "raw":"(키 미설정) 업로드/경로/CSRF는 정상입니다. 키를 설정하면 실제 분석이 수행돼요."
+        }, status=200)
 
-    # 이미지 준비
-    raw, mime = _thumb(img, max_px=768, quality=82)
-    data_url = f"data:{mime};base64,{base64.b64encode(raw).decode('utf-8')}"
+    try:
+        # ❸ 이미지 표준화(크기/품질 줄여서 API 에러 확률 ↓)
+        #    필요시 더 줄이려면 max_px=640, quality=78 정도로 시도
+        raw, mime = _thumb(img, max_px=768, quality=82)
 
-    payload = {
-        "model": "gpt-4o-mini",
-        "messages": [{
-            "role": "user",
-            "content": [
-                {"type":"text","text":
-                 '이미지를 보고 분위기를 자연스럽게 한두 문장으로 설명해줘. '
-                 '그리고 맨 끝에 이모지 3개만 붙여줘.'
-                },
-                {"type":"image_url","image_url":{"url": data_url}}
-            ]
-        }],
-        "temperature": 0.6,
-        "max_tokens": 150
-    }
+        # ❹ data URL 구성
+        data_url = f"data:{mime};base64,{base64.b64encode(raw).decode('utf-8')}"
+        # 길이 과도 시 방어 (임계 넘으면 한 번 더 축소)
+        if len(data_url) > 1_500_000:  # 대략 1.5MB 기준 (상황에 맞게 조정)
+            raw2, mime2 = _thumb(img, max_px=640, quality=78)
+            data_url = f"data:{mime2};base64,{base64.b64encode(raw2).decode('utf-8')}"
 
-    url = "https://api.openai.com/v1/chat/completions"
-    headers = {"Authorization": f"Bearer {key}", "Content-Type":"application/json"}
+        payload = {
+            "model": "gpt-4o-mini",
+            "messages": [{
+                "role": "user",
+                "content": [
+                    {"type":"text","text":
+                        "이미지를 보고 분위기를 자연스럽게 한두 문장으로 설명해줘. 그리고 맨 끝에 이모지 3개만 붙여줘."
+                    },
+                    {"type":"image_url","image_url":{"url": data_url}}
+                ]
+            }],
+            "temperature": 0.6,
+            "max_tokens": 150
+        }
+        headers = {"Authorization": f"Bearer {key}", "Content-Type":"application/json"}
+        url = "https://api.openai.com/v1/chat/completions"
 
-    # 간단 백오프(429 완화)
-    last_text = None
-    for attempt in range(4):
-        r = requests.post(url, headers=headers, json=payload, timeout=45)
-        last_text = r.text
-        if r.status_code == 429:
-            sleep_s = (0.6 * (2 ** attempt)) + random.random()*0.4
-            time.sleep(min(sleep_s, 4.0))
-            continue
-        if r.status_code == 403:
-            # 권한/결제 문제 시 임시 결과로 UX 유지
-            return JsonResponse({
-                "mood":"잔잔 · 포근",
-                "summary":"AI 권한/결제 설정을 확인 중입니다. 임시 분석 결과예요.",
-                "tags":["임시","대기중"], "emojis":"⌛"
-            })
-        r.raise_for_status()
-        content = r.json()["choices"][0]["message"]["content"].strip()
-        try:
-            return JsonResponse(json.loads(content))   # 모델이 준 JSON
-        except Exception:
-            return JsonResponse({"raw": content})      # 혹시 JSON이 아니면 그대로
-    # 재시도 끝
-    return JsonResponse({"error":"rate_limited", "detail": last_text}, status=429)
+        last_text = None
+        for attempt in range(4):
+            try:
+                r = requests.post(url, headers=headers, json=payload, timeout=45)
+                last_text = r.text
+            except requests.exceptions.Timeout:
+                if attempt == 3:
+                    return JsonResponse({"error":"upstream_timeout"}, status=504)
+                # 지수 백오프
+                time.sleep(0.5*(2**attempt))
+                continue
+
+            if r.status_code == 429:
+                # 레이트리밋 백오프 재시도
+                if attempt == 3:
+                    return JsonResponse({"error":"rate_limited", "detail": last_text[:400]}, status=429)
+                sleep_s = (0.6 * (2 ** attempt)) + random.random()*0.4
+                time.sleep(min(sleep_s, 4.0))
+                continue
+
+            if r.status_code == 403:
+                # 권한/결제 이슈 - 사용자에게는 부드럽게 전달
+                return JsonResponse({
+                    "raw":"AI 권한/결제 설정 확인 중입니다. (임시 메시지)"
+                }, status=200)
+
+            # 그 외 상태코드도 JSON으로 돌려주기 (HTML 500 방지)
+            if not r.ok:
+                return JsonResponse({
+                    "error":"upstream_error",
+                    "status": r.status_code,
+                    "detail": last_text[:500]
+                }, status=502)
+
+            # 정상
+            try:
+                content = r.json()["choices"][0]["message"]["content"].strip()
+            except Exception as e:
+                return JsonResponse({"error":"parse_upstream_json", "detail": str(e), "raw": last_text[:500]}, status=502)
+
+            # 모델 응답이 JSON일 수도/문장일 수도 있으니 모두 케이스 처리
+            try:
+                return JsonResponse(json.loads(content), status=200)
+            except Exception:
+                return JsonResponse({"raw": content}, status=200)
+
+        # 여기 오면 재시도 초과
+        return JsonResponse({"error":"retry_exhausted", "detail": last_text[:500]}, status=502)
+
+    except Exception as e:
+        # 어떤 예외가 나도 HTML 에러페이지 대신 JSON으로
+        return JsonResponse({"error":"server_exception", "detail": str(e)}, status=500)
