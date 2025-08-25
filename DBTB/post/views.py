@@ -359,7 +359,7 @@ def ai_photo(request):
         pass
 
     # ❷ 키 확인
-    key = (os.getenv("OPENAI_API_KEY") or "").strip()
+    key = (os.getenv("OPEN_API_KEY") or "").strip()
     if not key:
         # 키 없을 때도 항상 JSON 반환 (UX 유지)
         return JsonResponse({
