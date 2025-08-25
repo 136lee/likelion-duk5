@@ -1,5 +1,5 @@
 <h2>🏘️도봉또봉</h2>
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/4952f37c-ae8a-410e-b613-cda6a713df49" />
+<img width="3840" height="2160" alt="Image" src="https://github.com/user-attachments/assets/d2e66e28-8332-4a51-9b11-1fd71c950ec1" />
 <br>
 <br>
 <p>"버려진 공간에 스토리를 불어넣고, 사람·상권·커뮤니티에 다시 활력을 돌려주는 지속 가능한 서비스"</p>
