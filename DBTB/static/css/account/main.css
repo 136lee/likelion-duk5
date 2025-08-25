@@ -247,7 +247,7 @@ flex-direction: column;
 
 
   width: 350px;
-  height: 240px;
+ 
   background-color: white;
   z-index: 100;
   border-radius: 16px;
@@ -284,7 +284,7 @@ padding:15px 0;
   display: flex;
   flex-direction: column;
   font-size: 13px;
-  margin-bottom: 15px;
+ 
 }
 .gray{
   color:rgb(182,189,184) ;
@@ -308,6 +308,9 @@ padding:15px 0;
 }
 .recommend_spots{
   margin-top: 10px;
+  display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 #my_location_button{
   color:rgb(152,159,154);

@@ -11,6 +11,7 @@ from django.urls import reverse
 import os, json, base64, time, random , requests , re
 from io import BytesIO
 import re
+from django.views.decorators.csrf import csrf_exempt
 import logging
 
 logger = logging.getLogger(__name__)
@@ -276,6 +277,7 @@ def create(request):
             dong=dong,            # ✅ 여기!
         )
 
+
         try:
             ai_text = run_matching(post)
             Post.objects.filter(pk=post.pk).update(AI_matching=ai_text)
@@ -381,6 +383,7 @@ def _thumb(dj_file, max_px=768, quality=82):
     img.save(buf, format="JPEG", quality=quality, optimize=True)
     return buf.getvalue(), "image/jpeg"
 
+@csrf_exempt
 @require_POST
 def ai_photo(request):
     """
