@@ -51,11 +51,11 @@
             <div id="aiconEx">
               <div id="PlName">
                 <input type="text"  name="title" required id="PlNameTi" placeholder="제목을 입력해주세요."></input>
-                                   {% if post.dong %}
-                  <p id="PlNameAd">{{ post.dong }} {{ post.address }}</p>
-                      {% else %}
-                      <p id="PlNameAd">장소 정보 없음</p>
-                          {% endif %}
+                  {% if request.GET.dong or request.GET.addr %}
+                    <p id="PlNameAd">{{ request.GET.dong }} {{ request.GET.addr }}</p>
+                  {% else %}
+                    <p id="PlNameAd">장소 정보 없음</p>
+                  {% endif %}
               </div>
               <div class="PtBox">
                 <div>
