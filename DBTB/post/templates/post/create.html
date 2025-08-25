@@ -37,7 +37,6 @@
           <input type="hidden" name="address"   value="{{ request.GET.addr }}">
           <input type="hidden" name="dong"      value="{{ request.GET.dong }}">
           <input type="hidden" name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'map:list' %}{% endif %}">
-        <article id="PTcontt">
         <div>
           <div id="aicon">
                 <div id="addPtCon">
@@ -60,10 +59,6 @@
               <div class="PtBox">
                 <div>
                   <span class="PtBoxTT">AI 분위기 분석</span>
-                  <div class="PtRe">
-                    <img src="{% static 'img/refresh-ccw.svg'%}" />
-                    <span>재생성</span>
-                  </div>
                 </div>
                 <div class="PtLod" style="display: none">
                   <img src="{% static 'img/loader.svg' %}" />
