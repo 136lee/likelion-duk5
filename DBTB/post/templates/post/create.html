@@ -37,11 +37,6 @@
           <input type="hidden" name="address"   value="{{ request.GET.addr }}">
           <input type="hidden" name="dong"      value="{{ request.GET.dong }}">
           <input type="hidden" name="next" value="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'map:list' %}{% endif %}">
-<<<<<<< HEAD
-      <article id="PTcontt">
-=======
-        <article id="PTcontt">
->>>>>>> caa7023752d09601a530cf35a09a95f2febb8ac7
         <div>
           <div id="aicon">
                 <div id="addPtCon">
@@ -55,27 +50,15 @@
             <div id="aiconEx">
               <div id="PlName">
                 <input type="text"  name="title" required id="PlNameTi" placeholder="제목을 입력해주세요."></input>
-<<<<<<< HEAD
-                      {% if post.dong %}
-                  <p id="PlNameAd">{{ post.dong }} {{ post.address }}</p>
-                      {% else %}
-                      <p id="PlNameAd">장소 정보 없음</p>
-                          {% endif %}
-=======
                   {% if request.GET.dong or request.GET.addr %}
                     <p id="PlNameAd">{{ request.GET.dong }} {{ request.GET.addr }}</p>
                   {% else %}
                     <p id="PlNameAd">장소 정보 없음</p>
                   {% endif %}
->>>>>>> caa7023752d09601a530cf35a09a95f2febb8ac7
               </div>
               <div class="PtBox">
                 <div>
                   <span class="PtBoxTT">AI 분위기 분석</span>
-                  <div class="PtRe">
-                    <img src="{% static 'img/refresh-ccw.svg'%}" />
-                    <span>재생성</span>
-                  </div>
                 </div>
                 <div class="PtLod" style="display: none">
                   <img src="{% static 'img/loader.svg' %}" />
