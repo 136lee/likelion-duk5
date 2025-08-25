@@ -7,7 +7,7 @@
 특히 청년 유출과 방문객 감소로 지역 경제가 침체되는 문제가 있습니다.
 
 도봉또봉은 도봉구를 **“멀어도 일부러 찾고 싶은 동네”로 만들기 위한** **AI 지역 탐험 플랫폼**입니다.
-<h2>🛠️기술 스택</h2>
+<h2>🛠️Tech Stack</h2>
 
 - 프론트엔드:  <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white" height="25"> <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white" height="25"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" height="25">
 - 백엔드:
