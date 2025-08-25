@@ -110,8 +110,17 @@ def ai_feedback(request, post_id):
 def recom_now(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
+    # 1) 기본값: Post 필드
     place_name = (post.title or "").strip()
     place_address = (post.address or "").strip()
+
+    # 2) 보완: Place(M2M)에서 첫 번째 장소 사용
+    place_obj = post.place.first()
+    if place_obj:
+        if not place_name:
+            place_name = (getattr(place_obj, "name", "") or "").strip()
+        if not place_address:
+            place_address = (getattr(place_obj, "address", "") or "").strip()
 
     if not place_name:
         return HttpResponseBadRequest("제목(장소명)이 비어 있습니다.")
@@ -142,10 +151,9 @@ def recom_now(request, post_id):
             ]
         )
         text = getattr(resp, "output_text", "").strip()
-        if not text:
-            continue
-        rec = Recommend.objects.create(post=post, recom_now=text)
-        created.append(rec.recom_now)
+        if text:
+            rec = Recommend.objects.create(post=post, recom_now=text)
+            created.append(rec.recom_now)
 
     return JsonResponse(
         {"ok": True, "created_count": len(created), "items": created},
@@ -157,8 +165,17 @@ def recom_now(request, post_id):
 def recom_later(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
+    # 1) 기본값: Post 필드
     place_name = (post.title or "").strip()
     place_address = (post.address or "").strip()
+
+    # 2) 보완: Place(M2M)에서 첫 번째 장소 사용
+    place_obj = post.place.first()
+    if place_obj:
+        if not place_name:
+            place_name = (getattr(place_obj, "name", "") or "").strip()
+        if not place_address:
+            place_address = (getattr(place_obj, "address", "") or "").strip()
 
     if not place_name:
         return HttpResponseBadRequest("제목(장소명)이 비어 있습니다.")
@@ -190,10 +207,9 @@ def recom_later(request, post_id):
             ]
         )
         text = getattr(resp, "output_text", "").strip()
-        if not text:
-            continue
-        rec = Recommend.objects.create(post=post, recom_later=text)
-        created.append(rec.recom_later)
+        if text:
+            rec = Recommend.objects.create(post=post, recom_later=text)
+            created.append(rec.recom_later)
 
     return JsonResponse(
         {"ok": True, "created_count": len(created), "items": created},
