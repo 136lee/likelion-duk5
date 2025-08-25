@@ -145,3 +145,8 @@ OPEN_API_KEY=config.OPEN_API_KEY
 from django.urls import reverse_lazy
 LOGIN_URL = reverse_lazy("account:login")   # ← 템플릿에서 쓰는 것과 맞춤
 
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024
+
+
